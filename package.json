@@ -1,0 +1,25 @@
+{
+  "name": "waifulabs-landing",
+  "version": "1.0.0",
+  "description": "Landing page for waifulabs home infrastructure",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@nuxt/ui": "^3.0.0",
+    "@tailwindcss/vite": "^4.0.0",
+    "nuxt": "^4.0.0",
+    "tailwindcss": "^4.0.0",
+    "vue": "latest",
+    "marked": "^14.0.0"
+  },
+  "devDependencies": {
+    "@nuxt/eslint": "^0.7.0"
+  }
+}
