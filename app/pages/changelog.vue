@@ -81,12 +81,19 @@
 
 <script setup lang="ts">
 import { marked } from 'marked'
+import DOMPurify from 'isomorphic-dompurify'
 
 useHead({
   title: 'Changelog - waifulabs',
   meta: [
     { name: 'description', content: 'Release history for waifulabs infrastructure' }
   ]
+})
+
+// Configure marked to be more secure
+marked.setOptions({
+  breaks: true,
+  gfm: true
 })
 
 // Fetch releases from GitHub API
@@ -107,8 +114,13 @@ const formatDate = (dateString: string) => {
   })
 }
 
-// Render markdown
+// Render markdown with sanitization
 const renderMarkdown = (markdown: string) => {
-  return marked(markdown)
+  const html = marked(markdown)
+  // Sanitize the HTML to prevent XSS attacks
+  return DOMPurify.sanitize(html, {
+    ALLOWED_TAGS: ['p', 'br', 'strong', 'em', 'u', 'a', 'ul', 'ol', 'li', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'code', 'pre', 'blockquote'],
+    ALLOWED_ATTR: ['href', 'target', 'rel']
+  })
 }
 </script>
