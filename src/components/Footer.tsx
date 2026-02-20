@@ -1,6 +1,6 @@
 "use client";
 
-import { Github, BookOpen, Twitter, Linkedin } from "lucide-react";
+import { BookOpen, GithubIcon, LinkedinIcon, MastodonIcon } from "./icons";
 
 const footerLinks = [
   {
@@ -14,16 +14,16 @@ const footerLinks = [
   {
     title: "Connect",
     links: [
-      { label: "GitHub", href: "https://github.com/kashalls", icon: Github },
-      {
-        label: "Twitter",
-        href: "https://twitter.com/jordpjones",
-        icon: Twitter,
-      },
+      { label: "GitHub", href: "https://github.com/kashalls", icon: GithubIcon },
       {
         label: "LinkedIn",
         href: "https://www.linkedin.com/in/jordpjones/",
-        icon: Linkedin,
+        icon: LinkedinIcon,
+      },
+      {
+        label: "Mastodon",
+        href: "https://mastodon.social/@kashall",
+        icon: MastodonIcon,
       },
     ],
   },
@@ -86,7 +86,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="mt-16 pt-6 border-t border-card-border flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-muted">
-            &copy; {new Date().getFullYear()} Waifu Labs. Not a product, just a
+            &copy; {new Date().getFullYear()} Waifu Labs - Just a
             passion project.
           </p>
           <div className="flex items-center gap-2">
@@ -105,7 +105,7 @@ export default function Footer() {
               rel="noopener noreferrer"
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs text-muted hover:text-foreground transition-colors hover:bg-white/5"
             >
-              <Github className="w-3.5 h-3.5" />
+              <GithubIcon className="w-3.5 h-3.5" />
               Source
             </a>
           </div>

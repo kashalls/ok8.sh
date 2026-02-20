@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight, BookOpen, Github } from "lucide-react";
+import { ArrowRight, BookOpen, GithubIcon } from "./icons";
 
 export default function Hero() {
   return (
@@ -71,7 +71,7 @@ export default function Hero() {
             rel="noopener noreferrer"
             className="flex items-center gap-2 px-6 py-3 rounded-xl border border-card-border text-foreground font-medium text-sm hover:bg-white/5 transition-colors"
           >
-            <Github className="w-4 h-4" />
+            <GithubIcon className="w-4 h-4" />
             View Source
           </a>
         </motion.div>

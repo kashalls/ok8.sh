@@ -89,7 +89,6 @@ body {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .stat-card:hover {
-  transform: translateY(-2px);
   border-color: rgba(99, 102, 241, 0.3);
   box-shadow: 0 8px 32px rgba(99, 102, 241, 0.1);
 }
@@ -98,8 +97,9 @@ body {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .feature-card:hover {
-  border-color: rgba(99, 102, 241, 0.4);
+  border-color: rgba(99, 102, 241, 0.3);
   background: rgba(99, 102, 241, 0.05);
+  box-shadow: 0 8px 32px rgba(99, 102, 241, 0.1);
 }
 
 .noise::before {

@@ -14,7 +14,7 @@ import {
   AlertTriangle,
   Shield,
   Container,
-} from "lucide-react";
+} from "./icons";
 
 interface Metric {
   name: string;
@@ -165,19 +165,24 @@ export default function ClusterStats() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "-50px" }}
                     transition={{ delay: i * 0.08, duration: 0.4 }}
-                    className="stat-card rounded-xl border border-card-border bg-card/50 backdrop-blur-sm p-6"
                   >
-                    <div className="flex items-center gap-3 mb-4">
-                      <div
-                        className={`w-10 h-10 rounded-lg bg-card border border-card-border flex items-center justify-center ${color}`}
-                      >
-                        <Icon className="w-5 h-5" />
+                    <motion.div
+                      whileHover={{ y: -2 }}
+                      transition={{ duration: 0.3 }}
+                      className="stat-card rounded-xl border border-card-border bg-card/50 backdrop-blur-sm p-6 h-full"
+                    >
+                      <div className="flex items-center gap-3 mb-4">
+                        <div
+                          className={`w-10 h-10 rounded-lg bg-card border border-card-border flex items-center justify-center ${color}`}
+                        >
+                          <Icon className="w-5 h-5" />
+                        </div>
+                        <span className="text-sm text-muted">{metric.label}</span>
                       </div>
-                      <span className="text-sm text-muted">{metric.label}</span>
-                    </div>
-                    <div className="text-2xl sm:text-3xl font-bold font-mono tracking-tight">
-                      {metric.value ?? "—"}
-                    </div>
+                      <div className="text-2xl sm:text-3xl font-bold font-mono tracking-tight">
+                        {metric.value ?? "—"}
+                      </div>
+                    </motion.div>
                   </motion.div>
                 );
               })}

@@ -3,14 +3,14 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, BookOpen, Github, Activity } from "lucide-react";
+import { Menu, X, BookOpen, Activity, GithubIcon } from "./icons";
 
 const navLinks = [
   { label: "Docs", href: "https://docs.ok8.sh", icon: BookOpen },
   {
     label: "GitHub",
     href: "https://github.com/waifulabs/infrastructure",
-    icon: Github,
+    icon: GithubIcon,
   },
   { label: "Status", href: "https://kromgo.ok8.sh", icon: Activity },
 ];

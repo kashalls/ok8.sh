@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { GitBranch, Eye, Lock, Workflow, HardDrive, Globe } from "lucide-react";
+import { GitBranch, Workflow, Eye, Lock, HardDrive, Globe } from "./icons";
 
 const features = [
   {
@@ -72,15 +72,20 @@ export default function Features() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-50px" }}
               transition={{ delay: i * 0.08, duration: 0.4 }}
-              className="feature-card rounded-xl border border-card-border bg-card/30 backdrop-blur-sm p-6"
             >
-              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-accent/20 to-accent-secondary/20 border border-card-border flex items-center justify-center text-accent mb-4">
-                <feature.icon className="w-5 h-5" />
-              </div>
-              <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
-              <p className="text-sm text-muted leading-relaxed">
-                {feature.description}
-              </p>
+              <motion.div
+                whileHover={{ y: -2 }}
+                transition={{ duration: 0.3 }}
+                className="feature-card rounded-xl border border-card-border bg-card/30 backdrop-blur-sm p-6 h-full"
+              >
+                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-accent/20 to-accent-secondary/20 border border-card-border flex items-center justify-center text-accent mb-4">
+                  <feature.icon className="w-5 h-5" />
+                </div>
+                <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
+                <p className="text-sm text-muted leading-relaxed">
+                  {feature.description}
+                </p>
+              </motion.div>
             </motion.div>
           ))}
         </div>

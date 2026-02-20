@@ -14,7 +14,7 @@ interface KromgoResponse {
   schemaVersion: number;
 }
 
-const KROMGO_BASE = "https://kromgo.ok8.sh";
+const KROMGO_BASE = process.env.KROMGO_BASE_URL || "http://kromgo";
 
 const METRICS: { name: string; label: string }[] = [
   { name: "cluster_node_count", label: "Nodes" },
