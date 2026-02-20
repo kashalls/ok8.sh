@@ -3,6 +3,7 @@ name: Build & Push Container
 on:
   push:
     branches: [main]
+    tags: ["v*"]
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -41,10 +42,13 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=sha
+            type=semver,pattern={{version}},prefix=v
+            type=semver,pattern={{major}}.{{minor}},prefix=v
+            type=semver,pattern={{major}},prefix=v
             type=ref,event=branch
             type=ref,event=pr
-            type=raw,value=latest,enable={{is_default_branch}}
+          flavor: |
+            latest=auto
 
       - name: Build and push
         id: push
