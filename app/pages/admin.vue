@@ -2,11 +2,9 @@
 definePageMeta({ layout: 'field', pageTransition: { name: 'column', mode: 'out-in' } })
 useRobotsRule(false)
 
-const { loggedIn } = useUserSession()
-const signInFailed = useSignInFailed()
 // Rendered per request, so the session and everything below load on the server.
-// /api/admin answers 404 to anyone but the site owner.
-const { data, error, refresh } = await useFetch('/api/admin/comments', { immediate: loggedIn.value })
+// /api/admin answers 404 to anyone but the site owner, signed in or not.
+const { data, error, refresh } = await useFetch('/api/admin/comments')
 if (error.value?.statusCode === 404)
     throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
 
@@ -20,7 +18,7 @@ const unanswered = computed(() => entries.value.filter(({ source, comment }) => 
         && other.createdAt > comment.createdAt)))
 
 const { messages } = useSiteMessages()
-const { data: meta } = await useFetch('/api/meta', { immediate: loggedIn.value })
+const { data: meta } = await useFetch('/api/meta')
 const draft = reactive({ maintenance: meta.value?.messages.maintenance ?? '', live: meta.value?.messages.live ?? '' })
 const saving = ref(false)
 const saved = ref('')
@@ -44,14 +42,7 @@ async function saveMessages() {
   <main class="column column-wide">
     <h1 class="page-name">Admin</h1>
 
-    <template v-if="!loggedIn">
-      <p class="lead">Sign in to manage the site.</p>
-      <p v-if="signInFailed" role="alert" class="mt-4 text-sm text-[#ff7a6b]">Couldn't sign in with GitHub. Please try again.</p>
-      <UButton to="/auth/github?redirect=/admin" external icon="i-simple-icons-github" label="Sign in with GitHub"
-        variant="outline" class="mt-6 self-start" />
-    </template>
-
-    <p v-else-if="error" role="alert" class="lead">{{ error.statusMessage || 'Could not load the admin page.' }}</p>
+    <p v-if="error" role="alert" class="lead">{{ error.statusMessage || 'Could not load the admin page.' }}</p>
 
     <template v-else>
       <section aria-labelledby="messages-heading">
