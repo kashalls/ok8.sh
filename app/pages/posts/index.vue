@@ -43,7 +43,7 @@ function snippet(content: string) {
 }
 
 useSeoMeta({
-    title: () => debouncedQuery.value ? `Search: ${debouncedQuery.value} — Jordan Jones` : 'Search — Jordan Jones',
+    title: () => debouncedQuery.value ? `Search: ${debouncedQuery.value} — Kashall` : 'Search — Kashall',
     robots: 'noindex',
 })
 </script>

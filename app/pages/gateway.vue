@@ -19,7 +19,7 @@ useRobotsRule(false)
 <template>
     <main class="column">
         <h1 class="doc-title">No service configured</h1>
-        <p class="lead mt-4">This hostname is resolving to one of Jordan's gateway endpoints, but there's no service wired up behind it yet.</p>
+        <p class="lead mt-4">This hostname is resolving to one of Kashall's gateway endpoints, but there's no service wired up behind it yet.</p>
         <p class="mt-8 text-sm text-(--fg-3)">Hostname</p>
         <p class="mt-1 break-all font-mono text-(--fg)">{{ host }}</p>
         <p class="mt-8 flex gap-6 text-sm">

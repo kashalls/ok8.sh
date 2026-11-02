@@ -17,7 +17,7 @@ const { surround } = await useBlogNavigation()
 const section = computed(() => blogSection(post.value?.section))
 
 useSeoMeta({
-    title: `${post.value.title} — Jordan Jones`,
+    title: `${post.value.title} — Kashall`,
     description: post.value.description,
     ogDescription: post.value.description,
     ogType: 'article',

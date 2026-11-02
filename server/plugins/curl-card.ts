@@ -16,7 +16,7 @@ const links = [
 function card(build: { sha: string, ref: string, time: string }) {
     const lines = [
         '',
-        `  ${bold(purple('Jordan Jones'))} ${dim('·')} Platform Engineer`,
+        `  ${bold(purple('Kashall'))} ${dim('·')} Platform Engineer`,
         `  ${dim('Kubernetes infrastructure, and tooling that makes platforms more extensible.')}`,
         `  ${dim('Eugene, Oregon')}`,
         '',

@@ -1,4 +1,4 @@
-## Jordan's Site
+## Kashall's Site
 
 > My personal website, live at [ok8.sh](https://ok8.sh). Built with Nuxt 4 and Nuxt UI, deployed to Cloudflare Workers.
 

@@ -65,7 +65,7 @@ const tone = computed(() => heading(view.value).hue)
 const focus = useState<string | undefined>('field-focus', () => undefined)
 const title = computed(() => views.find(v => v.id === view.value)?.label)
 // The error page sets its own title.
-useHead({ title: computed(() => title.value ? `${title.value}, Jordan Jones` : error.value ? undefined : 'Jordan Jones') })
+useHead({ title: computed(() => title.value ? `${title.value}, Kashall` : error.value ? undefined : 'Kashall') })
 
 // --- The images the particle field takes its colour from -------------------
 
@@ -628,7 +628,7 @@ onBeforeUnmount(() => {
     <div class="top-fade" aria-hidden="true" />
     <header class="bar">
       <NuxtLink to="/" class="mark">
-        <NuxtImg src="/jordanjones.svg" alt="Jordan Jones" width="209" height="290" class="mark-logo" />
+        <NuxtImg src="/kashall.svg" alt="Kashall" width="209" height="290" class="mark-logo" />
       </NuxtLink>
       <nav aria-label="Sections">
         <ul class="flex gap-5 sm:gap-8">

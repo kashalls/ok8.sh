@@ -44,7 +44,7 @@ ${(post.tags ?? []).map(tag => `    <category term="${escape(tag)}"/>`).join('\n
   <subtitle>Notes on Kubernetes, homelabs, and whatever I'm building.</subtitle>
   <link href="${url('/feed.xml')}" rel="self"/>
   <link href="${url('/posts')}"/>
-  <author><name>Jordan Jones</name></author>
+  <author><name>Kashall</name></author>
   <updated>${updated}</updated>${entries}
 </feed>
 `

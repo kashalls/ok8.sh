@@ -30,7 +30,7 @@ withDefaults(defineProps<{
             {{ description }}
         </div>
         <div class="mt-auto mb-[70px] flex items-center text-2xl text-slate-400">
-            <div class="flex text-white">Jordan Jones</div>
+            <div class="flex text-white">Kashall</div>
             <div v-if="date" class="ml-4 flex">· {{ date }}</div>
             <div class="ml-auto flex">
                 <div v-for="tag in tags.slice(0, 3)" :key="tag"

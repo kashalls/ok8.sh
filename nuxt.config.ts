@@ -34,7 +34,7 @@ export default defineNuxtConfig({
   // NUXT_PUBLIC_SITE_URL in production.
   site: {
       url: 'https://ok8.sh',
-      name: 'Jordan Jones',
+      name: 'Kashall',
   },
 
   robots: {

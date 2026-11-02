@@ -2,7 +2,7 @@
 definePageMeta({ layout: 'sheet' })
 
 defineOgImage('Default', {
-  title: 'Jordan Jones',
+  title: 'Kashall',
   description: 'Platform engineer based in Oregon, building Kubernetes infrastructure and the tooling around it.',
 })
 

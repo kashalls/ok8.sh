@@ -4,7 +4,7 @@ withDefaults(defineProps<{
     description?: string
     badge?: string
 }>(), {
-    title: 'Jordan Jones',
+    title: 'Kashall',
     description: 'Platform engineer',
     badge: 'ok8.sh',
 })
