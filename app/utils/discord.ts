@@ -60,6 +60,16 @@ export function avatarUrl(id: string, avatar: string | null, size = 64): string 
 		: 'https://cdn.discordapp.com/embed/avatars/0.png'
 }
 
+/** A nameplate's art: `img.png` is an animated PNG, `static.png` its first frame. */
+export function nameplateUrl(asset: string, animated = false): string {
+	return `https://cdn.discordapp.com/assets/collectibles/${asset}${animated ? 'img' : 'static'}.png`
+}
+
+/** An avatar decoration: animated ones (`a_` assets) come as an animated PNG unless `passthrough=false`. */
+export function decorationUrl(asset: string, animated = false): string {
+	return `https://cdn.discordapp.com/avatar-decoration-presets/${asset}.png?size=96${animated ? '' : '&passthrough=false'}`
+}
+
 /** An activity's image key: `mp:` keys are proxied external images, numeric ones the app's own assets. */
 export function activityImageUrl(applicationId: string | null | undefined, key?: string): string | undefined {
 	if (!key) return undefined

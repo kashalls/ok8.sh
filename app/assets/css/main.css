@@ -14,6 +14,12 @@
   /* `font-body` utility -> PP Neue Machina Plain (used on window/dialog titles). */
   --font-body: "PP Neue Machina Plain", ui-sans-serif, system-ui, sans-serif;
 
+  /* `font-karla` -> body text on the sheet layout. */
+  --font-karla: "Karla", ui-sans-serif, system-ui, sans-serif;
+
+  /* `font-sniglet` -> the name on the sheet layout, standing in for Discord's Sakura. */
+  --font-sniglet: "Sniglet", ui-rounded, system-ui, sans-serif;
+
   /* Blog post OG card: Plus Jakarta Sans titles, JetBrains Mono for the rest. */
   --font-jakarta: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   --font-jetbrains: "JetBrains Mono", ui-monospace, monospace;
@@ -72,4 +78,6 @@ html.readable-font {
   --font-sans: "OpenDyslexic", ui-sans-serif, system-ui, sans-serif;
   --font-display: "OpenDyslexic", ui-sans-serif, system-ui, sans-serif;
   --font-body: "OpenDyslexic", ui-sans-serif, system-ui, sans-serif;
+  --font-karla: "OpenDyslexic", ui-sans-serif, system-ui, sans-serif;
+  --font-sniglet: "OpenDyslexic", ui-sans-serif, system-ui, sans-serif;
 }

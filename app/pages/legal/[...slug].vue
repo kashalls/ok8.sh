@@ -1,5 +1,5 @@
 <script setup lang="ts">
-definePageMeta({ layout: 'field', pageTransition: { name: 'column', mode: 'out-in' } })
+definePageMeta({ layout: 'sheet' })
 
 const route = useRoute()
 
@@ -27,13 +27,29 @@ const updated = computed(() => formatDate(postDate(page.value!.updated)))
 </script>
 
 <template>
-    <main v-if="page" class="column column-wide">
-        <header class="mb-10">
+    <main v-if="page">
+        <header class="mt-10 mb-8">
             <h1 class="doc-title">{{ page.title }}</h1>
-            <p class="mt-4 text-sm text-(--fg-3)">
+            <p class="mt-2 text-sm text-(--muted)">
                 Last updated <time :datetime="new Date(page.updated).toISOString()">{{ updated }}</time>
             </p>
         </header>
-        <ContentRenderer :value="page" class="prose-field" />
+        <ContentRenderer :value="page" class="doc-body" />
     </main>
 </template>
+
+<style scoped>
+.doc-title {
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    color: var(--cream);
+}
+
+.doc-body :deep(:is(h2, h3, h4)) {
+    font-family: var(--font-display);
+    font-weight: 400;
+    color: var(--cream);
+}
+</style>

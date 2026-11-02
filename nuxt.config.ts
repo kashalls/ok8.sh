@@ -187,6 +187,8 @@ export default defineNuxtConfig({
       },
       families: [
           { name: 'Inter', provider: 'google' },
+          { name: 'Karla', provider: 'google', weights: [400, 700] },
+          { name: 'Sniglet', provider: 'google', weights: [800] },
           // Opt-in readable font (useReadableFont). Only referenced from a custom
           // property, so it must be global to get an @font-face; browsers only
           // download it once the class is on.
