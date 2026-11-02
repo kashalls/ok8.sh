@@ -3,7 +3,7 @@ definePageMeta({ layout: 'sheet' })
 
 defineOgImage('Default', {
   title: 'Jordan Jones',
-  description: 'Freelance Software Engineer — integrations, full-stack & infrastructure.',
+  description: 'Platform engineer based in Oregon, building Kubernetes infrastructure and the tooling around it.',
 })
 
 // Cached on the server; a project without a count just leaves it off.
