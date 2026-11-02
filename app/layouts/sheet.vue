@@ -90,23 +90,8 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
 </template>
 
 <style>
-/* The character sheet's colour key, swatch for swatch. */
 .sheet {
-  --black: #1a1918;
-  --charcoal: #34323b;
-  --cream: #fcf6ed;
-  --text: rgb(252 246 237 / 0.85);
-  --violet: #5b3f7c;
-  --indigo: #52439c;
-  --lilac: #aa68cc;
-  --sky: #b2daf1;
-  --mint: #b1edd9;
-  --orange: #db8849;
-  --gold: #f6c252;
-  --muted: rgb(252 246 237 / 0.6);
-  --rule: rgb(170 104 204 / 0.2);
-
-  /* Nuxt UI components (legal prose, the contact dialog) take the same palette. */
+  /* Nuxt UI components (legal prose) take the same palette. */
   --ui-primary: var(--gold);
   --ui-text-dimmed: var(--muted);
   --ui-text-muted: var(--text);

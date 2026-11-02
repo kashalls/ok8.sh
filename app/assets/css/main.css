@@ -38,6 +38,25 @@
   --color-green-950: #052e16;
 }
 
+/* The character sheet's colour key, swatch for swatch. The contact dialog renders
+   outside the layout, so it gets the palette here too. */
+.sheet,
+.contact {
+  --black: #1a1918;
+  --charcoal: #34323b;
+  --cream: #fcf6ed;
+  --text: rgb(252 246 237 / 0.85);
+  --violet: #5b3f7c;
+  --indigo: #52439c;
+  --lilac: #aa68cc;
+  --sky: #b2daf1;
+  --mint: #b1edd9;
+  --orange: #db8849;
+  --gold: #f6c252;
+  --muted: rgb(252 246 237 / 0.6);
+  --rule: rgb(170 104 204 / 0.2);
+}
+
 /* Proximity border glow: useProximityGlow sets --glow-x/--glow-y to the
    cursor's position relative to each card, so the ring lights up on whichever
    edges are near the cursor. The mask keeps the gradient to a thin border. */
