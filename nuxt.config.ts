@@ -140,6 +140,7 @@ export default defineNuxtConfig({
       '/posts/**': { redirect: { to: '/blog/**', statusCode: 301 } },
       '/writing': { redirect: { to: '/blog', statusCode: 301 } },
       '/about': { redirect: { to: '/', statusCode: 301 } },
+      '/work': { redirect: { to: '/', statusCode: 301 } },
       '/git': { redirect: { to: 'https://github.com/kashalls', statusCode: 302 } },
       // Local fonts aren't content-hashed, so cache them without `immutable`.
       '/fonts/**': { headers: { 'cache-control': 'public, max-age=2592000' } },

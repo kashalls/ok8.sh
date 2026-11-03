@@ -1,5 +1,5 @@
 /**
- * Star counts for the Work page's projects, from GitHub's REST API. Cached so
+ * Star counts for the home page's projects, from GitHub's REST API. Cached so
  * visitors share one fetch instead of each spending the rate limit; a token
  * (NUXT_GITHUB_TOKEN) raises the limit but isn't required.
  */

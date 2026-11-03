@@ -340,6 +340,30 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
   color: var(--cream);
 }
 
+/* Something named in a sentence: an organisation or project with its logo, or a path. */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+  padding: 0.05em 0.35em;
+  border: 1px solid var(--rule);
+  line-height: 1.3;
+  /* Sit the chip's text on the sentence's baseline rather than the logo's bottom edge. */
+  vertical-align: -0.15em;
+  border-radius: 6px;
+  background: var(--charcoal);
+  color: var(--cream);
+  transition: border-color 200ms;
+}
+
+.chip:is(:hover, :focus-visible) {
+  border-color: var(--lilac);
+}
+
+.chip > :first-child {
+  font-size: 0.9em;
+}
+
 /* Lists of links: projects on home, posts on the blog. */
 .rows li + li {
   border-top: 1px solid var(--rule);

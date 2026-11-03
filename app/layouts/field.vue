@@ -34,15 +34,13 @@ const { height: noticeHeight } = useElementSize(notice, undefined, { box: 'borde
 
 // Each page's hue colours its particle title, the nav marker and its links.
 const views = [
-  { id: 'work', label: 'Work', to: '/work', tone: '#5fb2ff' },
   { id: 'blog', label: 'Blog', to: '/blog', tone: '#ff7ac8' },
   { id: 'guestbook', label: 'Guestbook', to: '/guestbook', tone: '#46e08c' },
 ] as const
 const HOME_TONE = '#c2a5ff'
 // Red: something isn't there or isn't working.
 const FAIL_TONE = '#ff7a6b'
-const error = useError()
-const view = computed(() => error.value ? 'error' : route.path.split('/')[1] || 'home')
+const view = computed(() => route.path.split('/')[1] || 'home')
 
 // The particle title and hue a route shows.
 function heading(id: string): { label?: string, hue: string } {
@@ -51,15 +49,11 @@ function heading(id: string): { label?: string, hue: string } {
   if (id === 'legal') return { label: 'Legal', hue: HOME_TONE }
   if (id === 'admin') return { label: 'Admin', hue: HOME_TONE }
   if (id === 'gateway') return { label: '502', hue: FAIL_TONE }
-  if (id === 'error') return { label: String(statusMeta(error.value?.statusCode).code), hue: FAIL_TONE }
   return { hue: HOME_TONE }
 }
 const tone = computed(() => heading(view.value).hue)
-// A page can borrow the particle title, as Work does for the project under the pointer.
-const focus = useState<string | undefined>('field-focus', () => undefined)
 const title = computed(() => views.find(v => v.id === view.value)?.label)
-// The error page sets its own title.
-useHead({ title: computed(() => title.value ? `${title.value}, Kashall` : error.value ? undefined : 'Kashall') })
+useHead({ title: computed(() => title.value ? `${title.value}, Kashall` : 'Kashall') })
 
 // --- The images the particle field takes its colour from -------------------
 
@@ -352,7 +346,7 @@ function drawTitle(ctx: CanvasRenderingContext2D, label: string, hue: string, as
 }
 
 const paintings = new Map<string, HTMLCanvasElement>()
-const titleFor = (id: string) => focus.value ?? heading(id).label
+const titleFor = (id: string) => heading(id).label
 const blank = () => {
   const made = document.createElement('canvas')
   made.width = PAINT_WIDTH
@@ -472,7 +466,6 @@ function morphTo(seconds: number, swirl: number) {
 
 async function show(id: string) {
   changing = true
-  focus.value = undefined
   await assets
   lids = [0, 0]
   if (renderer && live.value) {
@@ -485,12 +478,6 @@ async function show(id: string) {
   }
   if (id !== view.value) return
   changing = false
-  settle()
-}
-
-// A title borrowed while the field was busy lands once it's free.
-function settle() {
-  if (renderer && live.value && !changing && !blinking && titleFor(view.value) !== shownTitle) morphTo(0.8, 0.45)
 }
 
 type Frame = [left: number, right: number, ms: number]
@@ -515,7 +502,6 @@ async function blink(frames: Frame[]) {
     blinking = false
     lids = [0, 0]
   }
-  settle()
 }
 
 let blinkTimer: ReturnType<typeof setTimeout> | undefined
@@ -599,10 +585,6 @@ onMounted(async () => {
 })
 
 watch(view, id => show(id))
-// A borrowed title, or moving to a post in another section.
-watch(() => titleFor(view.value), () => {
-  if (renderer && live.value && !changing && !blinking) morphTo(0.8, 0.45)
-})
 watch(reduced, value => renderer?.setReduced(value))
 useEventListener('resize', useDebounceFn(() => show(view.value), 400))
 onBeforeUnmount(() => {
@@ -646,10 +628,6 @@ onBeforeUnmount(() => {
   --fg-2: #b2acc9;
   --fg-3: #7c7697;
   --accent: #c2a5ff;
-  /* The hues from the banner: who I am, the work, the side work. */
-  --tone-who: #d9c6ff;
-  --tone-work: #5fb2ff;
-  --tone-side: #ff9b4a;
   --rule: rgb(194 165 255 / 0.18);
   --notice: #ffb547;
 
@@ -755,15 +733,6 @@ onBeforeUnmount(() => {
   .field .column.column-wide {
     width: auto;
   }
-}
-
-/* A sentence in one of the hues colours its phrases and leaves the rest as is. */
-.tone-who { --tone: var(--tone-who); }
-.tone-work { --tone: var(--tone-work); }
-.tone-side { --tone: var(--tone-side); }
-
-:is(.tone-who, .tone-work, .tone-side) > span {
-  color: var(--tone);
 }
 
 .nav-link {
