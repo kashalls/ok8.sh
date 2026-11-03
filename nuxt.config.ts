@@ -135,10 +135,10 @@ export default defineNuxtConfig({
       '/gateway': { prerender: false, sitemap: false },
       // Only the site owner sees anything here, and it changes with every comment.
       '/admin': { prerender: false, sitemap: false },
-      // Redirects or shows search results depending on ?q=, so it can't be a static file.
-      '/posts': { prerender: false },
       // Old blog URLs, from before posts covered docs and guides too.
       '/blog/**': { redirect: { to: '/posts/**', statusCode: 301 } },
+      '/writing': { redirect: { to: '/posts', statusCode: 301 } },
+      '/about': { redirect: { to: '/', statusCode: 301 } },
       '/git': { redirect: { to: 'https://github.com/kashalls', statusCode: 302 } },
       // Local fonts aren't content-hashed, so cache them without `immutable`.
       '/fonts/**': { headers: { 'cache-control': 'public, max-age=2592000' } },

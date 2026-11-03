@@ -3,11 +3,7 @@ title: 'Janky Networking'
 description: 'See how my network comes to a crawl once RSTP is disabled...'
 date: 2024-09-16
 updated: 2025-10-29
-section: homelab
-category: homelab
 tags: [homelab, networking, unifi, bgp]
-icon: i-ph-network
-order: 4
 ---
 
 ## The Internet

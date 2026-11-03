@@ -17,9 +17,9 @@ interface PostCommentsStub {
 
 /**
  * The PostComments instance for the post named by the route's `slug`, or the
- * guestbook's for `guestbook`. Only published Blog section posts have one
- * (docs and guides take no comments), so arbitrary paths can't create
- * instances. Not available under `nuxt dev`, which doesn't run the Worker entry.
+ * guestbook's for `guestbook`. Only published posts have one, so arbitrary
+ * paths can't create instances. Not available under `nuxt dev`, which doesn't
+ * run the Worker entry.
  */
 export const usePostComments = async (event: H3Event): Promise<PostCommentsStub> => {
     const slug = getRouterParam(event, 'slug')
@@ -28,18 +28,16 @@ export const usePostComments = async (event: H3Event): Promise<PostCommentsStub>
         : await queryCollection(event, 'blog')
             .path(`/posts/${slug}`)
             .where('draft', '=', false)
-            .where('section', '=', 'blog')
             .select('path')
             .first()
     if (!post) throw createError({ statusCode: 404, statusMessage: 'Post not found.' })
     return commentsFor(event, post.path)
 }
 
-/** Every place that takes comments: the guestbook, then each published Blog post. */
+/** Every place that takes comments: the guestbook, then each published post. */
 export const commentSources = async (event: H3Event) => {
     const posts = await queryCollection(event, 'blog')
         .where('draft', '=', false)
-        .where('section', '=', 'blog')
         .select('path', 'title')
         .all()
     return [

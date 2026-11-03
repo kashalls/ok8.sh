@@ -37,19 +37,3 @@ const updated = computed(() => formatDate(postDate(page.value!.updated)))
         <ContentRenderer :value="page" class="doc-body" />
     </main>
 </template>
-
-<style scoped>
-.doc-title {
-    font-family: var(--font-display);
-    font-size: 1.75rem;
-    line-height: 1.1;
-    letter-spacing: -0.01em;
-    color: var(--cream);
-}
-
-.doc-body :deep(:is(h2, h3, h4)) {
-    font-family: var(--font-display);
-    font-weight: 400;
-    color: var(--cream);
-}
-</style>

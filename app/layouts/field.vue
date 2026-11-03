@@ -34,9 +34,8 @@ const { height: noticeHeight } = useElementSize(notice, undefined, { box: 'borde
 
 // Each page's hue colours its particle title, the nav marker and its links.
 const views = [
-  { id: 'about', label: 'About', to: '/about', tone: '#d9c6ff' },
   { id: 'work', label: 'Work', to: '/work', tone: '#5fb2ff' },
-  { id: 'writing', label: 'Writing', to: '/writing', tone: '#ff7ac8' },
+  { id: 'posts', label: 'Blog', to: '/posts', tone: '#ff7ac8' },
   { id: 'guestbook', label: 'Guestbook', to: '/guestbook', tone: '#46e08c' },
 ] as const
 const HOME_TONE = '#c2a5ff'
@@ -44,16 +43,11 @@ const HOME_TONE = '#c2a5ff'
 const FAIL_TONE = '#ff7a6b'
 const error = useError()
 const view = computed(() => error.value ? 'error' : route.path.split('/')[1] || 'home')
-const { current: postSection } = await useBlogNavigation()
 
-// The particle title and hue a route shows: a page's own, or a post's section.
+// The particle title and hue a route shows.
 function heading(id: string): { label?: string, hue: string } {
   const page = views.find(v => v.id === id)
   if (page) return { label: page.label, hue: page.tone }
-  if (id === 'posts') {
-    const section = blogSection(postSection.value)
-    return section ? { label: section.label, hue: section.hue } : { label: 'Search', hue: HOME_TONE }
-  }
   if (id === 'legal') return { label: 'Legal', hue: HOME_TONE }
   if (id === 'admin') return { label: 'Admin', hue: HOME_TONE }
   if (id === 'gateway') return { label: '502', hue: FAIL_TONE }

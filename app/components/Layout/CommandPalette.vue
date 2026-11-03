@@ -71,9 +71,8 @@ const groups = computed<CommandPaletteGroup[]>(() => [
         label: 'Pages',
         items: [
             { label: 'Home', icon: 'i-ph-house', to: '/' },
-            { label: 'About', icon: 'i-ph-user', to: '/about' },
             { label: 'Work', icon: 'i-ph-briefcase', to: '/work' },
-            { label: 'Writing', icon: 'i-ph-pen-nib', to: '/writing' },
+            { label: 'Blog', icon: 'i-ph-pen-nib', to: '/posts' },
             { label: 'Guestbook', icon: 'i-ph-book-open-text', to: '/guestbook' },
         ],
     },

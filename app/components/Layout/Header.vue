@@ -2,14 +2,10 @@
 import type { NavigationMenuItem } from '@nuxt/ui'
 
 const route = useRoute()
-const { sections } = await useBlogNavigation()
-
-const items = computed<NavigationMenuItem[]>(() =>
-    sections.value.map(section => ({ label: section.label, icon: section.icon, to: section.first, accent: section.accent })))
 
 const menuLinks = computed<NavigationMenuItem[]>(() => [
     { label: 'Home', icon: 'i-ph-house', to: '/', active: route.path === '/' },
-    { label: 'Writing', icon: 'i-ph-pen-nib', to: '/writing' },
+    { label: 'Blog', icon: 'i-ph-pen-nib', to: '/posts' },
 ])
 </script>
 
@@ -28,15 +24,6 @@ const menuLinks = computed<NavigationMenuItem[]>(() => [
             <span class="hidden font-display sm:inline">Kashall</span>
         </template>
 
-        <UNavigationMenu :items="items" color="neutral" variant="link">
-            <template #item-leading="{ item }">
-                <span v-if="item.accent" class="flex size-6 items-center justify-center rounded-md ring-1"
-                    :class="[item.accent.text, item.accent.ring]">
-                    <UIcon :name="item.icon" class="size-4" />
-                </span>
-            </template>
-        </UNavigationMenu>
-
         <template #right>
             <LayoutCommandPalette />
             <!-- No room below lg; the menu carries them there. -->
@@ -46,15 +33,6 @@ const menuLinks = computed<NavigationMenuItem[]>(() => [
 
         <template #body>
             <UNavigationMenu :items="menuLinks" orientation="vertical" color="primary" />
-            <USeparator class="my-6" />
-            <UNavigationMenu :items="items" orientation="vertical" color="neutral">
-                <template #item-leading="{ item }">
-                    <span class="flex size-6 items-center justify-center rounded-md ring-1"
-                        :class="[item.accent.text, item.accent.ring]">
-                        <UIcon :name="item.icon" class="size-4" />
-                    </span>
-                </template>
-            </UNavigationMenu>
             <USeparator class="my-6" />
             <LayoutSocial />
         </template>

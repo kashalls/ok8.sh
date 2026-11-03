@@ -2,11 +2,7 @@
 title: 'Understanding Talos'
 description: 'Talos provides a secure, immutable, minimal and confusing operating system for new users.'
 date: 2024-09-17
-section: guides
-category: guides
 tags: [talos, kubernetes]
-icon: i-ph-bird
-order: 2
 ---
 
 ::warning

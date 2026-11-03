@@ -1,67 +1,103 @@
 <script setup lang="ts">
 import { refDebounced } from '@vueuse/core'
 
-definePageMeta({ layout: 'field', pageTransition: { name: 'column', mode: 'out-in' } })
+definePageMeta({ layout: 'sheet' })
 
-const route = useRoute()
-const router = useRouter()
+const description = 'Posts about my homelab, Kubernetes and the tools I build.'
+useSeoMeta({ title: 'Blog — Kashall', description, ogDescription: description })
+defineOgImage('Default', { title: 'Blog', description })
 
-// /posts is only a search results page; without a query it goes to the index.
-if (!('q' in route.query)) {
-    await navigateTo('/writing', { redirectCode: 302 })
-}
-
-const query = ref(typeof route.query.q === 'string' ? route.query.q : '')
-const debouncedQuery = refDebounced(query, 200)
-watch(debouncedQuery, q => router.replace({ query: { q } }))
-
-const { data: sections } = await useAsyncData('blog-search-sections', () =>
-    queryCollectionSearchSections('blog', { extraFields: ['tags'] }).where('draft', '=', false),
+const { data: posts } = await useAsyncData('blog-posts', () =>
+    queryCollection('blog')
+        .where('draft', '=', false)
+        .order('date', 'DESC')
+        .select('title', 'description', 'path', 'date', 'tags')
+        .all(),
 )
 
-const terms = computed(() => debouncedQuery.value.toLowerCase().split(/\s+/).filter(Boolean))
-
-// A section matches when every term appears in its titles or text. Tags count
-// only for a post's top-level entry, so a tag doesn't match every heading.
-const results = computed(() => {
-    if (!terms.value.length) return []
-    return (sections.value ?? [])
-        .filter(section => {
-            const text = [section.title, ...section.titles, section.content, ...(section.level === 1 ? section.tags ?? [] : [])].join(' ').toLowerCase()
-            return terms.value.every(term => text.includes(term))
-        })
-        .map(section => ({ ...section, snippet: snippet(section.content) }))
+// The page is prerendered, so ?q= (a post's tag links here) is read in the browser.
+const route = useRoute()
+const router = useRouter()
+const query = ref('')
+onMounted(() => {
+    if (typeof route.query.q === 'string') query.value = route.query.q
 })
+const debouncedQuery = refDebounced(query, 200)
+watch(debouncedQuery, q => router.replace({ query: q.trim() ? { q: q.trim() } : {} }))
 
-// Up to ~160 characters of text, starting a little before the first term found.
-function snippet(content: string) {
-    const lower = content.toLowerCase()
-    const hit = terms.value.map(term => lower.indexOf(term)).find(i => i >= 0) ?? 0
-    const start = Math.max(0, hit - 40)
-    const text = content.slice(start, start + 160).trim()
-    return (start > 0 ? '…' : '') + text + (start + 160 < content.length ? '…' : '')
-}
-
-useSeoMeta({
-    title: () => debouncedQuery.value ? `Search: ${debouncedQuery.value} — Kashall` : 'Search — Kashall',
-    robots: 'noindex',
-})
+// A post matches when every word appears in its title, description or tags.
+const terms = computed(() => query.value.toLowerCase().split(/\s+/).filter(Boolean))
+const shown = computed(() => (posts.value ?? []).filter((post) => {
+    const text = [post.title, post.description, ...(post.tags ?? [])].join(' ').toLowerCase()
+    return terms.value.every(term => text.includes(term))
+}))
 </script>
 
 <template>
-    <main class="column">
-        <h1 class="page-name">Search</h1>
-        <input v-model="query" type="search" placeholder="Search every post" aria-label="Search posts" autofocus
-            class="search-input">
-        <ul v-if="results.length" class="list mt-8">
-            <li v-for="result in results" :key="result.id">
-                <NuxtLink :to="result.id" class="item">
-                    <span v-if="result.titles.length" class="item-meta text-(--accent)">{{ result.titles.join(' / ') }}</span>
-                    <span class="item-title">{{ result.title }}</span>
-                    <span v-if="result.snippet" class="item-text">{{ result.snippet }}</span>
+    <main>
+        <h1 class="doc-title">Blog</h1>
+        <form role="search" class="blog-search" @submit.prevent>
+            <input v-model="query" type="search" placeholder="Search posts" aria-label="Search posts">
+            <a href="/feed.xml" target="_blank" class="blog-rss">RSS</a>
+        </form>
+
+        <ul v-if="shown.length" class="rows">
+            <li v-for="post in shown" :key="post.path">
+                <NuxtLink :to="post.path" class="row">
+                    <span class="row-top">
+                        <span class="row-name">{{ post.title }}</span>
+                        <time :datetime="new Date(post.date).toISOString()" class="row-meta">{{ formatDate(postDate(post.date)) }}</time>
+                    </span>
+                    <span v-if="post.description" class="row-text">{{ post.description }}</span>
                 </NuxtLink>
             </li>
         </ul>
-        <p v-else-if="terms.length" class="item-text mt-8">Nothing matches “{{ debouncedQuery }}”. Try fewer words, or browse <NuxtLink to="/writing" class="inline-link">everything I've written</NuxtLink>.</p>
+        <p v-else class="blog-empty">Nothing matches “{{ query }}”. Try fewer words.</p>
     </main>
 </template>
+
+<style scoped>
+.blog-search {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin: 1.5rem 0 1rem;
+}
+
+.blog-search input {
+    flex: 1;
+    min-width: 0;
+    padding: 0.5rem 0.7rem;
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    background: var(--charcoal);
+    color: var(--cream);
+    transition: border-color 200ms, box-shadow 200ms;
+}
+
+.blog-search input::placeholder {
+    color: rgb(252 246 237 / 0.4);
+}
+
+/* The border and a ring in gold stand in for the outline. */
+.blog-search input:focus {
+    border-color: var(--gold);
+    outline: none;
+    box-shadow: 0 0 0 1px var(--gold);
+}
+
+.blog-rss {
+    font-size: 0.85rem;
+    color: var(--muted);
+    transition: color 200ms;
+}
+
+.blog-rss:hover {
+    color: var(--cream);
+}
+
+.blog-empty {
+    margin-top: 1.5rem;
+    color: var(--muted);
+}
+</style>

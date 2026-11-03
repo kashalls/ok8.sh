@@ -2,11 +2,7 @@
 title: 'Proxy DHCP PXE Booting'
 description: 'Utilize dnsmasq to allow PXE bootstraping your Kubernetes nodes seamlessly.'
 date: 2024-09-17
-section: guides
-category: guides
 tags: [talos, pxe, networking]
-icon: i-ph-arrows-left-right
-order: 3
 ---
 
 Most router appliances do not allow the user to properly configure multi-arch pxe booting without modifying the base operating system. These changes would be overwritten on the next firmware update, requiring you to redeploy the changes.

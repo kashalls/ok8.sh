@@ -1,6 +1,5 @@
 /**
- * Atom feed of the Blog section's posts; docs and guides change in place, so
- * they stay out. Prerendered at build (see nitro.prerender).
+ * Atom feed of every post. Prerendered at build (see nitro.prerender).
  */
 // Imported explicitly: typed routes pull this file into the app's type check,
 // where the auto-imported queryCollection is the client version.
@@ -16,7 +15,6 @@ export default defineEventHandler(async (event) => {
     const site = getSiteConfig(event)
     const posts = await queryCollection(event, 'blog')
         .where('draft', '=', false)
-        .where('section', '=', 'blog')
         .order('date', 'DESC')
         .select('title', 'description', 'date', 'updated', 'path', 'tags')
         .all()

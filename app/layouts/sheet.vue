@@ -2,6 +2,7 @@
 useDisplayPreferences()
 
 const { openContact } = useContact()
+const route = useRoute()
 // Discord has the footer's presence bar instead.
 const links = socials.filter(social => social.label !== 'Discord')
 const lanyard = useLanyard()
@@ -40,18 +41,21 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
       <header class="frame-header">
         <NuxtLink to="/" class="frame-name frame-logo" :class="{ 'is-gradient': nameGradient }"
           :style="{ backgroundImage: nameGradient }">Kashall</NuxtLink>
-        <ul class="frame-links">
-          <li v-for="social in links" :key="social.to">
-            <a :href="social.to" target="_blank" rel="noopener" :aria-label="social.label" :title="social.label">
-              <UIcon :name="social.iconFill" />
-            </a>
-          </li>
-          <li>
-            <button type="button" aria-label="Email me" title="Email me" @click="openContact()">
-              <UIcon name="i-ph-envelope-simple-fill" />
-            </button>
-          </li>
-        </ul>
+        <nav class="frame-nav" aria-label="Site">
+          <NuxtLink to="/posts" class="frame-nav-link" :aria-current="route.path.startsWith('/posts') ? 'page' : undefined">Blog</NuxtLink>
+          <ul class="frame-links">
+            <li v-for="social in links" :key="social.to">
+              <a :href="social.to" target="_blank" rel="noopener" :aria-label="social.label" :title="social.label">
+                <UIcon :name="social.iconFill" />
+              </a>
+            </li>
+            <li>
+              <button type="button" aria-label="Email me" title="Email me" @click="openContact()">
+                <UIcon name="i-ph-envelope-simple-fill" />
+              </button>
+            </li>
+          </ul>
+        </nav>
       </header>
 
       <slot />
@@ -270,6 +274,23 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
   min-width: 0;
 }
 
+.frame-nav {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.frame-nav-link {
+  font-size: 0.95rem;
+  color: var(--muted);
+  transition: color 200ms;
+}
+
+.frame-nav-link:hover,
+.frame-nav-link[aria-current] {
+  color: var(--cream);
+}
+
 .frame-links {
   display: flex;
   gap: 1rem;
@@ -296,5 +317,86 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
   color: var(--hover);
   filter: drop-shadow(0 0 6px var(--hover));
   translate: 0 -2px;
+}
+
+/* A page's own title: a post, the blog and the legal pages. */
+.doc-title {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: var(--cream);
+}
+
+/* Long-form text: posts and the legal pages. */
+.doc-body {
+  line-height: 1.75;
+}
+
+.doc-body :is(h2, h3, h4) {
+  font-family: var(--font-display);
+  font-weight: 400;
+  color: var(--cream);
+}
+
+/* Lists of links: projects on home, posts on the blog. */
+.rows li + li {
+  border-top: 1px solid var(--rule);
+}
+
+.row {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0.85rem 0;
+}
+
+/* The Discord bar's violet, washing in behind the row from the left. */
+.row::before {
+  content: '';
+  position: absolute;
+  inset: 0 -0.6rem;
+  z-index: -1;
+  border-radius: 6px;
+  background: linear-gradient(90deg, rgb(91 63 124 / 0.35), rgb(91 63 124 / 0.08));
+  opacity: 0;
+  transition: opacity 250ms;
+}
+
+.row:is(:hover, :focus-visible)::before {
+  opacity: 1;
+}
+
+.row-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.row-name {
+  color: var(--cream);
+  transition: color 200ms, translate 250ms ease-out;
+}
+
+.row:is(:hover, :focus-visible) .row-name {
+  color: var(--gold);
+  translate: 0.25rem 0;
+}
+
+.row-meta {
+  display: flex;
+  flex: none;
+  gap: 0.75rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.row-text {
+  font-size: 0.9rem;
+  color: var(--muted);
 }
 </style>

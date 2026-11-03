@@ -32,17 +32,17 @@ const { data: stars } = useFetch('/api/repos', { server: false, lazy: true })
 
     <section class="projects" aria-labelledby="projects-title">
       <h2 id="projects-title" class="projects-title">Projects</h2>
-      <ul>
+      <ul class="rows">
         <li v-for="project in projects" :key="project.repo">
-          <a :href="`https://github.com/${project.repo}`" target="_blank" rel="noopener" class="project">
-            <span class="project-top">
-              <span class="project-name">{{ project.name }}</span>
-              <span class="project-meta">
+          <a :href="`https://github.com/${project.repo}`" target="_blank" rel="noopener" class="row">
+            <span class="row-top">
+              <span class="row-name">{{ project.name }}</span>
+              <span class="row-meta">
                 <span>{{ project.lang }}</span>
                 <span v-if="stars?.[project.repo] != null"><span aria-hidden="true">★</span> {{ stars[project.repo] }}<span class="sr-only"> stars</span></span>
               </span>
             </span>
-            <span class="project-text">{{ project.description }}</span>
+            <span class="row-text">{{ project.description }}</span>
           </a>
         </li>
       </ul>
@@ -89,66 +89,6 @@ const { data: stars } = useFetch('/api/repos', { server: false, lazy: true })
   font-family: var(--font-display);
   font-size: 1.1rem;
   color: var(--cream);
-}
-
-.projects li + li {
-  border-top: 1px solid var(--rule);
-}
-
-.project {
-  position: relative;
-  isolation: isolate;
-  display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
-  padding: 0.85rem 0;
-}
-
-/* The Discord bar's violet, washing in behind the row from the left. */
-.project::before {
-  content: '';
-  position: absolute;
-  inset: 0 -0.6rem;
-  z-index: -1;
-  border-radius: 6px;
-  background: linear-gradient(90deg, rgb(91 63 124 / 0.35), rgb(91 63 124 / 0.08));
-  opacity: 0;
-  transition: opacity 250ms;
-}
-
-.project:is(:hover, :focus-visible)::before {
-  opacity: 1;
-}
-
-.project-top {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 1rem;
-}
-
-.project-name {
-  color: var(--cream);
-  transition: color 200ms, translate 250ms ease-out;
-}
-
-.project:is(:hover, :focus-visible) .project-name {
-  color: var(--gold);
-  translate: 0.25rem 0;
-}
-
-.project-meta {
-  display: flex;
-  flex: none;
-  gap: 0.75rem;
-  font-size: 0.8rem;
-  color: var(--muted);
-  font-variant-numeric: tabular-nums;
-}
-
-.project-text {
-  font-size: 0.9rem;
-  color: var(--muted);
 }
 
 /* A logo image rather than an icon, sized to match. */

@@ -3,11 +3,7 @@ title: 'TrueNAS'
 description: ''
 date: 2024-09-16
 updated: 2026-06-05
-section: homelab
-category: storage
 tags: [homelab, truenas, zfs]
-icon: i-simple-icons-truenas
-order: 2
 ---
 
 Puddle is my NAS, running **TrueNAS SCALE** on a **45HomeLab HL15** with 256 GB
