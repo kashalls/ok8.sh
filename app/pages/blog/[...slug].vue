@@ -46,14 +46,19 @@ defineOgImage('Post', {
             <p class="post-meta">
                 <time :datetime="new Date(post.date).toISOString()">{{ date }}</time>
                 <time v-if="updated" :datetime="new Date(post.updated!).toISOString()">Updated {{ updated }}</time>
-                <NuxtLink v-for="tag in post.tags" :key="tag" :to="{ path: '/blog', query: { q: tag } }" class="post-tag">#{{ tag }}</NuxtLink>
+                <span v-if="post.tags?.length" class="post-tags">
+                    <NuxtLink v-for="tag in post.tags" :key="tag" :to="{ path: '/blog', query: { q: tag } }" class="chip">{{ tag }}</NuxtLink>
+                </span>
             </p>
         </header>
 
         <ContentRenderer :value="post" class="doc-body" />
 
         <footer class="post-footer">
-            <a :href="editUrl" target="_blank" rel="noopener" class="post-edit">Edit this page on GitHub</a>
+            <a :href="editUrl" target="_blank" rel="noopener" class="post-edit">
+                <UIcon name="i-ph-pencil-simple" />
+                Edit this page on GitHub
+            </a>
 
             <BlogComments :path="post.path" class="post-comments" />
         </footer>
@@ -88,19 +93,17 @@ defineOgImage('Post', {
 .post-meta {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     gap: 0.25rem 1rem;
     margin-top: 0.75rem;
     font-size: 0.85rem;
     color: var(--muted);
 }
 
-.post-tag {
-    color: var(--lilac);
-    transition: color 200ms;
-}
-
-.post-tag:hover {
-    color: var(--cream);
+.post-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
 }
 
 .post-footer {
@@ -111,6 +114,9 @@ defineOgImage('Post', {
 }
 
 .post-edit {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
     align-self: flex-start;
     font-size: 0.85rem;
     color: var(--muted);

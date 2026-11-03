@@ -17,6 +17,13 @@ if (import.meta.client) {
   watch(visibility, (state) => { if (state === 'visible') refreshMessages() })
   useIntervalFn(() => { if (visibility.value === 'visible') refreshMessages() }, 5 * 60_000)
 }
+// The server decides whether this page load is a new visit. Unavailable under
+// `nuxt dev`, where the counter stays hidden.
+const visits = ref<number | null>(null)
+onMounted(async () => {
+  const result = await $fetch<{ count: number }>('/api/visits', { method: 'POST' }).catch(() => null)
+  if (result) visits.value = result.count
+})
 // Discord has the footer's presence bar instead.
 const links = socials.filter(social => social.label !== 'Discord')
 // Tooltips render in a portal outside .sheet, so .frame-tooltip carries the palette.
@@ -116,15 +123,23 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
             </div>
           </section>
         </Transition>
-        <ul class="frame-links frame-socials">
-          <li v-for="social in links" :key="social.to">
-            <UTooltip :text="social.label" v-bind="tooltip">
-              <a :href="social.to" target="_blank" rel="noopener" :aria-label="social.label">
-                <UIcon :name="social.iconFill" />
-              </a>
-            </UTooltip>
-          </li>
-        </ul>
+        <div class="frame-base">
+          <ul class="frame-links">
+            <li v-for="social in links" :key="social.to">
+              <UTooltip :text="social.label" v-bind="tooltip">
+                <a :href="social.to" target="_blank" rel="noopener" :aria-label="social.label">
+                  <UIcon :name="social.iconFill" />
+                </a>
+              </UTooltip>
+            </li>
+          </ul>
+          <UTooltip v-if="visits !== null" text="Visitors" v-bind="tooltip">
+            <p class="frame-visits">
+              <UIcon name="i-ph-eye-fill" />
+              {{ visits.toLocaleString('en-US') }}<span class="sr-only"> visitors</span>
+            </p>
+          </UTooltip>
+        </div>
       </footer>
     </div>
     <ContactDialog />
@@ -227,13 +242,31 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
   padding-top: 3rem;
 }
 
-.frame-socials {
+.frame-base {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
   padding-top: 1rem;
   border-top: 1px solid var(--rule);
 }
 
-.frame-card + .frame-socials {
+.frame-card + .frame-base {
   margin-top: 1.5rem;
+}
+
+.frame-visits {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  animation: frame-visits-in 300ms;
+}
+
+@keyframes frame-visits-in {
+  from { opacity: 0; }
 }
 
 /* The Discord user panel: avatar, name and custom status over the nameplate. */
