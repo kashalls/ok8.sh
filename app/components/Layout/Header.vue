@@ -5,7 +5,7 @@ const route = useRoute()
 
 const menuLinks = computed<NavigationMenuItem[]>(() => [
     { label: 'Home', icon: 'i-ph-house', to: '/', active: route.path === '/' },
-    { label: 'Blog', icon: 'i-ph-pen-nib', to: '/posts' },
+    { label: 'Blog', icon: 'i-ph-pen-nib', to: '/blog' },
 ])
 </script>
 

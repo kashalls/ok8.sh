@@ -35,7 +35,7 @@ const { height: noticeHeight } = useElementSize(notice, undefined, { box: 'borde
 // Each page's hue colours its particle title, the nav marker and its links.
 const views = [
   { id: 'work', label: 'Work', to: '/work', tone: '#5fb2ff' },
-  { id: 'posts', label: 'Blog', to: '/posts', tone: '#ff7ac8' },
+  { id: 'blog', label: 'Blog', to: '/blog', tone: '#ff7ac8' },
   { id: 'guestbook', label: 'Guestbook', to: '/guestbook', tone: '#46e08c' },
 ] as const
 const HOME_TONE = '#c2a5ff'

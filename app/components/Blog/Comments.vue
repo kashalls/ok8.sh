@@ -3,7 +3,7 @@ const props = defineProps<{ path: string, guestbook?: boolean }>()
 const noun = computed(() => props.guestbook ? 'entry' : 'comment')
 
 // Posts are prerendered, so comments and the session always load in the browser.
-const api = computed(() => `/api/comments/${props.path.replace(/^\/(posts\/)?/, '')}`)
+const api = computed(() => `/api/comments/${props.path.replace(/^\/(blog\/)?/, '')}`)
 const { data, status, refresh } = useFetch<{ comments: PostComment[], viewerIsOwner: boolean }>(api, { server: false, lazy: true, deep: true })
 const { loggedIn, user, clear } = useUserSession()
 const signInFailed = useSignInFailed()

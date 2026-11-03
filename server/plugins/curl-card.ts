@@ -9,7 +9,7 @@ const dim = (s: string) => `\x1b[2m${s}\x1b[0m`
 
 const links = [
     ['web', 'https://ok8.sh'],
-    ['posts', 'https://ok8.sh/posts'],
+    ['blog', 'https://ok8.sh/blog'],
     ...socials.map(social => [social.label.toLowerCase(), social.to]),
 ]
 

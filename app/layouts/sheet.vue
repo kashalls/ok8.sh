@@ -42,7 +42,7 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
         <NuxtLink to="/" class="frame-name frame-logo" :class="{ 'is-gradient': nameGradient }"
           :style="{ backgroundImage: nameGradient }">Kashall</NuxtLink>
         <nav class="frame-nav" aria-label="Site">
-          <NuxtLink to="/posts" class="frame-nav-link" :aria-current="route.path.startsWith('/posts') ? 'page' : undefined">Blog</NuxtLink>
+          <NuxtLink to="/blog" class="frame-nav-link" :aria-current="route.path.startsWith('/blog') ? 'page' : undefined">Blog</NuxtLink>
           <ul class="frame-links">
             <li v-for="social in links" :key="social.to">
               <a :href="social.to" target="_blank" rel="noopener" :aria-label="social.label" :title="social.label">
@@ -289,7 +289,7 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
 
 .frame-nav-link:hover,
 .frame-nav-link[aria-current] {
-  color: var(--cream);
+  color: var(--text);
 }
 
 .frame-links {

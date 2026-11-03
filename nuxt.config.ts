@@ -135,9 +135,10 @@ export default defineNuxtConfig({
       '/gateway': { prerender: false, sitemap: false },
       // Only the site owner sees anything here, and it changes with every comment.
       '/admin': { prerender: false, sitemap: false },
-      // Old blog URLs, from before posts covered docs and guides too.
-      '/blog/**': { redirect: { to: '/posts/**', statusCode: 301 } },
-      '/writing': { redirect: { to: '/posts', statusCode: 301 } },
+      // Old blog URLs, from when posts lived at /posts.
+      '/posts': { redirect: { to: '/blog', statusCode: 301 } },
+      '/posts/**': { redirect: { to: '/blog/**', statusCode: 301 } },
+      '/writing': { redirect: { to: '/blog', statusCode: 301 } },
       '/about': { redirect: { to: '/', statusCode: 301 } },
       '/git': { redirect: { to: 'https://github.com/kashalls', statusCode: 302 } },
       // Local fonts aren't content-hashed, so cache them without `immutable`.
@@ -171,7 +172,7 @@ export default defineNuxtConfig({
       // Prerender the static routes so their OG images are generated at build
       // (required by ogImage.zeroRuntime). Dynamic client data still hydrates.
       prerender: {
-          routes: ['/', '/posts/introduction', '/feed.xml', '/legal/juno/terms', '/legal/juno/privacy'],
+          routes: ['/', '/blog/introduction', '/feed.xml', '/legal/juno/terms', '/legal/juno/privacy'],
           // Follow the posts sidebar's links so every post (and its OG image) prerenders.
           crawlLinks: true,
       },

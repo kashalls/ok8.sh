@@ -26,7 +26,7 @@ export const usePostComments = async (event: H3Event): Promise<PostCommentsStub>
     const post = slug === 'guestbook'
         ? { path: '/guestbook' }
         : await queryCollection(event, 'blog')
-            .path(`/posts/${slug}`)
+            .path(`/blog/${slug}`)
             .where('draft', '=', false)
             .select('path')
             .first()
@@ -42,7 +42,7 @@ export const commentSources = async (event: H3Event) => {
         .all()
     return [
         { slug: 'guestbook', path: '/guestbook', title: 'Guestbook' },
-        ...posts.map(post => ({ slug: post.path.replace(/^\/posts\//, ''), path: post.path, title: post.title })),
+        ...posts.map(post => ({ slug: post.path.replace(/^\/blog\//, ''), path: post.path, title: post.title })),
     ]
 }
 
@@ -51,7 +51,8 @@ export const commentsFor = (event: H3Event, path: string): PostCommentsStub => {
     const exports = event.context.cloudflare?.context?.exports as
         { PostComments?: { getByName(name: string): PostCommentsStub } } | undefined
     if (!exports?.PostComments) throw createError({ statusCode: 503, statusMessage: 'Comments are unavailable right now.' })
-    return exports.PostComments.getByName(path)
+    // Comments are stored under the /posts paths the posts had before the blog moved to /blog.
+    return exports.PostComments.getByName(path.replace(/^\/blog\//, '/posts/'))
 }
 
 /** The signed-in GitHub account; commenting, hearts and removal all need one. */

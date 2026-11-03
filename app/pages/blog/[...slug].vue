@@ -35,7 +35,7 @@ defineOgImage('Post', {
 <template>
     <main v-if="post">
         <header class="mb-10">
-            <NuxtLink to="/posts" class="post-back">
+            <NuxtLink to="/blog" class="post-back">
                 <UIcon name="i-ph-arrow-left" />
                 All posts
             </NuxtLink>
@@ -46,7 +46,7 @@ defineOgImage('Post', {
             <p class="post-meta">
                 <time :datetime="new Date(post.date).toISOString()">{{ date }}</time>
                 <time v-if="updated" :datetime="new Date(post.updated!).toISOString()">Updated {{ updated }}</time>
-                <NuxtLink v-for="tag in post.tags" :key="tag" :to="{ path: '/posts', query: { q: tag } }" class="post-tag">#{{ tag }}</NuxtLink>
+                <NuxtLink v-for="tag in post.tags" :key="tag" :to="{ path: '/blog', query: { q: tag } }" class="post-tag">#{{ tag }}</NuxtLink>
             </p>
         </header>
 

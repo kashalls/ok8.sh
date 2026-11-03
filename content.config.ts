@@ -2,10 +2,10 @@ import { defineCollection, defineContentConfig, z } from '@nuxt/content'
 
 export default defineContentConfig({
     collections: {
-        // Posts live in content/posts/<slug>.md and are served at /posts/<slug>.
+        // Posts live in content/blog/<slug>.md and are served at /blog/<slug>.
         blog: defineCollection({
             type: 'page',
-            source: 'posts/**/*.md',
+            source: 'blog/**/*.md',
             schema: z.object({
                 date: z.date(),
                 // Last meaningful edit; shown beside the date when set.
