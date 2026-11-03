@@ -6,6 +6,11 @@ export function postDate(value: string | Date): Date {
     return new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate())
 }
 
+// The view transition name a post's title carries on the blog and its own page.
+export function postTransitionName(path: string): string {
+    return `post-${path.split('/').pop()}`
+}
+
 // The site's one date style, e.g. "Oct 5, 2026"; `year: false` drops the year
 // where a list is already grouped by year.
 export function formatDate(date: Date, { year = true } = {}): string {

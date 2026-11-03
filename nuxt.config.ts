@@ -202,5 +202,10 @@ export default defineNuxtConfig({
       ]
   },
 
+  // Adds Nuxt's view transitions; app.viewTransition keeps them off unless a page opts in.
+  experimental: {
+      viewTransition: true,
+  },
+
   compatibilityDate: '2026-06-08'
 })

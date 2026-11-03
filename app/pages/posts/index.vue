@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { refDebounced } from '@vueuse/core'
 
-definePageMeta({ layout: 'sheet' })
+definePageMeta({ layout: 'sheet', viewTransition: true })
 
 const description = 'Posts about my homelab, Kubernetes and the tools I build.'
 useSeoMeta({ title: 'Blog — Kashall', description, ogDescription: description })
@@ -45,7 +45,7 @@ const shown = computed(() => (posts.value ?? []).filter((post) => {
             <li v-for="post in shown" :key="post.path">
                 <NuxtLink :to="post.path" class="row">
                     <span class="row-top">
-                        <span class="row-name">{{ post.title }}</span>
+                        <span class="row-name" :style="{ viewTransitionName: postTransitionName(post.path) }">{{ post.title }}</span>
                         <time :datetime="new Date(post.date).toISOString()" class="row-meta">{{ formatDate(postDate(post.date)) }}</time>
                     </span>
                     <span v-if="post.description" class="row-text">{{ post.description }}</span>

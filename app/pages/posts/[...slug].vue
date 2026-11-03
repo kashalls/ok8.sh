@@ -1,5 +1,5 @@
 <script setup lang="ts">
-definePageMeta({ layout: 'sheet' })
+definePageMeta({ layout: 'sheet', viewTransition: true })
 
 const route = useRoute()
 
@@ -39,7 +39,9 @@ defineOgImage('Post', {
                 <UIcon name="i-ph-arrow-left" />
                 All posts
             </NuxtLink>
-            <h1 class="doc-title mt-6">{{ post.title }}</h1>
+            <h1 class="doc-title mt-6">
+                <span class="post-title" :style="{ viewTransitionName: postTransitionName(post.path) }">{{ post.title }}</span>
+            </h1>
             <p v-if="post.description" class="post-lead">{{ post.description }}</p>
             <p class="post-meta">
                 <time :datetime="new Date(post.date).toISOString()">{{ date }}</time>
@@ -71,6 +73,11 @@ defineOgImage('Post', {
 .post-back:is(:hover, :focus-visible) {
     gap: 0.6rem;
     color: var(--cream);
+}
+
+/* One box even when the title wraps, which a view transition needs. */
+.post-title {
+    display: inline-block;
 }
 
 .post-lead {

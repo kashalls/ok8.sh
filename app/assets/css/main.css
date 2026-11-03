@@ -89,6 +89,24 @@ html.reduce-motion *::after {
   scroll-behavior: auto !important;
 }
 
+/* Page changes on the sheet layout: the content crossfades and a post's title
+   glides between the blog list and the post. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 200ms;
+}
+
+::view-transition-group(*) {
+  animation-duration: 400ms;
+  animation-timing-function: cubic-bezier(0.3, 0.7, 0.2, 1);
+}
+
+html.reduce-motion::view-transition-group(*),
+html.reduce-motion::view-transition-old(*),
+html.reduce-motion::view-transition-new(*) {
+  animation: none !important;
+}
+
 html[data-text-size="sm"] { font-size: 87.5%; }
 html[data-text-size="lg"] { font-size: 112.5%; }
 html[data-text-size="xl"] { font-size: 125%; }

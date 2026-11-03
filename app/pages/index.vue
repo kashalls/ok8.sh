@@ -1,5 +1,5 @@
 <script setup lang="ts">
-definePageMeta({ layout: 'sheet' })
+definePageMeta({ layout: 'sheet', viewTransition: true })
 
 defineOgImage('Default', {
   title: 'Kashall',
