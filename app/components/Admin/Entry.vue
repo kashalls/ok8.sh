@@ -46,11 +46,11 @@ async function remove() {
 <template>
     <article class="item">
         <p class="item-meta">
-            <NuxtLink :to="`${source.path}#comment-${comment.id}`" class="text-(--accent) hover:text-(--fg)">{{ source.title }}</NuxtLink>
-            · <span class="text-(--fg-2)">{{ name(comment) }}</span>
+            <NuxtLink :to="`${source.path}#comment-${comment.id}`" class="text-(--gold) hover:text-(--cream)">{{ source.title }}</NuxtLink>
+            · <span class="text-(--text)">{{ name(comment) }}</span>
             · <time :datetime="comment.createdAt">{{ formatDate(new Date(comment.createdAt)) }}</time>
         </p>
-        <p v-if="parent" class="truncate text-xs text-(--fg-3)">Replying to {{ name(parent) }}: {{ parent.removed ? 'a removed comment' : parent.content }}</p>
+        <p v-if="parent" class="truncate text-xs text-(--muted)">Replying to {{ name(parent) }}: {{ parent.removed ? 'a removed comment' : parent.content }}</p>
         <p class="item-text whitespace-pre-wrap break-words">{{ comment.content }}</p>
 
         <form v-if="replying" class="mt-2 flex flex-col gap-2" @submit.prevent="reply">
@@ -58,13 +58,33 @@ async function remove() {
                 :placeholder="`Reply to ${name(comment)}…`" />
             <div class="flex items-center gap-5 text-sm">
                 <UButton type="submit" label="Post reply" variant="outline" size="sm" :loading="busy" :disabled="!content.trim()" />
-                <button type="button" class="text-(--fg-3) hover:text-(--fg)" @click="replying = false">Cancel</button>
+                <button type="button" class="text-(--muted) hover:text-(--cream)" @click="replying = false">Cancel</button>
             </div>
         </form>
         <p v-else class="mt-1 flex gap-5 text-sm">
-            <button type="button" class="text-(--accent) hover:text-(--fg)" @click="replying = true">Reply</button>
-            <button type="button" class="text-(--fg-3) hover:text-[#ff7a6b]" :disabled="busy" @click="remove">Remove</button>
+            <button type="button" class="text-(--gold) hover:text-(--cream)" @click="replying = true">Reply</button>
+            <button type="button" class="text-(--muted) hover:text-(--orange)" :disabled="busy" @click="remove">Remove</button>
         </p>
-        <p v-if="message" role="status" class="text-sm text-(--fg-3)">{{ message }}</p>
+        <p v-if="message" role="status" class="text-sm text-(--muted)">{{ message }}</p>
     </article>
 </template>
+
+<style scoped>
+.item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 1.1rem 0;
+}
+
+.item-meta {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.item-text {
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: var(--text);
+}
+</style>

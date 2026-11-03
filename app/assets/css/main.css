@@ -38,10 +38,11 @@
   --color-green-950: #052e16;
 }
 
-/* The character sheet's colour key, swatch for swatch. The contact dialog renders
-   outside the layout, so it gets the palette here too. */
+/* The character sheet's colour key, swatch for swatch. The contact dialog and tooltips render
+   outside the layout, so they get the palette here too. */
 .sheet,
-.contact {
+.contact,
+.frame-tooltip {
   --black: #1a1918;
   --charcoal: #34323b;
   --cream: #fcf6ed;
@@ -57,29 +58,7 @@
   --rule: rgb(170 104 204 / 0.2);
 }
 
-/* Proximity border glow: useProximityGlow sets --glow-x/--glow-y to the
-   cursor's position relative to each card, so the ring lights up on whichever
-   edges are near the cursor. The mask keeps the gradient to a thin border. */
-.glow-card {
-  position: relative;
-}
-
-.glow-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 10;
-  padding: 1.5px;
-  border-radius: inherit;
-  pointer-events: none;
-  background: radial-gradient(320px circle at var(--glow-x, -9999px) var(--glow-y, -9999px),
-      var(--ui-primary), transparent 60%);
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-}
-
-/* Display preferences (useDisplayPreferences), on every layout. */
+/* Display preferences (useDisplayPreferences). */
 html.reduce-motion *,
 html.reduce-motion *::before,
 html.reduce-motion *::after {

@@ -35,7 +35,7 @@ const next = computed(() => [
                 </p>
                 <p v-else class="error-text">{{ meta.description }}</p>
 
-                <ul class="rows error-next">
+                <ul class="cards error-next">
                     <li v-for="item in next" :key="item.name">
                         <button type="button" class="row" @click="item.go">
                             <span class="row-name">{{ item.name }}</span>
@@ -61,10 +61,5 @@ const next = computed(() => [
 
 .error-next {
     margin-top: 2rem;
-}
-
-.error-next .row {
-    width: 100%;
-    text-align: left;
 }
 </style>

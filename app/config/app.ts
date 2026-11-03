@@ -5,8 +5,7 @@ const description =
 
 // og:image and twitter:card come from defineOgImage on each page.
 export default {
-    // The sheet layout's pages opt in with definePageMeta; the field layout's
-    // pages run their own transition.
+    // Pages opt in with definePageMeta.
     viewTransition: false,
     head: {
         title: 'Kashall',

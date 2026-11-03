@@ -1,10 +1,26 @@
 <script setup lang="ts">
+import { useDocumentVisibility, useIntervalFn } from '@vueuse/core'
+
 useDisplayPreferences()
 
 const { openContact } = useContact()
 const route = useRoute()
+
+// Pages are prerendered, so messages load in the browser. Open pages pick up
+// changes on navigation, when the tab comes back into view, and every five
+// minutes while it's visible; idle hidden tabs cost nothing.
+const { messages, refresh: refreshMessages } = useSiteMessages()
+if (import.meta.client) {
+  const visibility = useDocumentVisibility()
+  onMounted(refreshMessages)
+  watch(() => route.path, refreshMessages)
+  watch(visibility, (state) => { if (state === 'visible') refreshMessages() })
+  useIntervalFn(() => { if (visibility.value === 'visible') refreshMessages() }, 5 * 60_000)
+}
 // Discord has the footer's presence bar instead.
 const links = socials.filter(social => social.label !== 'Discord')
+// Tooltips render in a portal outside .sheet, so .frame-tooltip carries the palette.
+const tooltip = { delayDuration: 200, content: { sideOffset: 6 }, ui: { content: 'frame-tooltip' } }
 const lanyard = useLanyard()
 const custom = computed(() => lanyard.value?.activities.find(a => a.type === ActivityType.Custom))
 const nameplate = computed(() => lanyard.value?.discord_user.collectibles?.nameplate)
@@ -41,29 +57,41 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
       <header class="frame-header">
         <NuxtLink to="/" aria-label="Kashall, home" class="frame-name frame-logo" :class="{ 'is-gradient': nameGradient }"
           :style="{ backgroundImage: nameGradient }">Kashall</NuxtLink>
-        <nav class="frame-nav" aria-label="Site">
-          <NuxtLink to="/blog" class="frame-nav-link" :aria-current="route.path.startsWith('/blog') ? 'page' : undefined">Blog</NuxtLink>
+        <nav aria-label="Site">
           <ul class="frame-links">
-            <li v-for="social in links" :key="social.to">
-              <a :href="social.to" target="_blank" rel="noopener" :aria-label="social.label" :title="social.label">
-                <UIcon :name="social.iconFill" />
-              </a>
+            <li>
+              <UTooltip text="Blog" v-bind="tooltip">
+                <NuxtLink to="/blog" aria-label="Blog" :aria-current="route.path.startsWith('/blog') ? 'page' : undefined">
+                  <UIcon name="i-ph-pen-nib-fill" />
+                </NuxtLink>
+              </UTooltip>
             </li>
             <li>
-              <button type="button" aria-label="Email me" title="Email me" @click="openContact()">
-                <UIcon name="i-ph-envelope-simple-fill" />
-              </button>
+              <UTooltip text="Guestbook" v-bind="tooltip">
+                <NuxtLink to="/guestbook" aria-label="Guestbook" :aria-current="route.path === '/guestbook' ? 'page' : undefined">
+                  <UIcon name="i-ph-signature-fill" />
+                </NuxtLink>
+              </UTooltip>
+            </li>
+            <li>
+              <UTooltip text="Email me" v-bind="tooltip">
+                <button type="button" aria-label="Email me" @click="openContact()">
+                  <UIcon name="i-ph-envelope-simple-fill" />
+                </button>
+              </UTooltip>
             </li>
           </ul>
         </nav>
       </header>
 
+      <p v-if="messages.maintenance" class="frame-notice" role="status">{{ messages.maintenance }}</p>
+
       <slot />
 
-      <!-- The presence bar is only on the home page; the name above still takes its colours everywhere. -->
-      <footer v-if="route.path === '/'" class="frame-footer">
+      <footer class="frame-footer">
+        <!-- The presence bar is only on the home page; the name above still takes its colours everywhere. -->
         <Transition name="frame-fade">
-          <section v-if="lanyard" class="frame-card" aria-label="Discord presence">
+          <section v-if="route.path === '/' && lanyard" class="frame-card" aria-label="Discord presence">
             <Transition name="frame-fade">
               <NuxtImg v-if="nameplate" :src="nameplateUrl(nameplate.asset, nameplateAnimated)" alt="" width="448" height="84"
                 class="frame-nameplate" />
@@ -88,6 +116,15 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
             </div>
           </section>
         </Transition>
+        <ul class="frame-links frame-socials">
+          <li v-for="social in links" :key="social.to">
+            <UTooltip :text="social.label" v-bind="tooltip">
+              <a :href="social.to" target="_blank" rel="noopener" :aria-label="social.label">
+                <UIcon :name="social.iconFill" />
+              </a>
+            </UTooltip>
+          </li>
+        </ul>
       </footer>
     </div>
     <ContactDialog />
@@ -136,26 +173,67 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
 }
 
 .frame {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
   max-width: calc(36rem + 2rem);
   margin-inline: auto;
-  padding: 4rem 1rem 8rem;
+  padding: 4rem 1rem 2rem;
   line-height: 1.5;
 }
 
 .frame-header {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   justify-content: space-between;
-  gap: 1rem;
+  gap: 0.75rem 1rem;
   margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--rule);
 }
 
 .frame-name.frame-logo {
   font-size: 1.75rem;
 }
 
+/* A maintenance message from the admin page. */
+.frame-notice {
+  display: flex;
+  align-items: baseline;
+  gap: 0.65rem;
+  margin-bottom: 1.5rem;
+  padding: 0.6rem 0.85rem;
+  border: 1px solid rgb(246 194 82 / 0.35);
+  border-radius: 8px;
+  background: rgb(246 194 82 / 0.08);
+  font-size: 0.9rem;
+  color: var(--cream);
+}
+
+.frame-notice::before {
+  content: '';
+  flex: none;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+  transform: translateY(-0.1em);
+}
+
+/* Pinned to the bottom of the window on short pages. */
 .frame-footer {
-  margin-top: 3rem;
+  margin-top: auto;
+  padding-top: 3rem;
+}
+
+.frame-socials {
+  padding-top: 1rem;
+  border-top: 1px solid var(--rule);
+}
+
+.frame-card + .frame-socials {
+  margin-top: 1.5rem;
 }
 
 /* The Discord user panel: avatar, name and custom status over the nameplate. */
@@ -275,23 +353,6 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
   min-width: 0;
 }
 
-.frame-nav {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-}
-
-.frame-nav-link {
-  font-size: 0.95rem;
-  color: var(--muted);
-  transition: color 200ms;
-}
-
-.frame-nav-link:hover,
-.frame-nav-link[aria-current] {
-  color: var(--text);
-}
-
 .frame-links {
   display: flex;
   gap: 1rem;
@@ -311,6 +372,17 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
   font-size: 1.1rem;
   color: var(--muted);
   transition: color 200ms, filter 200ms, translate 300ms cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+
+.frame-links [aria-current] {
+  color: var(--cream);
+}
+
+.frame-tooltip {
+  background: var(--charcoal);
+  color: var(--cream);
+  font-family: var(--font-karla);
+  --tw-ring-color: var(--rule);
 }
 
 /* A small springy hop with the glow. */
@@ -423,5 +495,31 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
 .row-text {
   font-size: 0.9rem;
   color: var(--muted);
+}
+
+/* Rows as bordered cards: where to go next from the error and gateway pages. */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: 0.75rem;
+}
+
+.cards .row {
+  width: 100%;
+  height: 100%;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  text-align: left;
+  transition: border-color 250ms;
+}
+
+.cards .row:is(:hover, :focus-visible) {
+  border-color: rgb(170 104 204 / 0.5);
+}
+
+.cards .row::before {
+  inset: 0;
+  border-radius: inherit;
 }
 </style>

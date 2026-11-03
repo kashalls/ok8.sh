@@ -1,5 +1,5 @@
 <script setup lang="ts">
-definePageMeta({ layout: 'field', pageTransition: { name: 'column', mode: 'out-in' } })
+definePageMeta({ layout: 'sheet' })
 useRobotsRule(false)
 
 // Rendered per request, so the session and everything below load on the server.
@@ -39,16 +39,16 @@ async function saveMessages() {
 </script>
 
 <template>
-  <main class="column column-wide">
-    <h1 class="page-name">Admin</h1>
+  <main>
+    <h1 class="doc-title">Admin</h1>
 
-    <p v-if="error" role="alert" class="lead">{{ error.statusMessage || 'Could not load the admin page.' }}</p>
+    <p v-if="error" role="alert" class="mt-4">{{ error.statusMessage || 'Could not load the admin page.' }}</p>
 
     <template v-else>
       <section aria-labelledby="messages-heading">
         <h2 id="messages-heading" class="group-label">Messages</h2>
         <form class="flex flex-col gap-5" @submit.prevent="saveMessages">
-          <UFormField label="Maintenance" help="Shown in the bottom right corner, or under the nav on phones. Leave it empty to hide it.">
+          <UFormField label="Maintenance" help="Shown under the header on every page. Leave it empty to hide it.">
             <UTextarea v-model="draft.maintenance" :rows="1" autoresize :maxlength="280" class="w-full" />
           </UFormField>
           <UFormField label="Status" help="Stored under the live key. Nothing on the site shows it yet.">
@@ -56,13 +56,13 @@ async function saveMessages() {
           </UFormField>
           <div class="flex flex-wrap items-center gap-4">
             <UButton type="submit" label="Save messages" variant="outline" :loading="saving" />
-            <p v-if="saved" role="status" class="text-sm text-(--fg-3)">{{ saved }}</p>
+            <p v-if="saved" role="status" class="text-sm text-(--muted)">{{ saved }}</p>
           </div>
         </form>
       </section>
 
       <section aria-labelledby="inbox-heading">
-        <h2 id="inbox-heading" class="group-label">Needs a reply <span class="text-(--fg-3)">{{ unanswered.length }}</span></h2>
+        <h2 id="inbox-heading" class="group-label">Needs a reply <span class="text-(--muted)">{{ unanswered.length }}</span></h2>
         <p v-if="!unanswered.length" class="item-text">You're all caught up.</p>
         <ul v-else class="list">
           <li v-for="entry in unanswered" :key="entry.comment.id">
@@ -72,7 +72,7 @@ async function saveMessages() {
       </section>
 
       <section aria-labelledby="all-heading">
-        <h2 id="all-heading" class="group-label">Everything <span class="text-(--fg-3)">{{ entries.length }}</span></h2>
+        <h2 id="all-heading" class="group-label">Everything <span class="text-(--muted)">{{ entries.length }}</span></h2>
         <p v-if="!entries.length" class="item-text">No one has written anything yet.</p>
         <ul v-else class="list">
           <li v-for="entry in entries" :key="entry.comment.id">
@@ -83,3 +83,21 @@ async function saveMessages() {
     </template>
   </main>
 </template>
+
+<style scoped>
+.group-label {
+  margin: 2.5rem 0 1rem;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  color: var(--cream);
+}
+
+.list > li + li {
+  border-top: 1px solid var(--rule);
+}
+
+.item-text {
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+</style>
