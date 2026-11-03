@@ -39,7 +39,7 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
     <div class="frame">
       <!-- Holds the spot for the logo. -->
       <header class="frame-header">
-        <NuxtLink to="/" class="frame-name frame-logo" :class="{ 'is-gradient': nameGradient }"
+        <NuxtLink to="/" aria-label="Kashall, home" class="frame-name frame-logo" :class="{ 'is-gradient': nameGradient }"
           :style="{ backgroundImage: nameGradient }">Kashall</NuxtLink>
         <nav class="frame-nav" aria-label="Site">
           <NuxtLink to="/blog" class="frame-nav-link" :aria-current="route.path.startsWith('/blog') ? 'page' : undefined">Blog</NuxtLink>
