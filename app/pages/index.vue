@@ -8,6 +8,18 @@ defineOgImage('Default', {
 
 // Cached on the server; a project without a count just leaves it off.
 const { data: stars } = useFetch('/api/repos', { server: false, lazy: true })
+
+// Hovering the WWT chip again and again gets a firmer answer and a shake.
+// Each hover within two seconds of the last counts towards it.
+const wwtHovers = ref(0)
+const wwtShaking = ref(false)
+let wwtLastHover = 0
+function hoverWwt() {
+  const now = Date.now()
+  wwtHovers.value = now - wwtLastHover < 2000 ? wwtHovers.value + 1 : 1
+  wwtLastHover = now
+  if (wwtHovers.value >= 3) wwtShaking.value = true
+}
 </script>
 
 <template>
@@ -16,8 +28,11 @@ const { data: stars } = useFetch('/api/repos', { server: false, lazy: true })
     <p>I'm a platform engineer based in Oregon.</p>
     <p>
       I currently work at
-      <a href="https://www.wwt.com" target="_blank" rel="noopener" class="chip">
-        <NuxtImg src="https://www.wwt.com/apple-touch-icon.png" alt="" width="14" height="14" class="chip-logo" />World Wide Technology</a>,
+      <UTooltip :text="wwtHovers >= 3 ? 'I still work here :)' : 'I work here'" v-bind="sheetTooltip">
+        <NuxtLink to="https://www.wwt.com" target="_blank" class="chip" :class="{ 'chip-shake': wwtShaking }"
+          @pointerenter="hoverWwt" @animationend="wwtShaking = false">
+          <NuxtImg src="https://www.wwt.com/apple-touch-icon.png" alt="" width="14" height="14" class="chip-logo" />World Wide Technology</NuxtLink>
+      </UTooltip>,
       on internal infrastructure and operations. My role allows me to develop and maintain critical infrastructure for
       our 2,000+ custom applications across 100+ Kubernetes clusters.
     </p>
@@ -26,7 +41,7 @@ const { data: stars } = useFetch('/api/repos', { server: false, lazy: true })
     </p>
     <p>
       On the side, I maintain my own
-      <a href="https://github.com/waifulabs/infrastructure" target="_blank" rel="noopener" class="chip"><UIcon name="i-simple-icons-kubernetes" class="chip-wheel" />Kubernetes infrastructure</a>
+      <NuxtLink to="https://github.com/waifulabs/infrastructure" target="_blank" class="chip"><UIcon name="i-simple-icons-kubernetes" class="chip-wheel" />Kubernetes infrastructure</NuxtLink>
       and write tooling that makes platforms more extensible.
     </p>
 
@@ -34,7 +49,7 @@ const { data: stars } = useFetch('/api/repos', { server: false, lazy: true })
       <h2 id="projects-title" class="projects-title">Projects</h2>
       <ul class="rows">
         <li v-for="project in projects" :key="project.repo">
-          <a :href="`https://github.com/${project.repo}`" target="_blank" rel="noopener" class="row">
+          <NuxtLink :to="`https://github.com/${project.repo}`" target="_blank" class="row">
             <span class="row-top">
               <span class="row-name">{{ project.name }}</span>
               <span class="row-meta">
@@ -43,7 +58,7 @@ const { data: stars } = useFetch('/api/repos', { server: false, lazy: true })
               </span>
             </span>
             <span class="row-text">{{ project.description }}</span>
-          </a>
+          </NuxtLink>
         </li>
       </ul>
     </section>
@@ -53,6 +68,17 @@ const { data: stars } = useFetch('/api/repos', { server: false, lazy: true })
 <style scoped>
 .home > * + * {
   margin-top: 1.5rem;
+}
+
+.chip-shake {
+  animation: chip-shake 400ms ease-in-out;
+}
+
+@keyframes chip-shake {
+  20% { translate: -3px 0; rotate: -2deg; }
+  40% { translate: 3px 0; rotate: 2deg; }
+  60% { translate: -2px 0; rotate: -1deg; }
+  80% { translate: 2px 0; rotate: 1deg; }
 }
 
 /* After the intro, so it outranks the spacing between paragraphs. */

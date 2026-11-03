@@ -26,8 +26,6 @@ onMounted(async () => {
 })
 // Discord has the footer's presence bar instead.
 const links = socials.filter(social => social.label !== 'Discord')
-// Tooltips render in a portal outside .sheet, so .frame-tooltip carries the palette.
-const tooltip = { delayDuration: 200, content: { sideOffset: 6 }, ui: { content: 'frame-tooltip' } }
 const lanyard = useLanyard()
 const custom = computed(() => lanyard.value?.activities.find(a => a.type === ActivityType.Custom))
 const nameplate = computed(() => lanyard.value?.discord_user.collectibles?.nameplate)
@@ -67,21 +65,21 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
         <nav aria-label="Site">
           <ul class="frame-links">
             <li>
-              <UTooltip text="Blog" v-bind="tooltip">
+              <UTooltip text="Blog" v-bind="sheetTooltip">
                 <NuxtLink to="/blog" aria-label="Blog" :aria-current="route.path.startsWith('/blog') ? 'page' : undefined">
                   <UIcon name="i-ph-pen-nib-fill" />
                 </NuxtLink>
               </UTooltip>
             </li>
             <li>
-              <UTooltip text="Guestbook" v-bind="tooltip">
+              <UTooltip text="Guestbook" v-bind="sheetTooltip">
                 <NuxtLink to="/guestbook" aria-label="Guestbook" :aria-current="route.path === '/guestbook' ? 'page' : undefined">
                   <UIcon name="i-ph-signature-fill" />
                 </NuxtLink>
               </UTooltip>
             </li>
             <li>
-              <UTooltip text="Email me" v-bind="tooltip">
+              <UTooltip text="Email me" v-bind="sheetTooltip">
                 <button type="button" aria-label="Email me" @click="openContact()">
                   <UIcon name="i-ph-envelope-simple-fill" />
                 </button>
@@ -126,14 +124,14 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
         <div class="frame-base">
           <ul class="frame-links">
             <li v-for="social in links" :key="social.to">
-              <UTooltip :text="social.label" v-bind="tooltip">
-                <a :href="social.to" target="_blank" rel="noopener" :aria-label="social.label">
+              <UTooltip :text="social.label" v-bind="sheetTooltip">
+                <NuxtLink :to="social.to" target="_blank" :aria-label="social.label">
                   <UIcon :name="social.iconFill" />
-                </a>
+                </NuxtLink>
               </UTooltip>
             </li>
           </ul>
-          <UTooltip v-if="visits !== null" text="Visitors" v-bind="tooltip">
+          <UTooltip v-if="visits !== null" text="Visitors" v-bind="sheetTooltip">
             <p class="frame-visits">
               <UIcon name="i-ph-eye-fill" />
               {{ visits.toLocaleString('en-US') }}<span class="sr-only"> visitors</span>

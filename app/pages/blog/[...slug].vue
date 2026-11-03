@@ -55,10 +55,10 @@ defineOgImage('Post', {
         <ContentRenderer :value="post" class="doc-body" />
 
         <footer class="post-footer">
-            <a :href="editUrl" target="_blank" rel="noopener" class="post-edit">
+            <NuxtLink :to="editUrl" target="_blank" class="post-edit">
                 <UIcon name="i-ph-pencil-simple" />
                 Edit this page on GitHub
-            </a>
+            </NuxtLink>
 
             <BlogComments :path="post.path" class="post-comments" />
         </footer>

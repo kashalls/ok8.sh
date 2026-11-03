@@ -207,6 +207,9 @@ export default defineNuxtConfig({
   // Adds Nuxt's view transitions; app.viewTransition keeps them off unless a page opts in.
   experimental: {
       viewTransition: true,
+      // NuxtLink adds noreferrer to external links by default; keep the referrer
+      // so the sites linked to can see visits came from here.
+      defaults: { nuxtLink: { externalRelAttribute: 'noopener' } },
   },
 
   compatibilityDate: '2026-06-08'
