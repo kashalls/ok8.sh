@@ -60,7 +60,8 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
 
       <slot />
 
-      <footer class="frame-footer">
+      <!-- The presence bar is only on the home page; the name above still takes its colours everywhere. -->
+      <footer v-if="route.path === '/'" class="frame-footer">
         <Transition name="frame-fade">
           <section v-if="lanyard" class="frame-card" aria-label="Discord presence">
             <Transition name="frame-fade">
