@@ -9,14 +9,14 @@ const dim = (s: string) => `\x1b[2m${s}\x1b[0m`
 
 const links = [
     ['web', 'https://ok8.sh'],
-    ['posts', 'https://ok8.sh/posts'],
+    ['blog', 'https://ok8.sh/blog'],
     ...socials.map(social => [social.label.toLowerCase(), social.to]),
 ]
 
 function card(build: { sha: string, ref: string, time: string }) {
     const lines = [
         '',
-        `  ${bold(purple('Jordan Jones'))} ${dim('·')} Platform Engineer`,
+        `  ${bold(purple('Kashall'))} ${dim('·')} Platform Engineer`,
         `  ${dim('Kubernetes infrastructure, and tooling that makes platforms more extensible.')}`,
         `  ${dim('Eugene, Oregon')}`,
         '',

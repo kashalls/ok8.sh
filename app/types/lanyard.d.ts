@@ -51,6 +51,10 @@ interface DiscordUser {
     global_name?: string | null;
     display_name?: string | null;
     primary_guild?: DiscordUserLike['primary_guild'];
+    avatar_decoration_data?: DiscordUserLike['avatar_decoration_data'];
+    collectibles?: { nameplate?: { asset: string; label: string; palette: string } | null } | null;
+    /** The display name's gradient, as RGB integers. */
+    display_name_styles?: { colors: number[] } | null;
     public_flags?: number;
     id: string;
     discriminator: string;

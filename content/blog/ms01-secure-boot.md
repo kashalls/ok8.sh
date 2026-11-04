@@ -1,13 +1,8 @@
 ---
 title: 'Allowing Custom Secure Boot Keys on the Minisforum MS-01'
 description: ''
-sidebarTitle: 'MS-01 Secure Boot'
 date: 2024-09-17
-section: guides
-category: guides
 tags: [hardware, secure-boot]
-icon: i-ph-key
-order: 4
 ---
 
 Product Link: https://store.minisforum.com/products/minisforum-ms-01

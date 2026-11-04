@@ -3,11 +3,7 @@ title: 'Special Thanks'
 description: ''
 date: 2024-09-16
 updated: 2025-09-10
-section: homelab
-category: welcome
 tags: [homelab, community]
-icon: i-ph-medal
-order: 2
 ---
 
 These people are worth admiting that they were helpful one way or another during my learning experience.

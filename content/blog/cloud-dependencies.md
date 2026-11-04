@@ -2,11 +2,7 @@
 title: 'Cloud Dependencies'
 description: ''
 date: 2024-09-16
-section: homelab
-category: homelab
 tags: [homelab, cloud]
-icon: i-ph-cloud
-order: 1
 ---
 
 While most of my infrastructure and workloads are self-hosted I do rely upon the cloud for certain key parts of my setup.

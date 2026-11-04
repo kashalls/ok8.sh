@@ -1,11 +1,12 @@
 <script setup lang="ts">
-definePageMeta({ layout: 'field', pageTransition: { name: 'column', mode: 'out-in' } })
+definePageMeta({ layout: 'sheet', viewTransition: true })
+useHead({ title: 'Guestbook — Kashall' })
 </script>
 
 <template>
-  <main class="column">
-    <h1 class="page-name">Guestbook</h1>
-    <p class="lead">Passing through? Say hello, or leave a note for the next visitor.</p>
+  <main>
+    <h1 class="doc-title">Guestbook</h1>
+    <p class="mt-4">Passing through? Say hello, or leave a note for the next visitor.</p>
     <BlogComments path="/guestbook" guestbook class="mt-8" />
   </main>
 </template>

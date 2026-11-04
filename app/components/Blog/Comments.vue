@@ -3,7 +3,7 @@ const props = defineProps<{ path: string, guestbook?: boolean }>()
 const noun = computed(() => props.guestbook ? 'entry' : 'comment')
 
 // Posts are prerendered, so comments and the session always load in the browser.
-const api = computed(() => `/api/comments/${props.path.replace(/^\/(posts\/)?/, '')}`)
+const api = computed(() => `/api/comments/${props.path.replace(/^\/(blog\/)?/, '')}`)
 const { data, status, refresh } = useFetch<{ comments: PostComment[], viewerIsOwner: boolean }>(api, { server: false, lazy: true, deep: true })
 const { loggedIn, user, clear } = useUserSession()
 const signInFailed = useSignInFailed()
@@ -94,10 +94,16 @@ async function signOut() {
 
 <template>
     <section id="comments" aria-labelledby="comments-heading" class="flex flex-col gap-4">
-        <div class="flex items-baseline justify-between gap-3">
-            <h2 id="comments-heading" class="font-display text-xl text-highlighted">{{ guestbook ? 'Entries' : 'Discussion' }}</h2>
-            <span v-if="data" class="text-sm text-muted">{{ total }} {{ total === 1 ? noun : guestbook ? 'entries' : 'comments' }}</span>
+        <div class="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+            <div class="flex items-baseline gap-3">
+                <h2 id="comments-heading" class="font-display text-xl text-highlighted">{{ guestbook ? 'Entries' : 'Discussion' }}</h2>
+                <span v-if="data" class="text-sm text-muted">{{ total }} {{ total === 1 ? noun : guestbook ? 'entries' : 'comments' }}</span>
+            </div>
+            <NuxtLink v-if="!loggedIn" :to="signInUrl" external class="text-sm text-primary hover:underline">
+                Sign in with GitHub to {{ guestbook ? 'sign the guestbook' : 'join the discussion' }}
+            </NuxtLink>
         </div>
+        <p v-if="!loggedIn && signInFailed" role="alert" class="text-sm text-error">Couldn't sign in with GitHub. Please try again.</p>
 
         <form v-if="loggedIn && user" class="flex flex-col gap-3 rounded-lg border border-default bg-elevated/30 p-4"
             @submit.prevent="post">
@@ -131,12 +137,6 @@ async function signOut() {
                     :label="replyTo ? 'Post reply' : guestbook ? 'Sign the guestbook' : 'Post comment'" />
             </div>
         </form>
-
-        <div v-else class="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-default bg-elevated/30 p-4">
-            <p v-if="signInFailed" role="alert" class="w-full text-sm text-error">Couldn't sign in with GitHub. Please try again.</p>
-            <p class="text-sm text-muted">Sign in with GitHub to {{ guestbook ? 'sign the guestbook' : 'join the discussion' }}.</p>
-            <UButton :to="signInUrl" external icon="i-simple-icons-github" label="Sign in with GitHub" variant="outline" />
-        </div>
 
         <p v-if="message" role="status" class="text-sm text-muted">{{ message }}</p>
         <p v-if="status === 'error'" role="alert" class="text-sm text-muted">

@@ -34,7 +34,7 @@ export default defineNuxtConfig({
   // NUXT_PUBLIC_SITE_URL in production.
   site: {
       url: 'https://ok8.sh',
-      name: 'Jordan Jones',
+      name: 'Kashall',
   },
 
   robots: {
@@ -98,11 +98,11 @@ export default defineNuxtConfig({
       // GitHub account ID (github.com/kashalls) that signs in as the site owner,
       // who posts comments as the author and can remove them.
       githubUserId: 17620516,
-      // Resend (set NUXT_RESEND_API_KEY). `onboarding@resend.dev` works without a
-      // verified domain and delivers to your Resend account email.
+      // Resend (set NUXT_RESEND_API_KEY). The sender must be on a domain verified
+      // in Resend, here msg.ok8.sh.
       resend: { apiKey: '' },
       contactTo: 'noc@ok8.sh',
-      contactFrom: 'Portfolio <onboarding@resend.dev>',
+      contactFrom: 'Kashall <contact@msg.ok8.sh>',
       // Turnstile keys are added by @nuxtjs/turnstile; set them at runtime with
       // NUXT_PUBLIC_TURNSTILE_SITE_KEY and NUXT_TURNSTILE_SECRET_KEY.
       public: {
@@ -135,10 +135,12 @@ export default defineNuxtConfig({
       '/gateway': { prerender: false, sitemap: false },
       // Only the site owner sees anything here, and it changes with every comment.
       '/admin': { prerender: false, sitemap: false },
-      // Redirects or shows search results depending on ?q=, so it can't be a static file.
-      '/posts': { prerender: false },
-      // Old blog URLs, from before posts covered docs and guides too.
-      '/blog/**': { redirect: { to: '/posts/**', statusCode: 301 } },
+      // Old blog URLs, from when posts lived at /posts.
+      '/posts': { redirect: { to: '/blog', statusCode: 301 } },
+      '/posts/**': { redirect: { to: '/blog/**', statusCode: 301 } },
+      '/writing': { redirect: { to: '/blog', statusCode: 301 } },
+      '/about': { redirect: { to: '/', statusCode: 301 } },
+      '/work': { redirect: { to: '/', statusCode: 301 } },
       '/git': { redirect: { to: 'https://github.com/kashalls', statusCode: 302 } },
       // Local fonts aren't content-hashed, so cache them without `immutable`.
       '/fonts/**': { headers: { 'cache-control': 'public, max-age=2592000' } },
@@ -171,7 +173,7 @@ export default defineNuxtConfig({
       // Prerender the static routes so their OG images are generated at build
       // (required by ogImage.zeroRuntime). Dynamic client data still hydrates.
       prerender: {
-          routes: ['/', '/posts/introduction', '/feed.xml', '/legal/juno/terms', '/legal/juno/privacy'],
+          routes: ['/', '/blog/introduction', '/feed.xml', '/legal/juno/terms', '/legal/juno/privacy'],
           // Follow the posts sidebar's links so every post (and its OG image) prerenders.
           crawlLinks: true,
       },
@@ -187,6 +189,9 @@ export default defineNuxtConfig({
       },
       families: [
           { name: 'Inter', provider: 'google' },
+          // global so @nuxt/fonts emits them for OG image (satori) font extraction.
+          { name: 'Karla', provider: 'google', weights: [400, 700], global: true },
+          { name: 'Sniglet', provider: 'google', weights: [800], global: true },
           // Opt-in readable font (useReadableFont). Only referenced from a custom
           // property, so it must be global to get an @font-face; browsers only
           // download it once the class is on.
@@ -194,10 +199,17 @@ export default defineNuxtConfig({
           { name: 'PP Neue Machina Plain', provider: 'local' },
           // global so @nuxt/fonts emits it for OG image (satori) font extraction.
           { name: 'PP Neue Machina Inktrap', provider: 'local', global: true },
-          // Blog post OG card (OgImage/Post); global for the same reason.
-          { name: 'Plus Jakarta Sans', provider: 'google', weights: [800], global: true },
+          // Only referenced through --font-mono, so global to get an @font-face.
           { name: 'JetBrains Mono', provider: 'google', weights: [400], global: true },
       ]
+  },
+
+  // Adds Nuxt's view transitions; app.viewTransition keeps them off unless a page opts in.
+  experimental: {
+      viewTransition: true,
+      // NuxtLink adds noreferrer to external links by default; keep the referrer
+      // so the sites linked to can see visits came from here.
+      defaults: { nuxtLink: { externalRelAttribute: 'noopener' } },
   },
 
   compatibilityDate: '2026-06-08'

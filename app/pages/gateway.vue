@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // Fallback page for hostnames that resolve to the gateway with no service
 // configured behind them. Point the gateway's default backend here.
-definePageMeta({ layout: 'field', pageTransition: { name: 'column', mode: 'out-in' } })
+definePageMeta({ layout: 'sheet' })
 
 const url = useRequestURL()
 const host = computed(() => url.host)
@@ -17,14 +17,49 @@ useRobotsRule(false)
 </script>
 
 <template>
-    <main class="column">
+    <main>
         <h1 class="doc-title">No service configured</h1>
-        <p class="lead mt-4">This hostname is resolving to one of Jordan's gateway endpoints, but there's no service wired up behind it yet.</p>
-        <p class="mt-8 text-sm text-(--fg-3)">Hostname</p>
-        <p class="mt-1 break-all font-mono text-(--fg)">{{ host }}</p>
-        <p class="mt-8 flex gap-6 text-sm">
-            <button type="button" class="text-(--accent) hover:text-(--fg)" @click="openContact">Contact the operator</button>
-            <NuxtLink to="/" class="text-(--fg-3) hover:text-(--fg)">Homepage</NuxtLink>
-        </p>
+        <p class="gateway-text">This hostname is resolving to one of my gateway endpoints, but there's no service wired up behind it yet.</p>
+
+        <p class="gateway-label">Hostname</p>
+        <p class="gateway-host">{{ host }}</p>
+
+        <ul class="cards gateway-next">
+            <li>
+                <button type="button" class="row" @click="openContact">
+                    <span class="row-name">Contact me</span>
+                    <span class="row-text">Expected something here? Let me know.</span>
+                </button>
+            </li>
+            <li>
+                <NuxtLink to="/" class="row">
+                    <span class="row-name">Home</span>
+                    <span class="row-text">Who I am and the projects I work on.</span>
+                </NuxtLink>
+            </li>
+        </ul>
     </main>
 </template>
+
+<style scoped>
+.gateway-text {
+    margin-top: 1rem;
+}
+
+.gateway-label {
+    margin-top: 2rem;
+    font-size: 0.9rem;
+    color: var(--muted);
+}
+
+.gateway-host {
+    margin-top: 0.25rem;
+    font-family: var(--font-mono);
+    color: var(--cream);
+    overflow-wrap: anywhere;
+}
+
+.gateway-next {
+    margin-top: 2rem;
+}
+</style>

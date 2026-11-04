@@ -3,11 +3,7 @@ title: 'Github Repository'
 description: 'Some of the things I do in my github repository that isn''t shown'
 date: 2024-09-21
 updated: 2025-11-15
-section: homelab
-category: homelab
 tags: [gitops, flux, github]
-icon: i-ph-github-logo
-order: 2
 ---
 
 You don't have to build your gitops homelab around github. There are plenty of people who use GitLab or other git-based providers.

@@ -2,11 +2,7 @@
 title: 'Introduction'
 description: 'The nodes and the bees.'
 date: 2024-09-16
-section: homelab
-category: welcome
 tags: [homelab, gitops, flux]
-icon: i-ph-hand-waving
-order: 1
 ---
 
 ## What is this?

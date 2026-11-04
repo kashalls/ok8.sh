@@ -1,6 +1,5 @@
 /**
- * Atom feed of the Blog section's posts; docs and guides change in place, so
- * they stay out. Prerendered at build (see nitro.prerender).
+ * Atom feed of every post. Prerendered at build (see nitro.prerender).
  */
 // Imported explicitly: typed routes pull this file into the app's type check,
 // where the auto-imported queryCollection is the client version.
@@ -12,11 +11,14 @@ const escape = (value: string) => value
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
 
+// Entry ids must never change either, so they keep the /posts paths the posts
+// had before the blog moved to /blog.
+const entryId = (path: string) => path.replace(/^\/blog\//, '/posts/')
+
 export default defineEventHandler(async (event) => {
     const site = getSiteConfig(event)
     const posts = await queryCollection(event, 'blog')
         .where('draft', '=', false)
-        .where('section', '=', 'blog')
         .order('date', 'DESC')
         .select('title', 'description', 'date', 'updated', 'path', 'tags')
         .all()
@@ -26,7 +28,7 @@ export default defineEventHandler(async (event) => {
 
     const entries = posts.map(post => `
   <entry>
-    <id>${url(post.path)}</id>
+    <id>${url(entryId(post.path))}</id>
     <title>${escape(post.title)}</title>
     <link href="${url(post.path)}"/>
     <published>${new Date(post.date).toISOString()}</published>
@@ -43,8 +45,8 @@ ${(post.tags ?? []).map(tag => `    <category term="${escape(tag)}"/>`).join('\n
   <title>${escape(site.name)}</title>
   <subtitle>Notes on Kubernetes, homelabs, and whatever I'm building.</subtitle>
   <link href="${url('/feed.xml')}" rel="self"/>
-  <link href="${url('/posts')}"/>
-  <author><name>Jordan Jones</name></author>
+  <link href="${url('/blog')}"/>
+  <author><name>Kashall</name></author>
   <updated>${updated}</updated>${entries}
 </feed>
 `
