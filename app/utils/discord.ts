@@ -18,9 +18,6 @@ export enum ActivityType {
 
 export const DISCORD_USER_ID = '201077739589992448'
 
-// Lanyard leaves out the banner, so it comes through dcdn, which looks it up by user ID.
-const DCDN = 'https://dcdn.dstn.to'
-
 export interface DiscordUserLike {
 	id: string
 	avatar?: string | null
@@ -43,11 +40,6 @@ export const STATUS: Record<'online' | 'idle' | 'dnd' | 'offline', { color: stri
 
 export function statusColor(status?: string): string {
 	return STATUS[status as keyof typeof STATUS]?.color ?? STATUS.offline.color
-}
-
-/** dcdn 404s when the user has no banner. */
-export function bannerUrl(id: string, size = 600): string {
-	return `${DCDN}/banners/${id}?size=${size}`
 }
 
 export function avatarUrl(id: string, avatar: string | null, size = 64): string {

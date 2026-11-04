@@ -53,7 +53,6 @@ function animatedOnceLoaded(url: () => string | undefined) {
 }
 const nameplateAnimated = animatedOnceLoaded(() => nameplate.value ? nameplateUrl(nameplate.value.asset, true) : undefined)
 const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decorationUrl(decoration.value.asset, true) : undefined)
-const bannerFailed = ref(false)
 </script>
 
 <template>
@@ -97,36 +96,30 @@ const bannerFailed = ref(false)
       <footer class="frame-footer">
         <!-- The presence bar is only on the home page; the name above still takes its colours everywhere. -->
         <Transition name="frame-fade">
-          <div v-if="route.path === '/' && lanyard" class="frame-profile">
-            <!-- The banner waits behind the card and peeks out above it on hover. -->
-            <div v-if="!bannerFailed" class="frame-banner">
-              <NuxtImg :src="bannerUrl(DISCORD_USER_ID)" alt="" width="600" height="240" loading="lazy" @error="bannerFailed = true" />
+          <section v-if="route.path === '/' && lanyard" class="frame-card" aria-label="Discord presence">
+            <Transition name="frame-fade">
+              <NuxtImg v-if="nameplate" :src="nameplateUrl(nameplate.asset, nameplateAnimated)" alt="" width="448" height="84"
+                class="frame-nameplate" />
+            </Transition>
+            <span class="frame-avatar">
+              <NuxtImg :src="avatarUrl(lanyard.discord_user.id, lanyard.discord_user.avatar)" alt="" width="36" height="36" />
+              <NuxtImg v-if="decoration" :src="decorationUrl(decoration.asset, decorationAnimated)" alt="" width="44"
+                height="44" class="frame-decoration" />
+              <span class="frame-dot" :style="{ background: statusColor(lanyard.discord_status) }" />
+            </span>
+            <div class="frame-who">
+              <span class="frame-name" :class="{ 'is-gradient': nameGradient }" :style="{ backgroundImage: nameGradient }">Kashall</span>
+              <p class="frame-custom">
+                <span class="sr-only">{{ STATUS[lanyard.discord_status]?.label ?? 'Offline' }} on Discord.</span>
+                <template v-if="custom?.state || custom?.emoji">
+                  <NuxtImg v-if="custom.emoji?.id" :src="`https://cdn.discordapp.com/emojis/${custom.emoji.id}.webp?size=32`"
+                    :alt="custom.emoji.name" width="14" height="14" />
+                  <template v-else-if="custom.emoji">{{ custom.emoji.name }}</template>
+                  <span class="truncate">{{ custom.state }}</span>
+                </template>
+              </p>
             </div>
-            <section class="frame-card" aria-label="Discord presence">
-              <Transition name="frame-fade">
-                <NuxtImg v-if="nameplate" :src="nameplateUrl(nameplate.asset, nameplateAnimated)" alt="" width="448" height="84"
-                  class="frame-nameplate" />
-              </Transition>
-              <span class="frame-avatar">
-                <NuxtImg :src="avatarUrl(lanyard.discord_user.id, lanyard.discord_user.avatar)" alt="" width="36" height="36" />
-                <NuxtImg v-if="decoration" :src="decorationUrl(decoration.asset, decorationAnimated)" alt="" width="44"
-                  height="44" class="frame-decoration" />
-                <span class="frame-dot" :style="{ background: statusColor(lanyard.discord_status) }" />
-              </span>
-              <div class="frame-who">
-                <span class="frame-name" :class="{ 'is-gradient': nameGradient }" :style="{ backgroundImage: nameGradient }">Kashall</span>
-                <p class="frame-custom">
-                  <span class="sr-only">{{ STATUS[lanyard.discord_status]?.label ?? 'Offline' }} on Discord.</span>
-                  <template v-if="custom?.state || custom?.emoji">
-                    <NuxtImg v-if="custom.emoji?.id" :src="`https://cdn.discordapp.com/emojis/${custom.emoji.id}.webp?size=32`"
-                      :alt="custom.emoji.name" width="14" height="14" />
-                    <template v-else-if="custom.emoji">{{ custom.emoji.name }}</template>
-                    <span class="truncate">{{ custom.state }}</span>
-                  </template>
-                </p>
-              </div>
-            </section>
-          </div>
+          </section>
         </Transition>
         <div class="frame-base">
           <ul class="frame-links">
@@ -256,62 +249,8 @@ const bannerFailed = ref(false)
   border-top: 1px solid var(--rule);
 }
 
-.frame-profile {
-  position: relative;
-}
-
-.frame-profile + .frame-base {
+.frame-card + .frame-base {
   margin-top: 1.5rem;
-}
-
-/* Only where there's a pointer to hover with. */
-.frame-banner {
-  display: none;
-}
-
-@media (hover: hover) {
-  /* Room above the card for the banner to peek into, less the gap the footer
-     already has, plus a little breathing room. */
-  .frame-profile {
-    margin-top: 5rem;
-  }
-
-  /* Stands on the card's bottom edge and reaches 7rem above it. It clips the image
-     there while it slides. */
-  .frame-banner {
-    display: block;
-    position: absolute;
-    /* A pixel up, so it doesn't show through the card's anti-aliased bottom edge. */
-    bottom: 1px;
-    left: 0;
-    width: 100%;
-    height: calc(100% + 7rem - 1px);
-    overflow: hidden;
-    border-radius: 8px;
-    pointer-events: none;
-  }
-}
-
-.frame-banner img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  /* Crops mostly from the top of the hair, keeping the eyes above the card. */
-  object-position: 50% 70%;
-  opacity: 0;
-  translate: 0 30%;
-  transition: opacity 250ms, translate 450ms cubic-bezier(0.3, 1.4, 0.5, 1);
-}
-
-.frame-profile:hover .frame-banner img {
-  opacity: 1;
-  translate: 0 0;
-}
-
-/* Keeps the name and status readable over the banner behind the card. */
-.frame-profile:hover .frame-card {
-  background: linear-gradient(90deg, rgb(26 25 24 / 0.85), rgb(91 63 124 / 0.6));
-  backdrop-filter: blur(6px);
 }
 
 .frame-visits {
@@ -339,7 +278,6 @@ const bannerFailed = ref(false)
   border-radius: 8px;
   /* The nameplate's palette (violet), under its art. */
   background: linear-gradient(90deg, rgb(91 63 124 / 0.2), rgb(91 63 124 / 0.5));
-  transition: background 250ms;
 }
 
 .frame-card > :not(.frame-nameplate) {
