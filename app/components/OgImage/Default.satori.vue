@@ -1,33 +1,51 @@
 <script setup lang="ts">
-withDefaults(defineProps<{
+const props = withDefaults(defineProps<{
     title?: string
     description?: string
     badge?: string
 }>(), {
     title: 'Kashall',
     description: 'Platform engineer',
-    badge: 'ok8.sh',
+    badge: '',
 })
+// The name already heads the card when the page is the home page.
+const showName = computed(() => props.title !== 'Kashall')
 </script>
 
 <template>
-    <!-- Satori renders this to a 1200x600 PNG. Vertical padding is added on top of
-         the height and pushes the bar off the canvas, so the top and bottom
-         spacing are margins instead. -->
-    <div class="flex size-full flex-col px-[90px] font-jetbrains text-white"
-        style="background:#0a0a12;background-image:radial-gradient(900px circle at 15% 110%, rgba(168,85,247,0.45), transparent 60%), linear-gradient(135deg,#0a0a12,#140b24);">
-        <div class="my-auto flex flex-col">
-            <div class="flex text-[26px] tracking-[2px] text-purple-500 uppercase">
-                {{ badge }}
+    <!-- Satori renders this to a 1200x600 PNG, in the sheet layout's palette and type.
+         Vertical padding is added on top of the height and pushes content off the
+         canvas, so the bottom spacing is a margin instead. -->
+    <div class="relative flex size-full flex-col px-[90px] font-karla" style="background:#1a1918;color:#fcf6ed;">
+        <!-- The Discord banner across the top, fading into the background behind the text. -->
+        <img src="/banner.png" width="1200" height="480" class="absolute top-0 left-0"
+            style="width:1200px;height:480px;object-fit:cover;object-position:50% 60%;">
+        <div class="absolute top-0 left-0 flex"
+            style="width:1200px;height:600px;background-image:linear-gradient(180deg, rgba(26,25,24,0.15) 0%, rgba(26,25,24,0.6) 40%, #1a1918 78%), radial-gradient(700px circle at 100% 100%, rgba(82,67,156,0.55), transparent 70%);" />
+        <div class="relative mt-auto mb-[72px] flex flex-col">
+            <div v-if="showName || badge" class="flex items-center">
+                <div v-if="showName" class="flex font-sniglet text-[40px] font-extrabold"
+                    style="background-image:linear-gradient(90deg,#b2daf1,#aa68cc);background-clip:text;color:transparent;">
+                    Kashall
+                </div>
+                <div v-if="badge" class="flex rounded-[10px] px-4 py-1 text-[26px]"
+                    :class="showName ? 'ml-5' : ''"
+                    style="background:#34323b;border:2px solid rgba(170,104,204,0.35);color:#f6c252;">
+                    {{ badge }}
+                </div>
             </div>
-            <div class="mt-6 flex max-w-[1000px] font-jakarta text-[84px] leading-[1.05] font-extrabold">
+            <!-- The home page's title is the name, set like the header's. -->
+            <div v-if="!showName" class="mt-4 flex font-sniglet text-[96px] leading-[1.05] font-extrabold"
+                style="background-image:linear-gradient(90deg,#b2daf1,#aa68cc);background-clip:text;color:transparent;">
+                {{ title }}
+            </div>
+            <div v-else class="mt-4 flex max-w-[1020px] font-display text-[84px] leading-[1.05]">
                 {{ title }}
             </div>
             <!-- Satori supports the plain line-clamp property, not Tailwind's -webkit-box version. -->
-            <div class="mt-6 block max-w-[1000px] text-[32px] text-slate-300" style="line-clamp:2">
+            <div class="mt-5 block max-w-[1000px] text-[32px] leading-[1.35]" style="line-clamp:2;color:rgba(252,246,237,0.7);">
                 {{ description }}
             </div>
         </div>
-        <div class="mb-[70px] flex h-2 w-40 rounded-full" style="background:linear-gradient(90deg,#a855f7,#6366f1);" />
     </div>
 </template>
