@@ -98,11 +98,11 @@ export default defineNuxtConfig({
       // GitHub account ID (github.com/kashalls) that signs in as the site owner,
       // who posts comments as the author and can remove them.
       githubUserId: 17620516,
-      // Resend (set NUXT_RESEND_API_KEY). `onboarding@resend.dev` works without a
-      // verified domain and delivers to your Resend account email.
+      // Resend (set NUXT_RESEND_API_KEY). The sender must be on a domain verified
+      // in Resend, here ok8.sh.
       resend: { apiKey: '' },
       contactTo: 'noc@ok8.sh',
-      contactFrom: 'Portfolio <onboarding@resend.dev>',
+      contactFrom: 'Kashall <contact@ok8.sh>',
       // Turnstile keys are added by @nuxtjs/turnstile; set them at runtime with
       // NUXT_PUBLIC_TURNSTILE_SITE_KEY and NUXT_TURNSTILE_SECRET_KEY.
       public: {
