@@ -52,6 +52,10 @@
   --gold: #f6c252;
   --muted: rgb(252 246 237 / 0.6);
   --rule: rgb(170 104 204 / 0.2);
+  /* Pastels: the warmer swatches softened with the sheet's cream. Sky and mint already are. */
+  --pastel-lilac: color-mix(in oklab, var(--lilac) 55%, var(--cream));
+  --pastel-peach: color-mix(in oklab, var(--orange) 50%, var(--cream));
+  --pastel-butter: color-mix(in oklab, var(--gold) 55%, var(--cream));
 }
 
 /* Display preferences (useDisplayPreferences). */

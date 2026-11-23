@@ -175,6 +175,9 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
   /* The sheet's diagonal stripes, over the galaxy skirt's violets in the corner. */
   background:
     repeating-linear-gradient(-58deg, transparent 0 46px, rgb(170 104 204 / 0.06) 46px 47.5px),
+    radial-gradient(44rem 30rem at 0% 0%, rgb(178 218 241 / 0.08), transparent 70%),
+    radial-gradient(36rem 26rem at 100% 0%, rgb(219 136 73 / 0.06), transparent 70%),
+    radial-gradient(40rem 30rem at 0% 70%, rgb(177 237 217 / 0.05), transparent 70%),
     radial-gradient(60rem 36rem at 100% 100%, rgb(82 67 156 / 0.55), transparent 70%),
     radial-gradient(80rem 50rem at 85% 110%, rgb(91 63 124 / 0.6), transparent 75%),
     var(--black);
@@ -210,7 +213,13 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
   gap: 0.75rem 1rem;
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
-  border-bottom: 1px solid var(--rule);
+  border-bottom: 1px solid;
+  border-image: var(--pastel-rule) 1;
+}
+
+/* A thread of the pastels for the lines that frame the page. */
+.frame {
+  --pastel-rule: linear-gradient(90deg, rgb(178 218 241 / 0.35), rgb(170 104 204 / 0.35), rgb(177 237 217 / 0.3), rgb(219 136 73 / 0.3));
 }
 
 .frame-name.frame-logo {
@@ -253,7 +262,8 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
   justify-content: space-between;
   gap: 1rem;
   padding-top: 1rem;
-  border-top: 1px solid var(--rule);
+  border-top: 1px solid;
+  border-image: var(--pastel-rule) 1;
 }
 
 .frame-card + .frame-base {
@@ -461,13 +471,14 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
   /* Sit the chip's text on the sentence's baseline rather than the logo's bottom edge. */
   vertical-align: -0.15em;
   border-radius: 6px;
-  background: var(--charcoal);
+  /* A chip can set --tint to the pastel of what it names. */
+  background: color-mix(in oklab, var(--charcoal) 80%, var(--tint, var(--pastel-lilac)));
   color: var(--cream);
   transition: border-color 200ms;
 }
 
 .chip:is(:hover, :focus-visible) {
-  border-color: var(--lilac);
+  border-color: var(--tint, var(--pastel-lilac));
 }
 
 .chip > :first-child {
@@ -488,14 +499,20 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
   padding: 0.85rem 0;
 }
 
-/* The Discord bar's violet, washing in behind the row from the left. */
+/* Each row takes the next pastel, washing in behind it from the left on hover. */
+.rows > li:nth-child(5n + 1) { --tint: var(--sky); }
+.rows > li:nth-child(5n + 2) { --tint: var(--mint); }
+.rows > li:nth-child(5n + 3) { --tint: var(--pastel-peach); }
+.rows > li:nth-child(5n + 4) { --tint: var(--pastel-lilac); }
+.rows > li:nth-child(5n + 5) { --tint: var(--pastel-butter); }
+
 .row::before {
   content: '';
   position: absolute;
   inset: 0 -0.6rem;
   z-index: -1;
   border-radius: 6px;
-  background: linear-gradient(90deg, rgb(91 63 124 / 0.35), rgb(91 63 124 / 0.08));
+  background: linear-gradient(90deg, color-mix(in oklab, var(--tint, var(--lilac)) 16%, transparent), transparent);
   opacity: 0;
   transition: opacity 250ms;
 }
@@ -517,7 +534,7 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
 }
 
 .row:is(:hover, :focus-visible) .row-name {
-  color: var(--gold);
+  color: var(--tint, var(--gold));
   translate: 0.25rem 0;
 }
 
