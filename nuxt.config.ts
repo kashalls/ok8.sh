@@ -190,7 +190,6 @@ export default defineNuxtConfig({
           prefix: '/_webfonts/',
       },
       families: [
-          { name: 'Inter', provider: 'google' },
           // global so @nuxt/fonts emits them for OG image (satori) font extraction.
           { name: 'Karla', provider: 'google', weights: [400, 700], global: true },
           { name: 'Sniglet', provider: 'google', weights: [400, 800], global: true },
@@ -199,7 +198,6 @@ export default defineNuxtConfig({
           // property, so it must be global to get an @font-face; browsers only
           // download it once the class is on.
           { name: 'OpenDyslexic', provider: 'fontsource', weights: [400, 700], global: true },
-          { name: 'PP Neue Machina Plain', provider: 'local' },
           // global so @nuxt/fonts emits it for OG image (satori) font extraction.
           { name: 'PP Neue Machina Inktrap', provider: 'local', global: true },
           // Only referenced through --font-mono, so global to get an @font-face.
