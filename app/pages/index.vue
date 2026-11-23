@@ -41,7 +41,7 @@ function hoverWwt() {
     </p>
     <p>
       On the side, I maintain my own
-      <NuxtLink to="https://github.com/waifulabs/infrastructure" target="_blank" class="chip" style="--tint: var(--mint)"><UIcon name="i-simple-icons-kubernetes" class="chip-wheel" />Kubernetes infrastructure</NuxtLink>
+      <NuxtLink to="https://github.com/kashalls/infrastructure" target="_blank" class="chip" style="--tint: var(--mint)"><UIcon name="i-simple-icons-kubernetes" class="chip-wheel" />Kubernetes infrastructure</NuxtLink>
       and write tooling that makes platforms more extensible.
     </p>
 
