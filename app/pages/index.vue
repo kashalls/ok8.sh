@@ -54,7 +54,7 @@ function hoverWwt() {
               <span class="row-name">{{ project.name }}</span>
               <span class="row-meta">
                 <span>{{ project.lang }}</span>
-                <span v-if="stars?.[project.repo] != null"><span aria-hidden="true">★</span> {{ stars[project.repo] }}<span class="sr-only"> stars</span></span>
+                <span v-if="stars?.[project.repo] != null" class="row-stars"><span aria-hidden="true">★</span> {{ stars[project.repo] }}<span class="sr-only"> stars</span></span>
               </span>
             </span>
             <span class="row-text">{{ project.description }}</span>
@@ -91,6 +91,16 @@ function hoverWwt() {
   font-family: var(--font-display);
   font-size: 1.1rem;
   color: var(--cream);
+}
+
+/* Pops in once the count arrives. */
+.row-stars {
+  display: inline-block;
+  animation: stars-pop 450ms cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+
+@keyframes stars-pop {
+  from { opacity: 0; scale: 0.5; }
 }
 
 /* A logo image rather than an icon, sized to match. */

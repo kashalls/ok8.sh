@@ -193,7 +193,8 @@ export default defineNuxtConfig({
           { name: 'Inter', provider: 'google' },
           // global so @nuxt/fonts emits them for OG image (satori) font extraction.
           { name: 'Karla', provider: 'google', weights: [400, 700], global: true },
-          { name: 'Sniglet', provider: 'google', weights: [800], global: true },
+          { name: 'Sniglet', provider: 'google', weights: [400, 800], global: true },
+          { name: 'Nunito', provider: 'google', weights: [400, 700], global: true },
           // Opt-in readable font (useReadableFont). Only referenced from a custom
           // property, so it must be global to get an @font-face; browsers only
           // download it once the class is on.

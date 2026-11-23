@@ -17,6 +17,9 @@
   /* `font-karla` -> body text on the sheet layout. */
   --font-karla: "Karla", ui-sans-serif, system-ui, sans-serif;
 
+  /* `font-nunito` -> body text on the sheet layout; Karla stays on the OG cards. */
+  --font-nunito: "Nunito", ui-rounded, ui-sans-serif, system-ui, sans-serif;
+
   /* `font-sniglet` -> the name on the sheet layout, standing in for Discord's Sakura. */
   --font-sniglet: "Sniglet", ui-rounded, system-ui, sans-serif;
 
@@ -56,6 +59,8 @@
   --pastel-lilac: color-mix(in oklab, var(--lilac) 55%, var(--cream));
   --pastel-peach: color-mix(in oklab, var(--orange) 50%, var(--cream));
   --pastel-butter: color-mix(in oklab, var(--gold) 55%, var(--cream));
+  /* Headings take the name's rounded face on the sheet. */
+  --font-display: var(--font-sniglet);
 }
 
 /* Display preferences (useDisplayPreferences). */
@@ -95,5 +100,6 @@ html.readable-font {
   --font-display: "OpenDyslexic", ui-sans-serif, system-ui, sans-serif;
   --font-body: "OpenDyslexic", ui-sans-serif, system-ui, sans-serif;
   --font-karla: "OpenDyslexic", ui-sans-serif, system-ui, sans-serif;
+  --font-nunito: "OpenDyslexic", ui-sans-serif, system-ui, sans-serif;
   --font-sniglet: "OpenDyslexic", ui-sans-serif, system-ui, sans-serif;
 }

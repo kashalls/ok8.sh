@@ -174,7 +174,7 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
 
   min-height: 100dvh;
   color: var(--text);
-  font-family: var(--font-karla);
+  font-family: var(--font-nunito);
   color-scheme: dark;
   /* The sheet's diagonal stripes, over the galaxy skirt's violets in the corner. */
   background:
@@ -184,7 +184,7 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
     radial-gradient(40rem 30rem at 0% 70%, rgb(177 237 217 / 0.05), transparent 70%),
     radial-gradient(60rem 36rem at 100% 100%, rgb(82 67 156 / 0.55), transparent 70%),
     radial-gradient(80rem 50rem at 85% 110%, rgb(91 63 124 / 0.6), transparent 75%),
-    var(--black);
+    color-mix(in oklab, var(--black) 88%, var(--violet));
   background-attachment: fixed;
 }
 
@@ -209,6 +209,7 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
 }
 
 .frame-header {
+  position: relative;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
@@ -216,13 +217,31 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
   gap: 0.75rem 1rem;
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
-  border-bottom: 1px solid;
-  border-image: var(--pastel-rule) 1;
 }
 
-/* A thread of the pastels for the lines that frame the page. */
+/* A wavy thread of the pastels for the lines that frame the page. */
 .frame {
-  --pastel-rule: linear-gradient(90deg, rgb(178 218 241 / 0.35), rgb(170 104 204 / 0.35), rgb(177 237 217 / 0.3), rgb(219 136 73 / 0.3));
+  --pastel-rule: linear-gradient(90deg, rgb(178 218 241 / 0.6), rgb(170 104 204 / 0.6), rgb(177 237 217 / 0.55), rgb(219 136 73 / 0.55));
+}
+
+.frame-header::after,
+.frame-base::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: var(--pastel-rule);
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='6'%3E%3Cpath d='M0 3Q4 0 8 3T16 3' fill='none' stroke='%23000' stroke-width='1.5'/%3E%3C/svg%3E") 0 0 / 16px 6px repeat-x;
+  pointer-events: none;
+}
+
+.frame-header::after {
+  bottom: -3px;
+}
+
+.frame-base::before {
+  top: -3px;
 }
 
 .frame-name.frame-logo {
@@ -237,7 +256,7 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
   margin-bottom: 1.5rem;
   padding: 0.6rem 0.85rem;
   border: 1px solid rgb(246 194 82 / 0.35);
-  border-radius: 8px;
+  border-radius: 14px;
   background: rgb(246 194 82 / 0.08);
   font-size: 0.9rem;
   color: var(--cream);
@@ -260,13 +279,12 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
 }
 
 .frame-base {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
   padding-top: 1rem;
-  border-top: 1px solid;
-  border-image: var(--pastel-rule) 1;
 }
 
 .frame-visits {
@@ -297,7 +315,7 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
   gap: 0.75rem;
   padding: 0.75rem 0.9rem;
   overflow: hidden;
-  border-radius: 8px;
+  border-radius: 14px;
   /* The nameplate's palette (violet), under its art. */
   background: linear-gradient(90deg, rgb(91 63 124 / 0.2), rgb(91 63 124 / 0.5));
 }
@@ -434,15 +452,25 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
 .frame-tooltip {
   background: var(--charcoal);
   color: var(--cream);
-  font-family: var(--font-karla);
+  font-family: var(--font-nunito);
   --tw-ring-color: var(--rule);
 }
 
-/* A small springy hop with the glow. */
+/* A small springy hop with the glow, and the icon gives a wiggle. */
 .frame-links :is(a, button):is(:hover, :focus-visible) {
   color: var(--hover);
   filter: drop-shadow(0 0 6px var(--hover));
   translate: 0 -2px;
+}
+
+.frame-links :is(a, button):is(:hover, :focus-visible) > * {
+  animation: frame-wiggle 450ms ease-in-out;
+}
+
+@keyframes frame-wiggle {
+  25% { rotate: -12deg; }
+  50% { rotate: 10deg; }
+  75% { rotate: -5deg; }
 }
 
 /* A page's own title: a post, the blog and the legal pages. */
@@ -470,20 +498,21 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
   display: inline-flex;
   align-items: center;
   gap: 0.3em;
-  padding: 0.05em 0.35em;
-  border: 1px solid var(--rule);
+  padding: 0.05em 0.6em;
+  border: 1px solid color-mix(in oklab, var(--tint, var(--pastel-lilac)) 35%, transparent);
   line-height: 1.3;
   /* Sit the chip's text on the sentence's baseline rather than the logo's bottom edge. */
   vertical-align: -0.15em;
-  border-radius: 6px;
+  border-radius: 999px;
   /* A chip can set --tint to the pastel of what it names. */
-  background: color-mix(in oklab, var(--charcoal) 80%, var(--tint, var(--pastel-lilac)));
+  background: color-mix(in oklab, var(--charcoal) 68%, var(--tint, var(--pastel-lilac)));
   color: var(--cream);
-  transition: border-color 200ms;
+  transition: border-color 200ms, translate 300ms cubic-bezier(0.3, 1.6, 0.5, 1);
 }
 
 .chip:is(:hover, :focus-visible) {
   border-color: var(--tint, var(--pastel-lilac));
+  translate: 0 -1px;
 }
 
 .chip > :first-child {
@@ -492,9 +521,10 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
 
 /* Lists of links: projects on home, posts on the blog. */
 .rows li + li {
-  border-top: 1px solid var(--rule);
+  border-top: 2px dotted var(--rule);
 }
 
+/* Rows hop up a little on hover. */
 .row {
   position: relative;
   isolation: isolate;
@@ -502,6 +532,11 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
   flex-direction: column;
   gap: 0.15rem;
   padding: 0.85rem 0;
+  transition: translate 300ms cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+
+.row:is(:hover, :focus-visible) {
+  translate: 0 -2px;
 }
 
 /* Each row takes the next pastel, washing in behind it from the left on hover. */
@@ -516,7 +551,7 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
   position: absolute;
   inset: 0 -0.6rem;
   z-index: -1;
-  border-radius: 6px;
+  border-radius: 12px;
   background: linear-gradient(90deg, color-mix(in oklab, var(--tint, var(--lilac)) 16%, transparent), transparent);
   opacity: 0;
   transition: opacity 250ms;
@@ -569,9 +604,9 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
   height: 100%;
   padding: 0.85rem 1rem;
   border: 1px solid var(--rule);
-  border-radius: 8px;
+  border-radius: 14px;
   text-align: left;
-  transition: border-color 250ms;
+  transition: border-color 250ms, translate 300ms cubic-bezier(0.3, 1.6, 0.5, 1);
 }
 
 .cards .row:is(:hover, :focus-visible) {

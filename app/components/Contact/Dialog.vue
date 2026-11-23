@@ -106,11 +106,11 @@ watch(open, (isOpen) => {
 .contact {
     padding: 1.25rem;
     border: 1px solid var(--rule);
-    border-radius: 8px;
+    border-radius: 16px;
     background: linear-gradient(160deg, rgb(91 63 124 / 0.35), transparent 60%), var(--black);
     box-shadow: 0 20px 60px rgb(0 0 0 / 0.5);
     color: var(--text);
-    font-family: var(--font-karla);
+    font-family: var(--font-nunito);
     line-height: 1.5;
 }
 
