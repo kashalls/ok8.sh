@@ -32,6 +32,8 @@ const isLight = computed(() => colorMode.value === 'light')
 function toggleTheme() {
   colorMode.preference = isLight.value ? 'dark' : 'light'
 }
+// Tints the browser's toolbar on phones to match: the cream or the black swatch.
+useHead({ meta: [{ name: 'theme-color', content: () => isLight.value ? '#fcf6ed' : '#1a1918' }] })
 // Pages are prerendered, so this is the year of the last build.
 const year = new Date().getFullYear()
 const socialHints: Record<string, string> = { GitHub: 'Peek at my code', LinkedIn: 'The grown-up profile' }
@@ -718,12 +720,13 @@ html.light .chip {
   background: color-mix(in oklab, white 55%, var(--tint, var(--pastel-lilac)));
 }
 
-/* The pastels are too pale to read as text on cream, so hovers mix them toward the text. */
+/* The pastels are too pale to read as text on cream, so hovers use the same hue at 0.5
+   lightness (4.8:1 or more on cream for every pastel). */
 html.light .frame-links :is(a, button):is(:hover, :focus-visible) {
-  color: color-mix(in oklab, var(--hover) 55%, var(--heading));
+  color: oklch(from var(--hover) 0.5 calc(c * 2.2) h);
 }
 
 html.light .row:is(:hover, :focus-visible) .row-name {
-  color: color-mix(in oklab, var(--tint, var(--accent)) 45%, var(--heading));
+  color: oklch(from var(--tint, var(--accent)) 0.5 calc(c * 2.2) h);
 }
 </style>

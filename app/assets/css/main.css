@@ -78,8 +78,16 @@ html.light :is(.sheet, .contact, .frame-tooltip) {
   --rule: rgb(170 104 204 / 0.3);
   --accent: #7a46a8;
   --on-accent: var(--cream);
-  /* Nuxt UI's light red (500) reads at 3.5:1 on cream; 700 clears 4.5:1. */
+  /* Nuxt UI's light status colours (500) are too pale on cream (red reads at 3.5:1); 700 clears 4.5:1. */
   --ui-error: var(--ui-color-error-700);
+  --ui-warning: var(--ui-color-warning-700);
+  --ui-info: var(--ui-color-info-700);
+  --ui-success: var(--ui-color-success-700);
+  /* Callouts set their text with a fixed shade (text-warning-600 and so on), which is just as pale. */
+  --ui-color-error-600: var(--ui-color-error-800);
+  --ui-color-warning-600: var(--ui-color-warning-800);
+  --ui-color-info-600: var(--ui-color-info-800);
+  --ui-color-success-600: var(--ui-color-success-800);
   color-scheme: light;
 }
 

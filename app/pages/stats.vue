@@ -278,6 +278,11 @@ html.reduce-motion .stats-bar {
 .stats-average dd { color: var(--mint); }
 .stats-contributions dd { color: var(--pastel-peach); }
 
+/* The pastels are too pale on cream; the same hues at 0.5 lightness read at 4.8:1 or more. */
+html.light .stats-total dd { color: oklch(from var(--sky) 0.5 calc(c * 2.2) h); }
+html.light .stats-average dd { color: oklch(from var(--mint) 0.5 calc(c * 2.2) h); }
+html.light .stats-contributions dd { color: oklch(from var(--pastel-peach) 0.5 calc(c * 2.2) h); }
+
 .stats-heroes dt {
   font-size: 0.8rem;
   color: var(--muted);
