@@ -15,6 +15,8 @@ export default {
             { rel: 'apple-touch-icon', href: '/logo.png' },
         ],
         meta: [
+            // Both themes, so the browser can theme its own UI before the CSS arrives.
+            { name: "color-scheme", content: "light dark" },
             { name: "description", content: description },
             { property: "og:type", content: "website" },
             { property: "og:site_name", content: "Kashall" },
