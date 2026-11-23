@@ -64,6 +64,8 @@
   --on-accent: var(--black);
   /* Headings take the name's rounded face on the sheet. */
   --font-display: var(--font-sniglet);
+  /* Native controls (checkboxes, radios, sliders) take the accent too. */
+  accent-color: var(--accent);
 }
 
 /* The light theme: the sheet's cream as the page, deep plum text, and a deeper lilac
@@ -91,10 +93,35 @@ html.light :is(.sheet, .contact, .frame-tooltip) {
   color-scheme: light;
 }
 
-/* A thin lilac scrollbar (the sheet's --lilac; the page's scrollbar belongs to html, outside .sheet). */
+/* The window itself follows the theme too: the root element decides the canvas behind the
+   page (seen when overscrolling or before it paints) and the page scrollbar, not .sheet.
+   Color mode puts .dark or .light on <html>; without either it follows the system. */
 html {
+  color-scheme: light dark;
+  /* A thin lilac scrollbar, at 3:1 or more against the page: 4.7:1 here, 6:1 in light. */
+  --scrollbar-thumb: #aa68cc;
   scrollbar-width: thin;
-  scrollbar-color: rgb(170 104 204 / 0.55) transparent;
+  scrollbar-color: var(--scrollbar-thumb) transparent;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
+html.light {
+  color-scheme: light;
+  --scrollbar-thumb: #7a46a8;
+}
+
+/* Nuxt UI paints the body its own slate (or white); match the sheet's black and cream. */
+html,
+body {
+  background-color: #1a1918;
+}
+
+html.light,
+html.light body {
+  background-color: #fcf6ed;
 }
 
 /* Display preferences (useDisplayPreferences). */
