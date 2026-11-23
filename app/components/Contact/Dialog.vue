@@ -16,11 +16,13 @@ function focusName(event: Event) {
     nameInput.value.focus()
 }
 
-const canSubmit = computed(() =>
-    !!form.name.trim() && !!form.email.trim() && !!form.message.trim() && !!token.value && !loading.value)
-
+// The browser enforces the required fields before this runs.
 async function submit() {
-    if (!canSubmit.value) return
+    if (loading.value) return
+    if (!token.value) {
+        errorMsg.value = 'Please complete the verification check.'
+        return
+    }
     loading.value = true
     errorMsg.value = ''
     try {
@@ -48,7 +50,8 @@ watch(open, (isOpen) => {
 </script>
 
 <template>
-    <UModal v-model:open="open" :content="{ onOpenAutoFocus: focusName }"
+    <!-- With a custom #content, UModal renders `title` visually hidden as the dialog's accessible name. -->
+    <UModal v-model:open="open" title="Send me a message" :content="{ onOpenAutoFocus: focusName }"
         :ui="{ overlay: 'bg-black/60 backdrop-blur-sm', content: 'w-full sm:max-w-md bg-transparent ring-0 shadow-none' }">
         <template #content>
             <div class="contact">
@@ -69,15 +72,16 @@ watch(open, (isOpen) => {
                 <form v-else class="contact-form" @submit.prevent="submit">
                     <label class="contact-field">
                         <span>Name</span>
-                        <input ref="nameInput" v-model="form.name" placeholder="Your name" autocomplete="name" required>
+                        <input ref="nameInput" v-model="form.name" name="name" placeholder="Your name" autocomplete="name" required>
                     </label>
                     <label class="contact-field">
                         <span>Email</span>
-                        <input v-model="form.email" type="email" placeholder="you@example.com" autocomplete="email" required>
+                        <input v-model="form.email" name="email" type="email" placeholder="you@example.com" autocomplete="email" spellcheck="false" required>
                     </label>
                     <label class="contact-field">
                         <span>Message</span>
-                        <textarea v-model="form.message" rows="4" placeholder="What's up?" required />
+                        <!-- Matches the server's limit. -->
+                        <textarea v-model="form.message" name="message" rows="4" maxlength="5000" placeholder="What's up?" required />
                     </label>
 
                     <NuxtTurnstile ref="turnstile" v-model="token" :options="{ theme: 'dark' }" />
@@ -86,7 +90,7 @@ watch(open, (isOpen) => {
                         <UIcon name="i-ph-warning-circle" /> {{ errorMsg }}
                     </p>
 
-                    <button type="submit" class="contact-button" :disabled="!canSubmit">
+                    <button type="submit" class="contact-button" :disabled="loading">
                         <UIcon v-if="loading" name="i-ph-circle-notch" class="animate-spin" />
                         <UIcon v-else name="i-ph-paper-plane-tilt" />
                         {{ loading ? 'Sending…' : 'Send message' }}
