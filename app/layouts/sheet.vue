@@ -98,12 +98,11 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
 
       <p v-if="messages.maintenance" class="frame-notice" role="status">{{ messages.maintenance }}</p>
 
-      <slot />
-
-      <footer class="frame-footer">
-        <!-- The presence bar is only on the home page; the name above still takes its colours everywhere. -->
+      <div v-if="route.path === '/'" class="frame-presence">
+        <!-- The presence bar is only on the home page; the name above still takes its colours everywhere.
+             Its spot is held while Lanyard connects, so the page doesn't jump when it arrives. -->
         <Transition name="frame-fade">
-          <section v-if="route.path === '/' && lanyard" class="frame-card" aria-label="Discord presence">
+          <section v-if="lanyard" class="frame-card" aria-label="Discord presence">
             <Transition name="frame-fade">
               <NuxtImg v-if="nameplate" :src="nameplateUrl(nameplate.asset, nameplateAnimated)" alt="" width="448" height="84"
                 class="frame-nameplate" />
@@ -128,6 +127,11 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
             </div>
           </section>
         </Transition>
+      </div>
+
+      <slot />
+
+      <footer class="frame-footer">
         <div class="frame-base">
           <ul class="frame-links">
             <li v-for="social in links" :key="social.to">
@@ -266,10 +270,6 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
   border-image: var(--pastel-rule) 1;
 }
 
-.frame-card + .frame-base {
-  margin-top: 1.5rem;
-}
-
 .frame-visits {
   display: flex;
   align-items: center;
@@ -282,6 +282,12 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
 
 @keyframes frame-visits-in {
   from { opacity: 0; }
+}
+
+/* The card's rendered height (its name and status line, padded), held before it loads.
+   No margin below: the home page already spaces its intro from what's above. */
+.frame-presence {
+  min-height: 4.04rem;
 }
 
 /* The Discord user panel: avatar, name and custom status over the nameplate. */
