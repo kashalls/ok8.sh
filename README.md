@@ -26,7 +26,8 @@ Environment variables:
 
 | Variable                     | Purpose                                                  |
 | ---------------------------- | -------------------------------------------------------- |
-| `NUXT_GITHUB_TOKEN`          | Optional; raises the GitHub rate limit for `/api/repos`  |
+| `NUXT_GITHUB_TOKEN`          | Raises the GitHub rate limit for `/api/repos`; required for the Stats page's contributions |
+| `NUXT_WAKATIME_TOKEN`        | WakaTime OAuth token with `read_stats`, for the Stats page |
 | `NUXT_RESEND_API_KEY`        | Enables sending mail from the contact form               |
 | `NUXT_TURNSTILE_SITE_KEY`    | Turnstile site key (dev uses the always-pass test keys)  |
 | `NUXT_TURNSTILE_SECRET_KEY`  | Turnstile secret for server-side verification            |
@@ -49,6 +50,7 @@ They're `ok8-sh-db`, `ok8-sh-cache` and `ok8-sh-messages`. The footer's visit co
 
 ```bash
 bunx wrangler secret put NUXT_GITHUB_TOKEN
+bunx wrangler secret put NUXT_WAKATIME_TOKEN
 bunx wrangler secret put NUXT_RESEND_API_KEY
 bunx wrangler secret put NUXT_TURNSTILE_SECRET_KEY
 bunx wrangler secret put NUXT_PUBLIC_TURNSTILE_SITE_KEY
@@ -82,6 +84,7 @@ Every other branch gets a [Worker Preview](https://developers.cloudflare.com/wor
 
 ```bash
 bunx wrangler preview base-config secret put NUXT_GITHUB_TOKEN
+bunx wrangler preview base-config secret put NUXT_WAKATIME_TOKEN
 ```
 
 Repeat for the other secrets above.

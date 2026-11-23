@@ -79,6 +79,13 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
               </UTooltip>
             </li>
             <li>
+              <UTooltip text="Stats" v-bind="sheetTooltip">
+                <NuxtLink to="/stats" aria-label="Stats" :aria-current="route.path === '/stats' ? 'page' : undefined">
+                  <UIcon name="i-ph-chart-line-fill" />
+                </NuxtLink>
+              </UTooltip>
+            </li>
+            <li>
               <UTooltip text="Email me" v-bind="sheetTooltip">
                 <button type="button" aria-label="Email me" @click="openContact()">
                   <UIcon name="i-ph-envelope-simple-fill" />
@@ -91,12 +98,11 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
 
       <p v-if="messages.maintenance" class="frame-notice" role="status">{{ messages.maintenance }}</p>
 
-      <slot />
-
-      <footer class="frame-footer">
-        <!-- The presence bar is only on the home page; the name above still takes its colours everywhere. -->
+      <div v-if="route.path === '/'" class="frame-presence">
+        <!-- The presence bar is only on the home page; the name above still takes its colours everywhere.
+             Its spot is held while Lanyard connects, so the page doesn't jump when it arrives. -->
         <Transition name="frame-fade">
-          <section v-if="route.path === '/' && lanyard" class="frame-card" aria-label="Discord presence">
+          <section v-if="lanyard" class="frame-card" aria-label="Discord presence">
             <Transition name="frame-fade">
               <NuxtImg v-if="nameplate" :src="nameplateUrl(nameplate.asset, nameplateAnimated)" alt="" width="448" height="84"
                 class="frame-nameplate" />
@@ -121,6 +127,11 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
             </div>
           </section>
         </Transition>
+      </div>
+
+      <slot />
+
+      <footer class="frame-footer">
         <div class="frame-base">
           <ul class="frame-links">
             <li v-for="social in links" :key="social.to">
@@ -168,6 +179,9 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
   /* The sheet's diagonal stripes, over the galaxy skirt's violets in the corner. */
   background:
     repeating-linear-gradient(-58deg, transparent 0 46px, rgb(170 104 204 / 0.06) 46px 47.5px),
+    radial-gradient(44rem 30rem at 0% 0%, rgb(178 218 241 / 0.08), transparent 70%),
+    radial-gradient(36rem 26rem at 100% 0%, rgb(219 136 73 / 0.06), transparent 70%),
+    radial-gradient(40rem 30rem at 0% 70%, rgb(177 237 217 / 0.05), transparent 70%),
     radial-gradient(60rem 36rem at 100% 100%, rgb(82 67 156 / 0.55), transparent 70%),
     radial-gradient(80rem 50rem at 85% 110%, rgb(91 63 124 / 0.6), transparent 75%),
     var(--black);
@@ -203,7 +217,13 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
   gap: 0.75rem 1rem;
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
-  border-bottom: 1px solid var(--rule);
+  border-bottom: 1px solid;
+  border-image: var(--pastel-rule) 1;
+}
+
+/* A thread of the pastels for the lines that frame the page. */
+.frame {
+  --pastel-rule: linear-gradient(90deg, rgb(178 218 241 / 0.35), rgb(170 104 204 / 0.35), rgb(177 237 217 / 0.3), rgb(219 136 73 / 0.3));
 }
 
 .frame-name.frame-logo {
@@ -246,11 +266,8 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
   justify-content: space-between;
   gap: 1rem;
   padding-top: 1rem;
-  border-top: 1px solid var(--rule);
-}
-
-.frame-card + .frame-base {
-  margin-top: 1.5rem;
+  border-top: 1px solid;
+  border-image: var(--pastel-rule) 1;
 }
 
 .frame-visits {
@@ -265,6 +282,12 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
 
 @keyframes frame-visits-in {
   from { opacity: 0; }
+}
+
+/* The card's rendered height (its name and status line, padded), held before it loads.
+   No margin below: the home page already spaces its intro from what's above. */
+.frame-presence {
+  min-height: 4.04rem;
 }
 
 /* The Discord user panel: avatar, name and custom status over the nameplate. */
@@ -454,13 +477,14 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
   /* Sit the chip's text on the sentence's baseline rather than the logo's bottom edge. */
   vertical-align: -0.15em;
   border-radius: 6px;
-  background: var(--charcoal);
+  /* A chip can set --tint to the pastel of what it names. */
+  background: color-mix(in oklab, var(--charcoal) 80%, var(--tint, var(--pastel-lilac)));
   color: var(--cream);
   transition: border-color 200ms;
 }
 
 .chip:is(:hover, :focus-visible) {
-  border-color: var(--lilac);
+  border-color: var(--tint, var(--pastel-lilac));
 }
 
 .chip > :first-child {
@@ -481,14 +505,20 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
   padding: 0.85rem 0;
 }
 
-/* The Discord bar's violet, washing in behind the row from the left. */
+/* Each row takes the next pastel, washing in behind it from the left on hover. */
+.rows > li:nth-child(5n + 1) { --tint: var(--sky); }
+.rows > li:nth-child(5n + 2) { --tint: var(--mint); }
+.rows > li:nth-child(5n + 3) { --tint: var(--pastel-peach); }
+.rows > li:nth-child(5n + 4) { --tint: var(--pastel-lilac); }
+.rows > li:nth-child(5n + 5) { --tint: var(--pastel-butter); }
+
 .row::before {
   content: '';
   position: absolute;
   inset: 0 -0.6rem;
   z-index: -1;
   border-radius: 6px;
-  background: linear-gradient(90deg, rgb(91 63 124 / 0.35), rgb(91 63 124 / 0.08));
+  background: linear-gradient(90deg, color-mix(in oklab, var(--tint, var(--lilac)) 16%, transparent), transparent);
   opacity: 0;
   transition: opacity 250ms;
 }
@@ -510,7 +540,7 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
 }
 
 .row:is(:hover, :focus-visible) .row-name {
-  color: var(--gold);
+  color: var(--tint, var(--gold));
   translate: 0.25rem 0;
 }
 

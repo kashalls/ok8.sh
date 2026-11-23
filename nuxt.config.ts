@@ -95,6 +95,8 @@ export default defineNuxtConfig({
   runtimeConfig: {
       // GitHub token (set NUXT_GITHUB_TOKEN); raises the rate limit for /api/repos.
       githubToken: '',
+      // WakaTime OAuth token with read_stats (set NUXT_WAKATIME_TOKEN), for /api/stats/wakatime.
+      wakatimeToken: '',
       // GitHub account ID (github.com/kashalls) that signs in as the site owner,
       // who posts comments as the author and can remove them.
       githubUserId: 17620516,

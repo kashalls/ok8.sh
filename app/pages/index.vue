@@ -29,7 +29,7 @@ function hoverWwt() {
     <p>
       I currently work at
       <UTooltip :text="wwtHovers >= 3 ? 'I still work here :)' : 'I work here'" v-bind="sheetTooltip">
-        <NuxtLink to="https://www.wwt.com" target="_blank" class="chip" :class="{ 'chip-shake': wwtShaking }"
+        <NuxtLink to="https://www.wwt.com" target="_blank" class="chip" :class="{ 'chip-shake': wwtShaking }" style="--tint: var(--sky)"
           @pointerenter="hoverWwt" @animationend="wwtShaking = false">
           <NuxtImg src="https://www.wwt.com/apple-touch-icon.png" alt="" width="14" height="14" class="chip-logo" />World Wide Technology</NuxtLink>
       </UTooltip>,
@@ -41,7 +41,7 @@ function hoverWwt() {
     </p>
     <p>
       On the side, I maintain my own
-      <NuxtLink to="https://github.com/waifulabs/infrastructure" target="_blank" class="chip"><UIcon name="i-simple-icons-kubernetes" class="chip-wheel" />Kubernetes infrastructure</NuxtLink>
+      <NuxtLink to="https://github.com/kashalls/infrastructure" target="_blank" class="chip" style="--tint: var(--mint)"><UIcon name="i-simple-icons-kubernetes" class="chip-wheel" />Kubernetes infrastructure</NuxtLink>
       and write tooling that makes platforms more extensible.
     </p>
 

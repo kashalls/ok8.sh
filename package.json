@@ -4,7 +4,7 @@
   "packageManager": "bun@1.4.4",
   "scripts": {
     "build": "nuxt build",
-    "dev": "nuxt dev",
+    "dev": "nuxt dev --dotenv .dev.vars",
     "generate": "nuxt generate",
     "preview": "wrangler dev",
     "deploy": "wrangler deploy",

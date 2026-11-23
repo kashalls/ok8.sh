@@ -18,7 +18,8 @@ export default defineCachedEventHandler(async (event) => {
     return Object.fromEntries(stars) as Record<string, number | null>
 }, {
     name: 'repos',
-    getKey: () => 'stars',
+    // Renamed when infrastructure moved to kashalls/, so the copy keyed by its old name is skipped.
+    getKey: () => 'stars-by-repo',
     maxAge: 60 * 60,
     staleMaxAge: 24 * 60 * 60, // keep serving the last counts through GitHub outages
     swr: true,
