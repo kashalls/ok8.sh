@@ -7,7 +7,7 @@ const { host } = useRequestURL()
 const { openContact } = useContact()
 
 useSeoMeta({
-    title: 'Gateway ࣪ ִֶָ☾ No Service Configured',
+    title: '𑣲Gateway: No Service Configured 𑄝੭',
     description: 'This hostname is resolving to a gateway endpoint with no configured service.',
     ogDescription: 'This hostname is resolving to a gateway endpoint with no configured service.',
 })

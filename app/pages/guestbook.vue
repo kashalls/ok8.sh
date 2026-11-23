@@ -1,6 +1,6 @@
 <script setup lang="ts">
 definePageMeta({ layout: 'sheet', viewTransition: true })
-useHead({ title: 'Guestbook ࣪ ִֶָ☾ Kashall' })
+useHead({ title: "𑣲Kashall's Guestbook 𑄝੭" })
 </script>
 
 <template>

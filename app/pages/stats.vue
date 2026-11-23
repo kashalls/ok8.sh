@@ -2,7 +2,7 @@
 definePageMeta({ layout: 'sheet', viewTransition: true })
 
 const description = 'What I have been coding lately, from WakaTime and GitHub.'
-useSeoMeta({ title: 'Stats ࣪ ִֶָ☾ Kashall', description, ogDescription: description })
+useSeoMeta({ title: "𑣲Kashall's Stats 𑄝੭", description, ogDescription: description })
 defineOgImage('Default', { title: 'Stats', description })
 
 const ranges = [

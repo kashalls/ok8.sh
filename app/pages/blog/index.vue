@@ -4,7 +4,7 @@ import { refDebounced } from '@vueuse/core'
 definePageMeta({ layout: 'sheet', viewTransition: true })
 
 const description = 'Posts about my homelab, Kubernetes and the tools I build.'
-useSeoMeta({ title: 'Blog ࣪ ִֶָ☾ Kashall', description, ogDescription: description })
+useSeoMeta({ title: "𑣲Kashall's Blog 𑄝੭", description, ogDescription: description })
 defineOgImage('Default', { title: 'Blog', description })
 
 const { data: posts } = await useAsyncData('blog-posts', () =>

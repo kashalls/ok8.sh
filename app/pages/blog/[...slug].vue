@@ -12,7 +12,7 @@ if (!post.value) {
 }
 
 useSeoMeta({
-    title: `${post.value.title} ࣪ ִֶָ☾ Kashall`,
+    title: `𑣲${post.value.title} 𑄝੭`,
     description: post.value.description,
     ogDescription: post.value.description,
     ogType: 'article',
