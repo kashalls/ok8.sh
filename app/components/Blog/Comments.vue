@@ -27,7 +27,6 @@ const posting = ref(false)
 const busy = ref<string | null>(null)
 const message = ref('')
 
-const errorMessage = (e: any, fallback: string) => e?.data?.message || e?.data?.statusMessage || fallback
 const name = (comment: PostComment) => comment.author?.name || comment.author?.login || 'Removed'
 const canRemove = (comment: PostComment) => isOwner.value || comment.author?.id === user.value?.id
 

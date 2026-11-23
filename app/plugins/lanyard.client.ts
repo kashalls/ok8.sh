@@ -7,7 +7,7 @@ const enum Constants {
 
 export default defineNuxtPlugin(() => {
     async function lanyard(options: { socket: true }): Promise<WebSocket>;
-    async function lanyard(options: {}): Promise<LanyardResponse>;
+    async function lanyard(options: Record<string, never>): Promise<LanyardResponse>;
 
     async function lanyard(options: { socket?: true }): Promise<WebSocket | LanyardResponse | LanyardResponse[]> {
         if (options.socket === true) {

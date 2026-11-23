@@ -30,8 +30,8 @@ async function saveMessages() {
         const result = await $fetch('/api/admin/messages', { method: 'PUT', body: draft })
         messages.value = result.messages
         saved.value = 'Saved. Visitors see it within about a minute.'
-    } catch (e: any) {
-        saved.value = e?.data?.message || e?.data?.statusMessage || 'Could not save the messages. Please try again.'
+    } catch (e) {
+        saved.value = errorMessage(e, 'Could not save the messages. Please try again.')
     } finally {
         saving.value = false
     }
