@@ -27,7 +27,8 @@ export default defineNuxtConfig({
       'nuxt-og-image',
       '@nuxtjs/sitemap',
       '@nuxtjs/robots',
-      'nuxt-auth-utils'
+      'nuxt-auth-utils',
+      '@nuxt/eslint'
   ],
 
   // Canonical site (used by sitemap, robots, OG images). Override with
