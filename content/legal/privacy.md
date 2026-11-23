@@ -37,6 +37,12 @@ Signing the guestbook or commenting on a post needs a GitHub account.
 
 Messages are emailed to me through [Resend](https://resend.com/legal/privacy-policy) with your name, email address and message, and [Cloudflare Turnstile](https://www.cloudflare.com/turnstile-privacy-policy/) checks that you're not a bot first. Nothing from the form is stored on the site; your message lives in my inbox, and I only use your email address to reply.
 
+## Copyright
+
+Writing, images and artwork on ok8.sh are © 2017-2026 Kashall or their artists, all rights reserved. Please don't republish them or pass them off as your own without asking.
+
+The site's code is open source under the [MIT license](https://github.com/kashalls/ok8.sh/blob/main/LICENSE). Feel free to read it, learn from it and reuse it with credit. The fonts and commissioned art aren't covered by that license and belong to their creators.
+
 ## Questions or removal
 
 If you'd like something removed, or have a question about any of this, use the email button at the top of any page.
