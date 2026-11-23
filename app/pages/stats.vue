@@ -2,7 +2,7 @@
 definePageMeta({ layout: 'sheet', viewTransition: true })
 
 const description = 'What I have been coding lately, from WakaTime and GitHub.'
-useSeoMeta({ title: 'Stats — Kashall', description, ogDescription: description })
+useSeoMeta({ title: "𑣲Kashall's Stats 𑄝੭", description, ogDescription: description })
 defineOgImage('Default', { title: 'Stats', description })
 
 const ranges = [
@@ -16,8 +16,16 @@ const rangeTotal = computed(() => ranges.find(r => r.value === range.value)!.tot
 const { data: waka, status: wakaStatus } = useFetch('/api/stats/wakatime', { server: false, lazy: true, query: { range } })
 const { data: github, status: githubStatus } = useFetch('/api/stats/github', { server: false, lazy: true })
 
+// A range change refetches with its data cleared; once coding time has failed, keep saying
+// so through that refetch instead of flashing the placeholders, until a fetch succeeds.
+const wakaFailed = ref(false)
+watch(wakaStatus, (status) => {
+  if (status === 'error') wakaFailed.value = true
+  else if (status === 'success') wakaFailed.value = false
+})
+
 // Placeholders hold each chart's shape until its data arrives (or fails).
-const wakaLoading = computed(() => !waka.value && wakaStatus.value !== 'error')
+const wakaLoading = computed(() => !waka.value && !wakaFailed.value && wakaStatus.value !== 'error')
 const githubLoading = computed(() => !github.value && githubStatus.value !== 'error')
 const placeholderDays = [70, 20, 35, 55, 10, 25, 45]
 const placeholderRows = [100, 60, 35, 20]
@@ -46,6 +54,22 @@ const tick = (start: string, i: number) => {
 
 // From the same buckets as the chart below, so the totals match it.
 const total = computed(() => (waka.value?.buckets ?? []).reduce((sum, bucket) => sum + bucket.seconds, 0))
+
+// A line of commentary on the range: a quiet one, or the language that took most of it.
+const QUIPS: Record<string, string> = {
+  TypeScript: 'TypeScript again? Of course.',
+  Go: 'Mostly Go lately. The gophers approve.',
+  YAML: 'So much YAML. Send help.',
+  Vue: 'Lots of Vue. Making things pretty takes a while.',
+  Python: 'Python this time. Snakes!',
+  Markdown: 'Mostly writing words, for once.',
+}
+const quip = computed(() => {
+  if (!waka.value) return ''
+  if (total.value < 60 * 60) return 'A quiet stretch. Probably outside, touching grass.'
+  const top = waka.value.languages.find(lang => lang.name !== 'Other')?.name
+  return top ? QUIPS[top] ?? `Mostly ${top} lately.` : ''
+})
 const activeDays = computed(() => waka.value?.unit === 'day' ? waka.value.buckets.filter(day => day.seconds >= 60).length : 0)
 
 const busiestBucket = computed(() => Math.max(1, ...(waka.value?.buckets.map(bucket => bucket.seconds) ?? [])))
@@ -89,7 +113,7 @@ const show = (text: string, event: PointerEvent) => { tip.value = { text, el: ev
       <UTabs v-model="range" :items="ranges" :content="false" size="xs" aria-label="Time range" :ui="{ list: 'w-auto' }" />
     </div>
 
-    <p v-if="!waka && wakaStatus === 'error'" class="stats-quiet">Coding time isn't available right now.</p>
+    <p v-if="!waka && (wakaFailed || wakaStatus === 'error')" class="stats-quiet">Coding time isn't available right now <span class="kaomoji" aria-hidden="true">(´-ω-`)</span></p>
 
     <!-- The skeletons are only shapes; screen readers get the one line of text. -->
     <div v-if="wakaLoading" class="stats-placeholder">
@@ -135,6 +159,8 @@ const show = (text: string, event: PointerEvent) => { tip.value = { text, el: ev
         <dt>contributions in the past year</dt>
       </div>
     </dl>
+
+    <p v-if="quip" class="stats-quip">{{ quip }}</p>
 
     <figure v-if="waka?.buckets.length" class="stats-figure">
       <figcaption>{{ waka.unit === 'hour' ? 'Per hour' : 'Per day' }}</figcaption>
@@ -261,7 +287,7 @@ html.reduce-motion .stats-bar {
   font-family: var(--font-display);
   font-size: 2rem;
   line-height: 1;
-  color: var(--cream);
+  color: var(--heading);
   font-variant-numeric: tabular-nums;
 }
 
@@ -269,6 +295,19 @@ html.reduce-motion .stats-bar {
 .stats-total dd { color: var(--sky); }
 .stats-average dd { color: var(--mint); }
 .stats-contributions dd { color: var(--pastel-peach); }
+
+/* The pastels are too pale on cream; the same hues at 0.5 lightness read at 4.8:1 or more. */
+html.light .stats-total dd { color: oklch(from var(--sky) 0.5 calc(c * 2.2) h); }
+html.light .stats-average dd { color: oklch(from var(--mint) 0.5 calc(c * 2.2) h); }
+html.light .stats-contributions dd { color: oklch(from var(--pastel-peach) 0.5 calc(c * 2.2) h); }
+
+/* Tucked under the numbers rather than spaced like a section. */
+.stats > .stats-quip {
+  margin-top: 0.9rem;
+  font-size: 0.9rem;
+  font-style: italic;
+  color: var(--muted);
+}
 
 .stats-heroes dt {
   font-size: 0.8rem;
@@ -345,7 +384,7 @@ html.reduce-motion .stats-bar {
 
 .stats-name {
   overflow: hidden;
-  color: var(--cream);
+  color: var(--heading);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -355,7 +394,7 @@ a.stats-name {
 }
 
 a.stats-name:is(:hover, :focus-visible) {
-  color: var(--gold);
+  color: var(--accent);
 }
 
 .stats-bar {
@@ -372,7 +411,7 @@ a.stats-name:is(:hover, :focus-visible) {
 .stats-rows > li:nth-child(6n + 3) { --tint: var(--mint); }
 .stats-rows > li:nth-child(6n + 4) { --tint: var(--pastel-peach); }
 .stats-rows > li:nth-child(6n + 5) { --tint: var(--pastel-butter); }
-.stats-rows > li:nth-child(6n + 6) { --tint: var(--cream); }
+.stats-rows > li:nth-child(6n + 6) { --tint: var(--heading); }
 
 .is-private .stats-name {
   color: var(--muted);
@@ -421,7 +460,7 @@ a.stats-name:is(:hover, :focus-visible) {
 .stats-cell {
   aspect-ratio: 1;
   border-radius: 2px;
-  background: rgb(252 246 237 / 0.06);
+  background: color-mix(in oklab, var(--heading) 6%, transparent);
 }
 
 .stats-cell[data-level="1"] { background: rgb(170 104 204 / 0.35); }
@@ -430,7 +469,7 @@ a.stats-name:is(:hover, :focus-visible) {
 .stats-cell[data-level="4"] { background: var(--lilac); }
 
 .stats-cell:hover {
-  outline: 1px solid var(--cream);
+  outline: 1px solid var(--heading);
 }
 
 </style>

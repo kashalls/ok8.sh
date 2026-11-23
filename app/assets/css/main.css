@@ -2,8 +2,8 @@
 @import "@nuxt/ui";
 
 @theme {
-  /* Inter for body text and controls; Machina is reserved for display text. */
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
+  /* The default face, for anything outside the sheet (like a dialog's hidden title). */
+  --font-sans: "Nunito", ui-rounded, ui-sans-serif, system-ui, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 
   /* `font-display` -> the name, page titles and other brand text. */
@@ -11,11 +11,11 @@
 
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 
-  /* `font-body` utility -> PP Neue Machina Plain (used on window/dialog titles). */
-  --font-body: "PP Neue Machina Plain", ui-sans-serif, system-ui, sans-serif;
-
   /* `font-karla` -> body text on the sheet layout. */
   --font-karla: "Karla", ui-sans-serif, system-ui, sans-serif;
+
+  /* `font-nunito` -> body text on the sheet layout; Karla stays on the OG cards. */
+  --font-nunito: "Nunito", ui-rounded, ui-sans-serif, system-ui, sans-serif;
 
   /* `font-sniglet` -> the name on the sheet layout, standing in for Discord's Sakura. */
   --font-sniglet: "Sniglet", ui-rounded, system-ui, sans-serif;
@@ -56,6 +56,72 @@
   --pastel-lilac: color-mix(in oklab, var(--lilac) 55%, var(--cream));
   --pastel-peach: color-mix(in oklab, var(--orange) 50%, var(--cream));
   --pastel-butter: color-mix(in oklab, var(--gold) 55%, var(--cream));
+  /* Roles: what components use, so the light theme only has to redefine these. */
+  --bg: var(--black);
+  --heading: var(--cream);
+  --surface: var(--charcoal);
+  --accent: var(--gold);
+  --on-accent: var(--black);
+  /* Headings take the name's rounded face on the sheet. */
+  --font-display: var(--font-sniglet);
+  /* Native controls (checkboxes, radios, sliders) take the accent too. */
+  accent-color: var(--accent);
+}
+
+/* The light theme: the sheet's cream as the page, deep plum text, and a deeper lilac
+   accent, since gold doesn't read on cream. Contrast on the cream: heading 11.6:1,
+   text 7.4:1, muted 4.7:1, accent 6:1. */
+html.light :is(.sheet, .contact, .frame-tooltip) {
+  --bg: var(--cream);
+  --heading: #3a2f4a;
+  --text: rgb(58 47 74 / 0.85);
+  --muted: rgb(58 47 74 / 0.7);
+  --surface: #f1e8f6;
+  --rule: rgb(170 104 204 / 0.3);
+  --accent: #7a46a8;
+  --on-accent: var(--cream);
+  /* Nuxt UI's light status colours (500) are too pale on cream (red reads at 3.5:1); 700 clears 4.5:1. */
+  --ui-error: var(--ui-color-error-700);
+  --ui-warning: var(--ui-color-warning-700);
+  --ui-info: var(--ui-color-info-700);
+  --ui-success: var(--ui-color-success-700);
+  /* Callouts set their text with a fixed shade (text-warning-600 and so on), which is just as pale. */
+  --ui-color-error-600: var(--ui-color-error-800);
+  --ui-color-warning-600: var(--ui-color-warning-800);
+  --ui-color-info-600: var(--ui-color-info-800);
+  --ui-color-success-600: var(--ui-color-success-800);
+  color-scheme: light;
+}
+
+/* The window itself follows the theme too: the root element decides the canvas behind the
+   page (seen when overscrolling or before it paints) and the page scrollbar, not .sheet.
+   Color mode puts .dark or .light on <html>; without either it follows the system. */
+html {
+  color-scheme: light dark;
+  /* A thin lilac scrollbar, at 3:1 or more against the page: 4.7:1 here, 6:1 in light. */
+  --scrollbar-thumb: #aa68cc;
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) transparent;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
+html.light {
+  color-scheme: light;
+  --scrollbar-thumb: #7a46a8;
+}
+
+/* Nuxt UI paints the body its own slate (or white); match the sheet's black and cream. */
+html,
+body {
+  background-color: #1a1918;
+}
+
+html.light,
+html.light body {
+  background-color: #fcf6ed;
 }
 
 /* Display preferences (useDisplayPreferences). */
@@ -68,16 +134,51 @@ html.reduce-motion *::after {
   scroll-behavior: auto !important;
 }
 
-/* Page changes on the sheet layout: the content crossfades and a post's title
-   glides between the blog list and the post. */
-::view-transition-old(root),
+/* Page changes on the sheet layout: the old page drifts up and fades while the new one
+   springs in, the header stays put, and a post's title glides between the blog list and
+   the post. This animates the whole viewport rather than a named page element: a page
+   whose height changes as it loads (like stats) would be stretched to its first snapshot. */
+::view-transition-old(root) {
+  animation: page-out 180ms ease-in both;
+}
+
 ::view-transition-new(root) {
-  animation-duration: 200ms;
+  animation: page-in 380ms cubic-bezier(0.3, 1.3, 0.5, 1) 60ms both;
+}
+
+@keyframes page-out {
+  to { opacity: 0; translate: 0 -6px; }
+}
+
+@keyframes page-in {
+  from { opacity: 0; translate: 0 8px; }
 }
 
 ::view-transition-group(*) {
   animation-duration: 400ms;
   animation-timing-function: cubic-bezier(0.3, 0.7, 0.2, 1);
+}
+
+/* Switching themes (toggleTheme in the sheet layout): the new theme spills out from the
+   toggle in a growing circle over the old one. Everything is one snapshot for this, so
+   nothing with its own name (the header, a post title) crossfades on top. */
+html.theme-reveal body * {
+  view-transition-name: none !important;
+}
+
+html.theme-reveal::view-transition-old(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+html.theme-reveal::view-transition-new(root) {
+  animation: theme-reveal 550ms cubic-bezier(0.4, 0, 0.2, 1);
+  mix-blend-mode: normal;
+}
+
+@keyframes theme-reveal {
+  from { clip-path: circle(0 at var(--reveal-x) var(--reveal-y)); }
+  to { clip-path: circle(var(--reveal-r) at var(--reveal-x) var(--reveal-y)); }
 }
 
 html.reduce-motion::view-transition-group(*),
@@ -93,7 +194,7 @@ html[data-text-size="xl"] { font-size: 125%; }
 html.readable-font {
   --font-sans: "OpenDyslexic", ui-sans-serif, system-ui, sans-serif;
   --font-display: "OpenDyslexic", ui-sans-serif, system-ui, sans-serif;
-  --font-body: "OpenDyslexic", ui-sans-serif, system-ui, sans-serif;
   --font-karla: "OpenDyslexic", ui-sans-serif, system-ui, sans-serif;
+  --font-nunito: "OpenDyslexic", ui-sans-serif, system-ui, sans-serif;
   --font-sniglet: "OpenDyslexic", ui-sans-serif, system-ui, sans-serif;
 }

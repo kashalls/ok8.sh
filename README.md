@@ -89,6 +89,14 @@ bunx wrangler preview base-config secret put NUXT_WAKATIME_TOKEN
 
 Repeat for the other secrets above.
 
+### License
+
+The code is [MIT](LICENSE). That covers the code only. These are not under the MIT license:
+
+- Writing, including blog posts (`content/blog`) and legal pages (`content/legal`): all rights reserved.
+- Images and artwork, including `public/banner.png`, `public/logo.png` and any commissioned art: all rights reserved by their creators.
+- The PP Neue Machina Inktrap font in `public/fonts`, which belongs to Pangram Pangram and are used under their license.
+
 ### 💖 Sponsors
 
 <p align="center">

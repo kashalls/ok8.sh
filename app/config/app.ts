@@ -1,7 +1,7 @@
 import type { NuxtConfig } from 'nuxt/schema'
 
 const description =
-    "Platform engineer based in Oregon, building Kubernetes infrastructure and the tooling around it."
+    "Hi, I'm Kashall! A platform engineer in Oregon who keeps Kubernetes clusters happy and builds tools that make platforms easier to extend."
 
 // og:image and twitter:card come from defineOgImage on each page.
 export default {
@@ -10,9 +10,13 @@ export default {
     head: {
         title: 'Kashall',
         link: [
-            { rel: 'icon', type: 'image/png', href: '/logo.png' }
+            // Only Firefox animates a GIF favicon; other browsers show its first frame.
+            { rel: 'icon', type: 'image/gif', href: '/favicon.gif' },
+            { rel: 'apple-touch-icon', href: '/logo.png' },
         ],
         meta: [
+            // Both themes, so the browser can theme its own UI before the CSS arrives.
+            { name: "color-scheme", content: "light dark" },
             { name: "description", content: description },
             { property: "og:type", content: "website" },
             { property: "og:site_name", content: "Kashall" },

@@ -19,7 +19,7 @@ export default defineEventHandler(async (event) => {
 
     const outcome = await verifyTurnstileToken(token, event)
     if (!outcome.success)
-        throw createError({ statusCode: 403, statusMessage: 'Captcha verification failed — please try again.' })
+        throw createError({ statusCode: 403, statusMessage: "Couldn't check you're human. Please try again." })
 
     const config = useRuntimeConfig(event)
     if (!config.resend?.apiKey)

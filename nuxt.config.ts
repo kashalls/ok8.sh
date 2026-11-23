@@ -128,6 +128,18 @@ export default defineNuxtConfig({
       },
   },
 
+  // Nuxt UI's defaults, except the light theme: material-theme-lighter's pale tokens don't
+  // read on the light sheet.
+  mdc: {
+      highlight: {
+          theme: {
+              light: 'github-light',
+              default: 'material-theme',
+              dark: 'material-theme-palenight',
+          },
+      },
+  },
+
   css: ['~/assets/css/main.css'],
 
   sourcemap: { server: false },
@@ -149,7 +161,8 @@ export default defineNuxtConfig({
   },
 
   colorMode: {
-      preference: 'dark',
+      preference: 'system',
+      fallback: 'dark',
   },
 
   nitro: {
@@ -190,15 +203,14 @@ export default defineNuxtConfig({
           prefix: '/_webfonts/',
       },
       families: [
-          { name: 'Inter', provider: 'google' },
           // global so @nuxt/fonts emits them for OG image (satori) font extraction.
           { name: 'Karla', provider: 'google', weights: [400, 700], global: true },
-          { name: 'Sniglet', provider: 'google', weights: [800], global: true },
+          { name: 'Sniglet', provider: 'google', weights: [400, 800], global: true },
+          { name: 'Nunito', provider: 'google', weights: [400, 700], global: true },
           // Opt-in readable font (useReadableFont). Only referenced from a custom
           // property, so it must be global to get an @font-face; browsers only
           // download it once the class is on.
           { name: 'OpenDyslexic', provider: 'fontsource', weights: [400, 700], global: true },
-          { name: 'PP Neue Machina Plain', provider: 'local' },
           // global so @nuxt/fonts emits it for OG image (satori) font extraction.
           { name: 'PP Neue Machina Inktrap', provider: 'local', global: true },
           // Only referenced through --font-mono, so global to get an @font-face.

@@ -5,10 +5,10 @@ const props = defineProps<{ error: NuxtError }>()
 
 const meta = computed(() => statusMeta(props.error?.statusCode))
 
-useHead({ title: () => `${meta.value.code} — ${meta.value.title}` })
+useHead({ title: () => `𑣲${meta.value.code} ${meta.value.title} 𑄝੭` })
 
 defineOgImage('Default', {
-    title: `${meta.value.code} — ${meta.value.title}`,
+    title: `𑣲${meta.value.code} ${meta.value.title} 𑄝੭`,
     description: meta.value.description,
     badge: 'Error',
 })
@@ -31,9 +31,9 @@ const next = computed(() => [
                     <span class="error-code">{{ meta.code }}</span>
                 </div>
                 <p v-if="meta.code === 404" class="error-text">
-                    What you are looking for could not be found. Here are some other things for you to look at.
+                    This page wandered off <span class="kaomoji" aria-hidden="true">(・・？)</span> Maybe one of these has what you're after?
                 </p>
-                <p v-else class="error-text">{{ meta.description }}</p>
+                <p v-else class="error-text">{{ meta.description }} <span class="kaomoji" aria-hidden="true">(；ω；)</span></p>
 
                 <ul class="cards error-next">
                     <li v-for="item in next" :key="item.name">

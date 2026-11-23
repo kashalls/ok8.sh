@@ -14,7 +14,8 @@ export default defineContentConfig({
                 draft: z.boolean().default(false),
             }),
         }),
-        // Policies for other projects, served at /legal/<project>/<page> and not linked from the site.
+        // The site's privacy policy (/legal/privacy, linked from the footer), and policies for
+        // other projects at /legal/<project>/<page>, which aren't linked from the site.
         legal: defineCollection({
             type: 'page',
             source: 'legal/**/*.md',

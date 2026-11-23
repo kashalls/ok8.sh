@@ -51,12 +51,12 @@ watch(open, (isOpen) => {
 
 <template>
     <!-- With a custom #content, UModal renders `title` visually hidden as the dialog's accessible name. -->
-    <UModal v-model:open="open" title="Send me a message" :content="{ onOpenAutoFocus: focusName }"
+    <UModal v-model:open="open" title="Say hi!" :content="{ onOpenAutoFocus: focusName }"
         :ui="{ overlay: 'bg-black/60 backdrop-blur-sm', content: 'w-full sm:max-w-md bg-transparent ring-0 shadow-none' }">
         <template #content>
             <div class="contact">
                 <header class="contact-head">
-                    <h2 class="contact-title">Send me a message</h2>
+                    <h2 class="contact-title">Say hi!</h2>
                     <button type="button" class="contact-close" aria-label="Close" @click="closeContact">
                         <UIcon name="i-ph-x" />
                     </button>
@@ -64,8 +64,8 @@ watch(open, (isOpen) => {
 
                 <div v-if="sent" class="contact-sent" role="status">
                     <UIcon name="i-ph-check-circle" class="contact-sent-icon" />
-                    <p class="contact-title">Message sent</p>
-                    <p>Thanks for reaching out. I'll get back to you soon.</p>
+                    <p class="contact-title">Yay, got it!</p>
+                    <p>Thanks for writing. I'll get back to you soon.</p>
                     <button type="button" class="contact-button" @click="closeContact">Close</button>
                 </div>
 
@@ -93,7 +93,7 @@ watch(open, (isOpen) => {
                     <button type="submit" class="contact-button" :disabled="loading">
                         <UIcon v-if="loading" name="i-ph-circle-notch" class="animate-spin" />
                         <UIcon v-else name="i-ph-paper-plane-tilt" />
-                        {{ loading ? 'Sending…' : 'Send message' }}
+                        {{ loading ? 'Sending…' : 'Send it!' }}
                     </button>
                 </form>
             </div>
@@ -106,11 +106,11 @@ watch(open, (isOpen) => {
 .contact {
     padding: 1.25rem;
     border: 1px solid var(--rule);
-    border-radius: 8px;
-    background: linear-gradient(160deg, rgb(91 63 124 / 0.35), transparent 60%), var(--black);
+    border-radius: 16px;
+    background: linear-gradient(160deg, rgb(91 63 124 / 0.35), transparent 60%), var(--bg);
     box-shadow: 0 20px 60px rgb(0 0 0 / 0.5);
     color: var(--text);
-    font-family: var(--font-karla);
+    font-family: var(--font-nunito);
     line-height: 1.5;
 }
 
@@ -124,7 +124,7 @@ watch(open, (isOpen) => {
 .contact-title {
     font-family: var(--font-display);
     font-size: 1.1rem;
-    color: var(--cream);
+    color: var(--heading);
 }
 
 .contact-close {
@@ -135,7 +135,7 @@ watch(open, (isOpen) => {
 }
 
 .contact-close:hover {
-    color: var(--cream);
+    color: var(--heading);
 }
 
 .contact-form {
@@ -160,8 +160,8 @@ watch(open, (isOpen) => {
     padding: 0.55rem 0.7rem;
     border: 1px solid var(--rule);
     border-radius: 6px;
-    background: var(--charcoal);
-    color: var(--cream);
+    background: var(--surface);
+    color: var(--heading);
     transition: border-color 200ms, box-shadow 200ms;
 }
 
@@ -171,14 +171,14 @@ watch(open, (isOpen) => {
 }
 
 .contact-field :is(input, textarea)::placeholder {
-    color: rgb(252 246 237 / 0.4);
+    color: color-mix(in oklab, var(--muted) 75%, transparent);
 }
 
 /* The border and a ring in gold stand in for the outline. */
 .contact-field :is(input, textarea):focus {
-    border-color: var(--gold);
+    border-color: var(--accent);
     outline: none;
-    box-shadow: 0 0 0 1px var(--gold);
+    box-shadow: 0 0 0 1px var(--accent);
 }
 
 .contact-error {
@@ -196,8 +196,8 @@ watch(open, (isOpen) => {
     gap: 0.5rem;
     padding: 0.6rem 1rem;
     border-radius: 6px;
-    background: var(--gold);
-    color: var(--black);
+    background: var(--accent);
+    color: var(--on-accent);
     font-weight: 700;
     transition: background-color 200ms, color 200ms, filter 200ms;
 }
@@ -207,14 +207,14 @@ watch(open, (isOpen) => {
 }
 
 .contact-button:disabled {
-    background: var(--charcoal);
+    background: var(--surface);
     color: var(--muted);
     cursor: not-allowed;
 }
 
 .contact-button:focus-visible,
 .contact-close:focus-visible {
-    outline: 2px solid var(--gold);
+    outline: 2px solid var(--accent);
     outline-offset: 2px;
 }
 
