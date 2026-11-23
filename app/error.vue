@@ -5,10 +5,10 @@ const props = defineProps<{ error: NuxtError }>()
 
 const meta = computed(() => statusMeta(props.error?.statusCode))
 
-useHead({ title: () => `${meta.value.code} — ${meta.value.title}` })
+useHead({ title: () => `${meta.value.code} 🌙 ${meta.value.title}` })
 
 defineOgImage('Default', {
-    title: `${meta.value.code} — ${meta.value.title}`,
+    title: `${meta.value.code} 🌙 ${meta.value.title}`,
     description: meta.value.description,
     badge: 'Error',
 })
