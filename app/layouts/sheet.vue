@@ -142,12 +142,15 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
               </UTooltip>
             </li>
           </ul>
-          <UTooltip v-if="visits !== null" text="Visitors" v-bind="sheetTooltip">
-            <p class="frame-visits">
-              <UIcon name="i-ph-eye-fill" />
-              {{ visits.toLocaleString('en-US') }}<span class="sr-only"> visitors</span>
-            </p>
-          </UTooltip>
+          <div class="frame-end">
+            <NuxtLink to="/legal/privacy" class="frame-legal">Privacy</NuxtLink>
+            <UTooltip v-if="visits !== null" text="Visitors" v-bind="sheetTooltip">
+              <p class="frame-visits">
+                <UIcon name="i-ph-eye-fill" />
+                {{ visits.toLocaleString('en-US') }}<span class="sr-only"> visitors</span>
+              </p>
+            </UTooltip>
+          </div>
         </div>
       </footer>
     </div>
@@ -285,6 +288,24 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
   justify-content: space-between;
   gap: 1rem;
   padding-top: 1rem;
+}
+
+.frame-end {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.frame-legal {
+  font-size: 0.85rem;
+  color: var(--muted);
+  text-underline-offset: 4px;
+  transition: color 200ms;
+}
+
+.frame-legal:is(:hover, :focus-visible) {
+  color: var(--cream);
+  text-decoration: underline wavy var(--pastel-lilac);
 }
 
 .frame-visits {

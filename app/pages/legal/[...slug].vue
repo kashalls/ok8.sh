@@ -12,7 +12,7 @@ if (!page.value) {
 }
 
 useSeoMeta({
-    title: page.value.title,
+    title: `𑣲${page.value.title} 𑄝੭`,
     description: page.value.description,
     ogDescription: page.value.description,
 })
