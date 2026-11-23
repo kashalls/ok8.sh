@@ -79,6 +79,13 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
               </UTooltip>
             </li>
             <li>
+              <UTooltip text="Stats" v-bind="sheetTooltip">
+                <NuxtLink to="/stats" aria-label="Stats" :aria-current="route.path === '/stats' ? 'page' : undefined">
+                  <UIcon name="i-ph-chart-line-fill" />
+                </NuxtLink>
+              </UTooltip>
+            </li>
+            <li>
               <UTooltip text="Email me" v-bind="sheetTooltip">
                 <button type="button" aria-label="Email me" @click="openContact()">
                   <UIcon name="i-ph-envelope-simple-fill" />
