@@ -40,8 +40,10 @@ async function toggleTheme(event: MouseEvent) {
     // Color mode sets the class on <html> in a watcher; the transition snapshots after this.
     await nextTick()
   }
-  themeSpinning.value = true
   if (reduced.value || !document.startViewTransition) return apply()
+  // Only once motion is allowed: under reduced motion the spin never runs, so animationend
+  // would never clear it.
+  themeSpinning.value = true
   // The new theme spills out from the toggle in a circle (see .theme-reveal in main.css).
   const { left, top, width, height } = (event.currentTarget as HTMLElement).getBoundingClientRect()
   const x = left + width / 2
