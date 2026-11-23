@@ -92,7 +92,7 @@ function hoverWwt() {
   margin-bottom: 0.5rem;
   font-family: var(--font-display);
   font-size: 1.1rem;
-  color: var(--cream);
+  color: var(--heading);
 }
 
 /* Pops in once the count arrives. */

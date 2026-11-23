@@ -56,8 +56,29 @@
   --pastel-lilac: color-mix(in oklab, var(--lilac) 55%, var(--cream));
   --pastel-peach: color-mix(in oklab, var(--orange) 50%, var(--cream));
   --pastel-butter: color-mix(in oklab, var(--gold) 55%, var(--cream));
+  /* Roles: what components use, so the light theme only has to redefine these. */
+  --bg: var(--black);
+  --heading: var(--cream);
+  --surface: var(--charcoal);
+  --accent: var(--gold);
+  --on-accent: var(--black);
   /* Headings take the name's rounded face on the sheet. */
   --font-display: var(--font-sniglet);
+}
+
+/* The light theme: the sheet's cream as the page, deep plum text, and a deeper lilac
+   accent, since gold doesn't read on cream. Contrast on the cream: heading 11.6:1,
+   text 7.4:1, muted 4.7:1, accent 6:1. */
+html.light :is(.sheet, .contact, .frame-tooltip) {
+  --bg: var(--cream);
+  --heading: #3a2f4a;
+  --text: rgb(58 47 74 / 0.85);
+  --muted: rgb(58 47 74 / 0.7);
+  --surface: #f1e8f6;
+  --rule: rgb(170 104 204 / 0.3);
+  --accent: #7a46a8;
+  --on-accent: var(--cream);
+  color-scheme: light;
 }
 
 /* A thin lilac scrollbar (the sheet's --lilac; the page's scrollbar belongs to html, outside .sheet). */

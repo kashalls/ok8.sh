@@ -54,7 +54,7 @@ useRobotsRule(false)
 .gateway-host {
     margin-top: 0.25rem;
     font-family: var(--font-mono);
-    color: var(--cream);
+    color: var(--heading);
     overflow-wrap: anywhere;
 }
 

@@ -128,6 +128,18 @@ export default defineNuxtConfig({
       },
   },
 
+  // Nuxt UI's defaults, except the light theme: material-theme-lighter's pale tokens don't
+  // read on the light sheet.
+  mdc: {
+      highlight: {
+          theme: {
+              light: 'github-light',
+              default: 'material-theme',
+              dark: 'material-theme-palenight',
+          },
+      },
+  },
+
   css: ['~/assets/css/main.css'],
 
   sourcemap: { server: false },
@@ -149,7 +161,8 @@ export default defineNuxtConfig({
   },
 
   colorMode: {
-      preference: 'dark',
+      preference: 'system',
+      fallback: 'dark',
   },
 
   nitro: {

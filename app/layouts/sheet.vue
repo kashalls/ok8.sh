@@ -26,6 +26,12 @@ onMounted(async () => {
 })
 // Discord has the footer's presence bar instead.
 const links = socials.filter(social => social.label !== 'Discord')
+// Follows the system theme until the visitor picks one; Nuxt UI's color mode remembers it.
+const colorMode = useColorMode()
+const isLight = computed(() => colorMode.value === 'light')
+function toggleTheme() {
+  colorMode.preference = isLight.value ? 'dark' : 'light'
+}
 // Pages are prerendered, so this is the year of the last build.
 const year = new Date().getFullYear()
 const socialHints: Record<string, string> = { GitHub: 'Peek at my code', LinkedIn: 'The grown-up profile' }
@@ -102,6 +108,21 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
                 </button>
               </UTooltip>
             </li>
+            <li>
+              <!-- Prerendered pages can't know the visitor's theme, so the toggle renders in the browser. -->
+              <ClientOnly>
+                <UTooltip :text="isLight ? 'Lights off' : 'Lights on'" v-bind="sheetTooltip">
+                  <button type="button" :aria-label="isLight ? 'Switch to the dark theme' : 'Switch to the light theme'"
+                    @click="toggleTheme">
+                    <UIcon v-if="isLight" name="i-ph-moon-stars-fill" />
+                    <UIcon v-else name="i-ph-sun-fill" />
+                  </button>
+                </UTooltip>
+                <template #fallback>
+                  <span class="frame-theme-slot" />
+                </template>
+              </ClientOnly>
+            </li>
           </ul>
         </nav>
       </header>
@@ -177,16 +198,16 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
 <style>
 .sheet {
   /* Nuxt UI components (legal prose) take the same palette. */
-  --ui-primary: var(--gold);
+  --ui-primary: var(--accent);
   --ui-text-dimmed: var(--muted);
   --ui-text-muted: var(--text);
   --ui-text-toned: var(--text);
   --ui-text: var(--text);
-  --ui-text-highlighted: var(--cream);
-  --ui-bg: var(--black);
-  --ui-bg-muted: var(--charcoal);
-  --ui-bg-elevated: var(--charcoal);
-  --ui-bg-accented: var(--charcoal);
+  --ui-text-highlighted: var(--heading);
+  --ui-bg: var(--bg);
+  --ui-bg-muted: var(--surface);
+  --ui-bg-elevated: var(--surface);
+  --ui-bg-accented: var(--surface);
   --ui-border: var(--rule);
   --ui-border-muted: var(--rule);
   --ui-border-accented: var(--lilac);
@@ -203,7 +224,7 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
     radial-gradient(40rem 30rem at 0% 70%, rgb(177 237 217 / 0.05), transparent 70%),
     radial-gradient(60rem 36rem at 100% 100%, rgb(82 67 156 / 0.55), transparent 70%),
     radial-gradient(80rem 50rem at 85% 110%, rgb(91 63 124 / 0.6), transparent 75%),
-    color-mix(in oklab, var(--black) 88%, var(--violet));
+    color-mix(in oklab, var(--bg) 88%, var(--violet));
   background-attachment: fixed;
 }
 
@@ -289,7 +310,7 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
   border-radius: 14px;
   background: rgb(246 194 82 / 0.08);
   font-size: 0.9rem;
-  color: var(--cream);
+  color: var(--heading);
 }
 
 .frame-notice::before {
@@ -347,7 +368,7 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
 }
 
 .frame-legal:is(:hover, :focus-visible) {
-  color: var(--cream);
+  color: var(--heading);
   text-decoration: underline wavy var(--pastel-lilac);
 }
 
@@ -453,7 +474,7 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
   font-size: 1.2rem;
   line-height: 1.15;
   letter-spacing: -0.01em;
-  color: var(--cream);
+  color: var(--heading);
 }
 
 .frame-custom {
@@ -492,13 +513,20 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
   transition: color 200ms, filter 200ms, translate 300ms cubic-bezier(0.3, 1.6, 0.5, 1);
 }
 
+/* Holds the theme toggle's spot (an icon's size) until it renders. */
+.frame-theme-slot {
+  display: block;
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
 .frame-links [aria-current] {
-  color: var(--cream);
+  color: var(--heading);
 }
 
 .frame-tooltip {
-  background: var(--charcoal);
-  color: var(--cream);
+  background: var(--surface);
+  color: var(--heading);
   font-family: var(--font-nunito);
   --tw-ring-color: var(--rule);
 }
@@ -526,7 +554,7 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
   font-size: 1.75rem;
   line-height: 1.1;
   letter-spacing: -0.01em;
-  color: var(--cream);
+  color: var(--heading);
 }
 
 /* Long-form text: posts and the legal pages. */
@@ -537,7 +565,7 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
 .doc-body :is(h2, h3, h4) {
   font-family: var(--font-display);
   font-weight: 400;
-  color: var(--cream);
+  color: var(--heading);
 }
 
 /* Something named in a sentence: an organisation or project with its logo, or a path. */
@@ -552,8 +580,8 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
   vertical-align: -0.15em;
   border-radius: 999px;
   /* A chip can set --tint to the pastel of what it names. */
-  background: color-mix(in oklab, var(--charcoal) 68%, var(--tint, var(--pastel-lilac)));
-  color: var(--cream);
+  background: color-mix(in oklab, var(--surface) 68%, var(--tint, var(--pastel-lilac)));
+  color: var(--heading);
   transition: border-color 200ms, translate 300ms cubic-bezier(0.3, 1.6, 0.5, 1);
 }
 
@@ -616,12 +644,12 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
 }
 
 .row-name {
-  color: var(--cream);
+  color: var(--heading);
   transition: color 200ms, translate 250ms ease-out;
 }
 
 .row:is(:hover, :focus-visible) .row-name {
-  color: var(--tint, var(--gold));
+  color: var(--tint, var(--accent));
   translate: 0.25rem 0;
 }
 
@@ -663,5 +691,39 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
 .cards .row::before {
   inset: 0;
   border-radius: inherit;
+}
+
+/* The light theme (tokens in main.css): the same stripes and swatch glows, softer, on cream. */
+html.light .sheet {
+  background:
+    repeating-linear-gradient(-58deg, transparent 0 46px, rgb(170 104 204 / 0.07) 46px 47.5px),
+    radial-gradient(44rem 30rem at 0% 0%, rgb(178 218 241 / 0.5), transparent 70%),
+    radial-gradient(36rem 26rem at 100% 0%, rgb(219 136 73 / 0.16), transparent 70%),
+    radial-gradient(40rem 30rem at 0% 70%, rgb(177 237 217 / 0.35), transparent 70%),
+    radial-gradient(60rem 36rem at 100% 100%, rgb(170 104 204 / 0.25), transparent 70%),
+    var(--bg);
+  background-attachment: fixed;
+}
+
+html.light .frame-card {
+  background: linear-gradient(90deg, rgb(170 104 204 / 0.12), rgb(170 104 204 / 0.28));
+}
+
+html.light .frame-custom {
+  text-shadow: none;
+}
+
+html.light .chip {
+  border-color: color-mix(in oklab, var(--tint, var(--pastel-lilac)) 55%, transparent);
+  background: color-mix(in oklab, white 55%, var(--tint, var(--pastel-lilac)));
+}
+
+/* The pastels are too pale to read as text on cream, so hovers mix them toward the text. */
+html.light .frame-links :is(a, button):is(:hover, :focus-visible) {
+  color: color-mix(in oklab, var(--hover) 55%, var(--heading));
+}
+
+html.light .row:is(:hover, :focus-visible) .row-name {
+  color: color-mix(in oklab, var(--tint, var(--accent)) 45%, var(--heading));
 }
 </style>

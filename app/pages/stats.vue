@@ -269,7 +269,7 @@ html.reduce-motion .stats-bar {
   font-family: var(--font-display);
   font-size: 2rem;
   line-height: 1;
-  color: var(--cream);
+  color: var(--heading);
   font-variant-numeric: tabular-nums;
 }
 
@@ -353,7 +353,7 @@ html.reduce-motion .stats-bar {
 
 .stats-name {
   overflow: hidden;
-  color: var(--cream);
+  color: var(--heading);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -363,7 +363,7 @@ a.stats-name {
 }
 
 a.stats-name:is(:hover, :focus-visible) {
-  color: var(--gold);
+  color: var(--accent);
 }
 
 .stats-bar {
@@ -380,7 +380,7 @@ a.stats-name:is(:hover, :focus-visible) {
 .stats-rows > li:nth-child(6n + 3) { --tint: var(--mint); }
 .stats-rows > li:nth-child(6n + 4) { --tint: var(--pastel-peach); }
 .stats-rows > li:nth-child(6n + 5) { --tint: var(--pastel-butter); }
-.stats-rows > li:nth-child(6n + 6) { --tint: var(--cream); }
+.stats-rows > li:nth-child(6n + 6) { --tint: var(--heading); }
 
 .is-private .stats-name {
   color: var(--muted);
@@ -429,7 +429,7 @@ a.stats-name:is(:hover, :focus-visible) {
 .stats-cell {
   aspect-ratio: 1;
   border-radius: 2px;
-  background: rgb(252 246 237 / 0.06);
+  background: color-mix(in oklab, var(--heading) 6%, transparent);
 }
 
 .stats-cell[data-level="1"] { background: rgb(170 104 204 / 0.35); }
@@ -438,7 +438,7 @@ a.stats-name:is(:hover, :focus-visible) {
 .stats-cell[data-level="4"] { background: var(--lilac); }
 
 .stats-cell:hover {
-  outline: 1px solid var(--cream);
+  outline: 1px solid var(--heading);
 }
 
 </style>

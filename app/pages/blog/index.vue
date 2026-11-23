@@ -70,20 +70,20 @@ const shown = computed(() => (posts.value ?? []).filter((post) => {
     padding: 0.5rem 0.7rem;
     border: 1px solid var(--rule);
     border-radius: 6px;
-    background: var(--charcoal);
-    color: var(--cream);
+    background: var(--surface);
+    color: var(--heading);
     transition: border-color 200ms, box-shadow 200ms;
 }
 
 .blog-search input::placeholder {
-    color: rgb(252 246 237 / 0.4);
+    color: color-mix(in oklab, var(--muted) 75%, transparent);
 }
 
 /* The border and a ring in gold stand in for the outline. */
 .blog-search input:focus {
-    border-color: var(--gold);
+    border-color: var(--accent);
     outline: none;
-    box-shadow: 0 0 0 1px var(--gold);
+    box-shadow: 0 0 0 1px var(--accent);
 }
 
 .blog-rss {
@@ -93,7 +93,7 @@ const shown = computed(() => (posts.value ?? []).filter((post) => {
 }
 
 .blog-rss:hover {
-    color: var(--cream);
+    color: var(--heading);
 }
 
 .blog-empty {

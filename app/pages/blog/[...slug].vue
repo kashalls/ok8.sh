@@ -77,7 +77,7 @@ defineOgImage('Post', {
 
 .post-back:is(:hover, :focus-visible) {
     gap: 0.6rem;
-    color: var(--cream);
+    color: var(--heading);
 }
 
 /* One box even when the title wraps, which a view transition needs. */
@@ -124,7 +124,7 @@ defineOgImage('Post', {
 }
 
 .post-edit:hover {
-    color: var(--cream);
+    color: var(--heading);
 }
 
 .post-comments {

@@ -107,7 +107,7 @@ watch(open, (isOpen) => {
     padding: 1.25rem;
     border: 1px solid var(--rule);
     border-radius: 16px;
-    background: linear-gradient(160deg, rgb(91 63 124 / 0.35), transparent 60%), var(--black);
+    background: linear-gradient(160deg, rgb(91 63 124 / 0.35), transparent 60%), var(--bg);
     box-shadow: 0 20px 60px rgb(0 0 0 / 0.5);
     color: var(--text);
     font-family: var(--font-nunito);
@@ -124,7 +124,7 @@ watch(open, (isOpen) => {
 .contact-title {
     font-family: var(--font-display);
     font-size: 1.1rem;
-    color: var(--cream);
+    color: var(--heading);
 }
 
 .contact-close {
@@ -135,7 +135,7 @@ watch(open, (isOpen) => {
 }
 
 .contact-close:hover {
-    color: var(--cream);
+    color: var(--heading);
 }
 
 .contact-form {
@@ -160,8 +160,8 @@ watch(open, (isOpen) => {
     padding: 0.55rem 0.7rem;
     border: 1px solid var(--rule);
     border-radius: 6px;
-    background: var(--charcoal);
-    color: var(--cream);
+    background: var(--surface);
+    color: var(--heading);
     transition: border-color 200ms, box-shadow 200ms;
 }
 
@@ -171,14 +171,14 @@ watch(open, (isOpen) => {
 }
 
 .contact-field :is(input, textarea)::placeholder {
-    color: rgb(252 246 237 / 0.4);
+    color: color-mix(in oklab, var(--muted) 75%, transparent);
 }
 
 /* The border and a ring in gold stand in for the outline. */
 .contact-field :is(input, textarea):focus {
-    border-color: var(--gold);
+    border-color: var(--accent);
     outline: none;
-    box-shadow: 0 0 0 1px var(--gold);
+    box-shadow: 0 0 0 1px var(--accent);
 }
 
 .contact-error {
@@ -196,8 +196,8 @@ watch(open, (isOpen) => {
     gap: 0.5rem;
     padding: 0.6rem 1rem;
     border-radius: 6px;
-    background: var(--gold);
-    color: var(--black);
+    background: var(--accent);
+    color: var(--on-accent);
     font-weight: 700;
     transition: background-color 200ms, color 200ms, filter 200ms;
 }
@@ -207,14 +207,14 @@ watch(open, (isOpen) => {
 }
 
 .contact-button:disabled {
-    background: var(--charcoal);
+    background: var(--surface);
     color: var(--muted);
     cursor: not-allowed;
 }
 
 .contact-button:focus-visible,
 .contact-close:focus-visible {
-    outline: 2px solid var(--gold);
+    outline: 2px solid var(--accent);
     outline-offset: 2px;
 }
 

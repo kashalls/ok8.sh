@@ -89,7 +89,7 @@ async function saveMessages() {
   margin: 2.5rem 0 1rem;
   font-family: var(--font-display);
   font-size: 1.15rem;
-  color: var(--cream);
+  color: var(--heading);
 }
 
 .list > li + li {
