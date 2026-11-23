@@ -78,6 +78,8 @@ html.light :is(.sheet, .contact, .frame-tooltip) {
   --rule: rgb(170 104 204 / 0.3);
   --accent: #7a46a8;
   --on-accent: var(--cream);
+  /* Nuxt UI's light red (500) reads at 3.5:1 on cream; 700 clears 4.5:1. */
+  --ui-error: var(--ui-color-error-700);
   color-scheme: light;
 }
 
