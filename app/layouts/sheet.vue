@@ -26,6 +26,8 @@ onMounted(async () => {
 })
 // Discord has the footer's presence bar instead.
 const links = socials.filter(social => social.label !== 'Discord')
+// Pages are prerendered, so this is the year of the last build.
+const year = new Date().getFullYear()
 const socialHints: Record<string, string> = { GitHub: 'Peek at my code', LinkedIn: 'The grown-up profile' }
 const statusHints: Record<string, string> = {
   online: 'Around!',
@@ -153,6 +155,7 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
             </li>
           </ul>
           <div class="frame-end">
+            <p class="frame-copyright">© 2017-{{ year }} Kashall</p>
             <NuxtLink to="/legal/privacy" class="frame-legal">Privacy</NuxtLink>
             <UTooltip v-if="visits !== null" text="Friends who stopped by" v-bind="sheetTooltip">
               <p class="frame-visits">
@@ -308,7 +311,14 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
 .frame-end {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.25rem 1rem;
+}
+
+.frame-copyright {
+  font-size: 0.85rem;
+  color: var(--muted);
 }
 
 .frame-legal {
