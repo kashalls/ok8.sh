@@ -25,24 +25,24 @@ function hoverWwt() {
 <template>
   <main class="home">
     <h1 class="sr-only">Kashall</h1>
-    <p>I'm a platform engineer based in Oregon.</p>
+    <p>Hi, I'm Kashall! I'm a platform engineer living in Oregon.</p>
     <p>
-      I currently work at
+      By day I'm at
       <UTooltip :text="wwtHovers >= 3 ? 'I still work here :)' : 'I work here'" v-bind="sheetTooltip">
         <NuxtLink to="https://www.wwt.com" target="_blank" class="chip" :class="{ 'chip-shake': wwtShaking }" style="--tint: var(--sky)"
           @pointerenter="hoverWwt" @animationend="wwtShaking = false">
           <NuxtImg src="https://www.wwt.com/apple-touch-icon.png" alt="" width="14" height="14" class="chip-logo" />World Wide Technology</NuxtLink>
       </UTooltip>,
-      on internal infrastructure and operations. My role allows me to develop and maintain critical infrastructure for
-      our 2,000+ custom applications across 100+ Kubernetes clusters.
+      looking after internal infrastructure and operations. That means keeping 2,000+ custom apps happy across
+      100+ Kubernetes clusters.
     </p>
     <p>
-      Most of the code I write is Go, TypeScript and JavaScript, from Kubernetes tooling to web apps like this site.
+      I mostly write Go, TypeScript and JavaScript, anything from little Kubernetes tools to web apps like this one.
     </p>
     <p>
-      On the side, I maintain my own
+      After hours I tinker with my own
       <NuxtLink to="https://github.com/kashalls/infrastructure" target="_blank" class="chip" style="--tint: var(--mint)"><UIcon name="i-simple-icons-kubernetes" class="chip-wheel" />Kubernetes infrastructure</NuxtLink>
-      and write tooling that makes platforms more extensible.
+      and build tools that make platforms easier to extend. Thanks for stopping by!
     </p>
 
     <section class="projects">
