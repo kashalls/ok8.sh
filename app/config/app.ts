@@ -1,7 +1,7 @@
 import type { NuxtConfig } from 'nuxt/schema'
 
 const description =
-    "Platform engineer based in Oregon, building Kubernetes infrastructure and the tooling around it."
+    "Hi, I'm Kashall! A platform engineer in Oregon who keeps Kubernetes clusters happy and builds tools that make platforms easier to extend."
 
 // og:image and twitter:card come from defineOgImage on each page.
 export default {

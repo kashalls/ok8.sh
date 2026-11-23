@@ -3,7 +3,7 @@ definePageMeta({ layout: 'sheet', viewTransition: true })
 
 defineOgImage('Default', {
   title: 'Kashall',
-  description: 'Platform engineer based in Oregon, building Kubernetes infrastructure and the tooling around it.',
+  description: 'A platform engineer in Oregon who keeps Kubernetes clusters happy and builds tools that make platforms easier to extend.',
 })
 
 // Cached on the server; a project without a count just leaves it off.
