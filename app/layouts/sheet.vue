@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useDocumentVisibility, useIntervalFn } from '@vueuse/core'
+import { useDocumentVisibility, useIntervalFn, useResizeObserver } from '@vueuse/core'
 
 useDisplayPreferences()
 
@@ -26,6 +26,28 @@ onMounted(async () => {
 })
 // Discord has the footer's presence bar instead.
 const links = socials.filter(social => social.label !== 'Discord')
+const socialHints: Record<string, string> = { GitHub: 'Peek at my code', LinkedIn: 'The grown-up profile' }
+const statusHints: Record<string, string> = {
+  online: 'Around!',
+  idle: 'Probably snacking',
+  dnd: 'In the zone, shh',
+  offline: 'Asleep, probably',
+}
+
+// The header name, a letter at a time so it can wave. A transformed letter drops out of
+// its parent's background-clip, so each letter paints its own slice of the gradient,
+// offset by where it sits in the word.
+const nameLetters = [...'Kashall']
+const nameWord = ref<HTMLElement | null>(null)
+function measureName() {
+  const word = nameWord.value
+  if (!word) return
+  word.parentElement!.style.setProperty('--name-w', `${word.offsetWidth}px`)
+  for (const letter of word.children as HTMLCollectionOf<HTMLElement>) letter.style.setProperty('--x', `${letter.offsetLeft}px`)
+}
+useResizeObserver(nameWord, measureName)
+onMounted(() => document.fonts.ready.then(measureName))
+const squishing = ref(false)
 const lanyard = useLanyard()
 const custom = computed(() => lanyard.value?.activities.find(a => a.type === ActivityType.Custom))
 const nameplate = computed(() => lanyard.value?.discord_user.collectibles?.nameplate)
@@ -60,33 +82,38 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
     <div class="frame">
       <!-- Holds the spot for the logo. -->
       <header class="frame-header">
-        <NuxtLink to="/" aria-label="Kashall, home" class="frame-name frame-logo" :class="{ 'is-gradient': nameGradient }"
-          :style="{ backgroundImage: nameGradient }">Kashall</NuxtLink>
+        <NuxtLink to="/" aria-label="Kashall, home" class="frame-name frame-logo" :class="{ 'has-gradient': nameGradient }"
+          :style="{ '--name-gradient': nameGradient }" @click="squishing = true">
+          <span ref="nameWord" class="frame-word" :class="{ 'is-squishing': squishing }" aria-hidden="true"
+            @animationend.self="squishing = false">
+            <span v-for="(letter, i) in nameLetters" :key="i" class="frame-letter" :style="{ '--i': i }">{{ letter }}</span>
+          </span>
+        </NuxtLink>
         <nav aria-label="Site">
           <ul class="frame-links">
             <li>
-              <UTooltip text="Blog" v-bind="sheetTooltip">
+              <UTooltip text="Read my notes" v-bind="sheetTooltip">
                 <NuxtLink to="/blog" aria-label="Blog" :aria-current="route.path.startsWith('/blog') ? 'page' : undefined">
                   <UIcon name="i-ph-pen-nib-fill" />
                 </NuxtLink>
               </UTooltip>
             </li>
             <li>
-              <UTooltip text="Guestbook" v-bind="sheetTooltip">
+              <UTooltip text="Sign my guestbook!" v-bind="sheetTooltip">
                 <NuxtLink to="/guestbook" aria-label="Guestbook" :aria-current="route.path === '/guestbook' ? 'page' : undefined">
                   <UIcon name="i-ph-signature-fill" />
                 </NuxtLink>
               </UTooltip>
             </li>
             <li>
-              <UTooltip text="Stats" v-bind="sheetTooltip">
+              <UTooltip text="Nerdy numbers" v-bind="sheetTooltip">
                 <NuxtLink to="/stats" aria-label="Stats" :aria-current="route.path === '/stats' ? 'page' : undefined">
                   <UIcon name="i-ph-chart-line-fill" />
                 </NuxtLink>
               </UTooltip>
             </li>
             <li>
-              <UTooltip text="Email me" v-bind="sheetTooltip">
+              <UTooltip text="Say hi!" v-bind="sheetTooltip">
                 <button type="button" aria-label="Email me" @click="openContact()">
                   <UIcon name="i-ph-envelope-simple-fill" />
                 </button>
@@ -107,12 +134,14 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
               <NuxtImg v-if="nameplate" :src="nameplateUrl(nameplate.asset, nameplateAnimated)" alt="" width="448" height="84"
                 class="frame-nameplate" />
             </Transition>
-            <span class="frame-avatar">
-              <NuxtImg :src="avatarUrl(lanyard.discord_user.id, lanyard.discord_user.avatar)" alt="" width="36" height="36" />
-              <NuxtImg v-if="decoration" :src="decorationUrl(decoration.asset, decorationAnimated)" alt="" width="44"
-                height="44" class="frame-decoration" />
-              <span class="frame-dot" :style="{ background: statusColor(lanyard.discord_status) }" />
-            </span>
+            <UTooltip :text="statusHints[lanyard.discord_status] ?? statusHints.offline" v-bind="sheetTooltip">
+              <span class="frame-avatar">
+                <NuxtImg :src="avatarUrl(lanyard.discord_user.id, lanyard.discord_user.avatar)" alt="" width="36" height="36" />
+                <NuxtImg v-if="decoration" :src="decorationUrl(decoration.asset, decorationAnimated)" alt="" width="44"
+                  height="44" class="frame-decoration" />
+                <span class="frame-dot" :style="{ background: statusColor(lanyard.discord_status) }" />
+              </span>
+            </UTooltip>
             <div class="frame-who">
               <span class="frame-name" :class="{ 'is-gradient': nameGradient }" :style="{ backgroundImage: nameGradient }">Kashall</span>
               <p class="frame-custom">
@@ -129,13 +158,15 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
         </Transition>
       </div>
 
-      <slot />
+      <div class="frame-page">
+        <slot />
+      </div>
 
       <footer class="frame-footer">
         <div class="frame-base">
           <ul class="frame-links">
             <li v-for="social in links" :key="social.to">
-              <UTooltip :text="social.label" v-bind="sheetTooltip">
+              <UTooltip :text="socialHints[social.label] ?? social.label" v-bind="sheetTooltip">
                 <NuxtLink :to="social.to" target="_blank" :aria-label="social.label">
                   <UIcon :name="social.iconFill" />
                 </NuxtLink>
@@ -144,7 +175,7 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
           </ul>
           <div class="frame-end">
             <NuxtLink to="/legal/privacy" class="frame-legal">Privacy</NuxtLink>
-            <UTooltip v-if="visits !== null" text="Visitors" v-bind="sheetTooltip">
+            <UTooltip v-if="visits !== null" text="Friends who stopped by" v-bind="sheetTooltip">
               <p class="frame-visits">
                 <UIcon name="i-ph-eye-fill" />
                 {{ visits.toLocaleString('en-US') }}<span class="sr-only"> visitors</span>
@@ -249,6 +280,83 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
 
 .frame-name.frame-logo {
   font-size: 1.75rem;
+}
+
+.frame-word {
+  position: relative;
+  display: inline-block;
+  transform-origin: 50% 100%;
+}
+
+.frame-letter {
+  display: inline-block;
+}
+
+/* Registered so the shimmer can animate it. */
+@property --name-shift {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 0px;
+}
+
+.frame-logo.has-gradient {
+  animation: name-shimmer 4s ease-in-out infinite alternate;
+}
+
+/* The same back-and-forth shimmer as the presence card's name, shared across the letters. */
+.frame-logo.has-gradient .frame-letter {
+  background-image: var(--name-gradient);
+  background-size: calc(var(--name-w, 100%) * 2) 100%;
+  background-position: calc(-1 * var(--x, 0px) - var(--name-shift)) 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@keyframes name-shimmer {
+  to { --name-shift: var(--name-w, 0px); }
+}
+
+/* Hovering the name sends a little wave through the letters. */
+.frame-logo:is(:hover, :focus-visible) .frame-letter {
+  animation: name-hop 500ms ease-in-out calc(var(--i) * 45ms) both;
+}
+
+@keyframes name-hop {
+  35% { translate: 0 -0.2em; }
+  70% { translate: 0 0.02em; }
+}
+
+/* Clicking it gives a squish. */
+.frame-word.is-squishing {
+  animation: name-squish 450ms ease-out;
+}
+
+@keyframes name-squish {
+  25% { scale: 1.12 0.84; }
+  55% { scale: 0.94 1.08; }
+  80% { scale: 1.02 0.98; }
+}
+
+/* Page changes: the old page drifts up and fades, the new one rises in. */
+.frame-page {
+  view-transition-name: frame-page;
+}
+
+::view-transition-old(frame-page) {
+  animation: page-out 180ms ease-in both;
+}
+
+::view-transition-new(frame-page) {
+  animation: page-in 380ms cubic-bezier(0.3, 1.3, 0.5, 1) 60ms both;
+}
+
+@keyframes page-out {
+  to { opacity: 0; translate: 0 -6px; }
+}
+
+@keyframes page-in {
+  from { opacity: 0; translate: 0 10px; scale: 0.99; }
 }
 
 /* A maintenance message from the admin page. */
