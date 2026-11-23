@@ -64,9 +64,6 @@ const charts = computed(() => {
   }))
 })
 
-// Four steps of lilac, scaled to the busiest day.
-const busiestContribution = computed(() => Math.max(1, ...(github.value?.weeks.flat().map(day => day.count) ?? [])))
-const level = (count: number) => count ? Math.ceil((count / busiestContribution.value) * 4) : 0
 // A month's name over the first week that starts in it.
 const months = computed(() => (github.value?.weeks ?? []).map((week, i, weeks) => {
   const month = week[0] && new Date(`${week[0].date}T00:00:00`).getMonth()
@@ -129,7 +126,7 @@ const show = (text: string, event: PointerEvent) => { tip.value = { text, el: ev
       </div>
       <div v-if="github" class="stats-contributions">
         <dd>{{ github.total.toLocaleString('en-US') }}</dd>
-        <dt>contributions this year</dt>
+        <dt>contributions in the past year</dt>
       </div>
     </dl>
 
@@ -165,7 +162,7 @@ const show = (text: string, event: PointerEvent) => { tip.value = { text, el: ev
         </div>
         <div class="stats-cells" role="img" :aria-label="`${github.total} GitHub contributions in the past year`">
           <div v-for="(week, w) in github.weeks" :key="w" class="stats-week">
-            <span v-for="day in week" :key="day.date" class="stats-cell" :data-level="level(day.count)"
+            <span v-for="day in week" :key="day.date" class="stats-cell" :data-level="day.level"
               @pointerenter="show(`${longDate(day.date)}: ${day.count} contribution${day.count === 1 ? '' : 's'}`, $event)"
               @pointerleave="tip = undefined" />
           </div>
