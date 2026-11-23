@@ -45,8 +45,8 @@ function hoverWwt() {
       and write tooling that makes platforms more extensible.
     </p>
 
-    <section class="projects" aria-labelledby="projects-title">
-      <h2 id="projects-title" class="projects-title">Projects</h2>
+    <section class="projects">
+      <h2 class="projects-title">Projects</h2>
       <ul class="rows">
         <li v-for="project in projects" :key="project.repo">
           <NuxtLink :to="`https://github.com/${project.repo}`" target="_blank" class="row">

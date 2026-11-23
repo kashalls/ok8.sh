@@ -65,11 +65,16 @@ const charts = computed(() => {
 })
 
 // A month's name over the first week that starts in it.
-const months = computed(() => (github.value?.weeks ?? []).map((week, i, weeks) => {
-  const month = week[0] && new Date(`${week[0].date}T00:00:00`).getMonth()
-  const previous = i && weeks[i - 1]![0] && new Date(`${weeks[i - 1]![0]!.date}T00:00:00`).getMonth()
-  return i && month !== previous ? new Date(`${week[0]!.date}T00:00:00`).toLocaleDateString('en-US', { month: 'short' }) : ''
-}))
+const months = computed(() => {
+  let previous: number | undefined
+  return (github.value?.weeks ?? []).map((week, i) => {
+    if (!week[0]) return ''
+    const date = new Date(`${week[0].date}T00:00:00`)
+    const label = i && date.getMonth() !== previous ? date.toLocaleDateString('en-US', { month: 'short' }) : ''
+    previous = date.getMonth()
+    return label
+  })
+})
 
 // One tooltip for every mark, anchored to the hovered one: a tooltip per calendar
 // cell would mount hundreds of them.
@@ -86,15 +91,16 @@ const show = (text: string, event: PointerEvent) => { tip.value = { text, el: ev
 
     <p v-if="!waka && wakaStatus === 'error'" class="stats-quiet">Coding time isn't available right now.</p>
 
-    <div v-if="wakaLoading" class="stats-placeholder" aria-busy="true">
+    <!-- The skeletons are only shapes; screen readers get the one line of text. -->
+    <div v-if="wakaLoading" class="stats-placeholder">
       <span class="sr-only">Loading stats</span>
-      <div class="stats-heroes">
+      <div class="stats-heroes" aria-hidden="true">
         <div v-for="n in 3" :key="n">
           <USkeleton class="h-8 w-28" />
           <USkeleton class="h-3 w-24" />
         </div>
       </div>
-      <figure class="stats-figure">
+      <figure class="stats-figure" aria-hidden="true">
         <USkeleton class="mb-3.5 h-3 w-14" />
         <ul class="stats-days">
           <li v-for="(height, i) in placeholderDays" :key="i">
@@ -103,7 +109,7 @@ const show = (text: string, event: PointerEvent) => { tip.value = { text, el: ev
           </li>
         </ul>
       </figure>
-      <figure class="stats-figure">
+      <figure class="stats-figure" aria-hidden="true">
         <USkeleton class="mb-3.5 h-3 w-20" />
         <ul class="stats-rows">
           <li v-for="(width, i) in placeholderRows" :key="i">
@@ -170,7 +176,7 @@ const show = (text: string, event: PointerEvent) => { tip.value = { text, el: ev
       </div>
     </figure>
 
-    <figure v-if="githubLoading" class="stats-figure" aria-busy="true">
+    <figure v-if="githubLoading" class="stats-figure is-placeholder" aria-hidden="true">
       <USkeleton class="mb-3.5 h-3 w-28" />
       <USkeleton class="aspect-[53/8] w-full" />
     </figure>
@@ -196,7 +202,7 @@ const show = (text: string, event: PointerEvent) => { tip.value = { text, el: ev
 
 /* Placeholders don't fade in; only the real data does. */
 .stats-placeholder :is(.stats-heroes, .stats-figure),
-.stats-figure[aria-busy] {
+.stats-figure.is-placeholder {
   animation: none;
 }
 

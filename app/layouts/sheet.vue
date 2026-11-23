@@ -102,7 +102,7 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
         <!-- The presence bar is only on the home page; the name above still takes its colours everywhere.
              Its spot is held while Lanyard connects, so the page doesn't jump when it arrives. -->
         <Transition name="frame-fade">
-          <section v-if="lanyard" class="frame-card" aria-label="Discord presence">
+          <section v-if="lanyard" class="frame-card">
             <Transition name="frame-fade">
               <NuxtImg v-if="nameplate" :src="nameplateUrl(nameplate.asset, nameplateAnimated)" alt="" width="448" height="84"
                 class="frame-nameplate" />
@@ -196,7 +196,6 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
 .sheet :focus-visible {
   outline: 2px solid var(--gold);
   outline-offset: 3px;
-  border-radius: 2px;
 }
 
 .frame {
