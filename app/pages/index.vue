@@ -1,6 +1,8 @@
 <script setup lang="ts">
 definePageMeta({ layout: 'sheet', viewTransition: true })
 
+useHead({ title: '𑣲Kashall 𑄝੭' })
+
 defineOgImage('Default', {
   title: 'Kashall',
   description: 'A platform engineer in Oregon who keeps Kubernetes clusters happy and builds tools that make platforms easier to extend.',
