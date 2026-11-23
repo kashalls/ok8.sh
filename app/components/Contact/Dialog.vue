@@ -51,12 +51,12 @@ watch(open, (isOpen) => {
 
 <template>
     <!-- With a custom #content, UModal renders `title` visually hidden as the dialog's accessible name. -->
-    <UModal v-model:open="open" title="Send me a message" :content="{ onOpenAutoFocus: focusName }"
+    <UModal v-model:open="open" title="Say hi!" :content="{ onOpenAutoFocus: focusName }"
         :ui="{ overlay: 'bg-black/60 backdrop-blur-sm', content: 'w-full sm:max-w-md bg-transparent ring-0 shadow-none' }">
         <template #content>
             <div class="contact">
                 <header class="contact-head">
-                    <h2 class="contact-title">Send me a message</h2>
+                    <h2 class="contact-title">Say hi!</h2>
                     <button type="button" class="contact-close" aria-label="Close" @click="closeContact">
                         <UIcon name="i-ph-x" />
                     </button>
@@ -64,8 +64,8 @@ watch(open, (isOpen) => {
 
                 <div v-if="sent" class="contact-sent" role="status">
                     <UIcon name="i-ph-check-circle" class="contact-sent-icon" />
-                    <p class="contact-title">Message sent</p>
-                    <p>Thanks for reaching out. I'll get back to you soon.</p>
+                    <p class="contact-title">Yay, got it!</p>
+                    <p>Thanks for writing. I'll get back to you soon.</p>
                     <button type="button" class="contact-button" @click="closeContact">Close</button>
                 </div>
 
@@ -93,7 +93,7 @@ watch(open, (isOpen) => {
                     <button type="submit" class="contact-button" :disabled="loading">
                         <UIcon v-if="loading" name="i-ph-circle-notch" class="animate-spin" />
                         <UIcon v-else name="i-ph-paper-plane-tilt" />
-                        {{ loading ? 'Sending…' : 'Send message' }}
+                        {{ loading ? 'Sending…' : 'Send it!' }}
                     </button>
                 </form>
             </div>

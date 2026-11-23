@@ -210,8 +210,14 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
 }
 
 .sheet :focus-visible {
-  outline: 2px solid var(--gold);
+  outline: 2px solid var(--pastel-lilac);
   outline-offset: 3px;
+}
+
+/* Rounds the ring on anything without its own corners; zero specificity, so a chip or
+   card keeps its shape. */
+:where(.sheet :focus-visible) {
+  border-radius: 6px;
 }
 
 .frame {

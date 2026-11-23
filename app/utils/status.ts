@@ -5,11 +5,11 @@ export interface StatusMeta {
 
 const STATUS: Record<number, StatusMeta> = {
 	400: { title: 'Bad request', description: "That request doesn't look quite right. Head back and try again." },
-	401: { title: 'Unauthorized', description: 'This page needs a fancy authorization token — or yours is invalid.' },
+	401: { title: 'Unauthorized', description: "This page needs a special pass, and you don't have one (or yours has expired)." },
 	403: { title: 'Forbidden', description: "Looks like you shouldn't be here anyway." },
-	404: { title: 'Not found', description: "The page you're looking for packed up and left. Check the URL, or head home." },
+	404: { title: 'Not found', description: "This page wandered off. Check the URL, or head home and say hi." },
 	418: { title: "I'm a teapot", description: 'I cannot brew coffee, for I am, in fact, a teapot.' },
-	429: { title: 'Too many requests', description: 'Whoa there — slow down a moment, then give it another go.' },
+	429: { title: 'Too many requests', description: 'Whoa there, slow down a moment, then give it another go.' },
 	500: { title: 'Internal server error', description: "It's not you, it's me. If you think this is a bug, reach out." },
 	502: { title: 'Bad gateway', description: 'The upstream server handed me something I could not use.' },
 	503: { title: 'Service unavailable', description: 'This service is taking a quick nap. Try again shortly.' },

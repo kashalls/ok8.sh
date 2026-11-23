@@ -60,6 +60,12 @@
   --font-display: var(--font-sniglet);
 }
 
+/* A thin lilac scrollbar (the sheet's --lilac; the page's scrollbar belongs to html, outside .sheet). */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(170 104 204 / 0.55) transparent;
+}
+
 /* Display preferences (useDisplayPreferences). */
 html.reduce-motion *,
 html.reduce-motion *::before,

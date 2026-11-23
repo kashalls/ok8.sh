@@ -31,7 +31,7 @@ const next = computed(() => [
                     <span class="error-code">{{ meta.code }}</span>
                 </div>
                 <p v-if="meta.code === 404" class="error-text">
-                    What you are looking for could not be found. Here are some other things for you to look at.
+                    This page wandered off. Maybe one of these has what you're after?
                 </p>
                 <p v-else class="error-text">{{ meta.description }}</p>
 
