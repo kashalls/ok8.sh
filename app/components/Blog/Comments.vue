@@ -59,7 +59,11 @@ async function post() {
     }
 }
 
+// A little pop of hearts when one is given, straight away rather than after the request.
+const bursts = reactive<Record<string, number>>({})
+
 async function heart(comment: PostComment) {
+    if (!comment.hearted) bursts[comment.id] = Date.now()
     busy.value = comment.id
     try {
         Object.assign(comment, await $fetch<Pick<PostComment, 'hearts' | 'hearted'>>(api.value, { method: 'PATCH', body: { id: comment.id, hearted: !comment.hearted } }))
@@ -140,12 +144,12 @@ async function signOut() {
 
         <p v-if="message" role="status" class="text-sm text-muted">{{ message }}</p>
         <p v-if="status === 'error'" role="alert" class="text-sm text-muted">
-            Could not load {{ guestbook ? 'the guestbook' : 'comments' }}.
-            <UButton label="Try again" color="neutral" variant="link" class="p-0" @click="refresh()" />
+            Could not load {{ guestbook ? 'the guestbook' : 'comments' }} <span class="kaomoji" aria-hidden="true">(；ω；)</span> <UButton
+                label="Try again" color="neutral" variant="link" class="p-0" @click="refresh()" />
         </p>
         <!-- Keyed on data, not status: status is idle when prerendered but pending while hydrating. -->
         <p v-else-if="!data" class="text-sm text-muted">Loading {{ guestbook ? 'the guestbook' : 'comments' }}…</p>
-        <p v-else-if="!threads.length" class="text-sm text-muted">{{ guestbook ? 'No one has signed yet. Be the first.' : 'No comments yet. Start the conversation.' }}</p>
+        <p v-else-if="!threads.length" class="text-sm text-muted">{{ guestbook ? 'No one has signed yet. Be the first!' : 'No comments yet. Start the conversation!' }} <span class="kaomoji" aria-hidden="true">(｡･ω･｡)</span></p>
 
         <div v-for="thread in threads" :key="thread.comment.id" class="flex flex-col gap-3">
             <div v-for="comment in [thread.comment, ...thread.replies]" :id="`comment-${comment.id}`" :key="comment.id"
@@ -169,10 +173,13 @@ async function signOut() {
                     {{ comment.removed ? `This ${noun} was removed.` : comment.content }}
                 </p>
                 <div v-if="!comment.removed" class="-ml-2 flex items-center gap-1">
-                    <UButton :icon="comment.hearted ? 'i-ph-heart-fill' : 'i-ph-heart'" :label="String(comment.hearts)"
-                        size="xs" variant="ghost" :color="comment.hearted ? 'primary' : 'neutral'"
-                        :aria-pressed="comment.hearted" :aria-label="`${comment.hearted ? 'Remove heart' : 'Give a heart'} (${comment.hearts})`"
-                        :disabled="!loggedIn || busy === comment.id" @click="heart(comment)" />
+                    <span class="relative inline-flex">
+                        <UButton :icon="comment.hearted ? 'i-ph-heart-fill' : 'i-ph-heart'" :label="String(comment.hearts)"
+                            size="xs" variant="ghost" :color="comment.hearted ? 'primary' : 'neutral'"
+                            :aria-pressed="comment.hearted" :aria-label="`${comment.hearted ? 'Remove heart' : 'Give a heart'} (${comment.hearts})`"
+                            :disabled="!loggedIn || busy === comment.id" @click="heart(comment)" />
+                        <PopBurst :trigger="bursts[comment.id] ?? 0" shape="heart" />
+                    </span>
                     <UButton v-if="loggedIn" icon="i-ph-arrow-bend-up-left" label="Reply" size="xs" color="neutral"
                         variant="ghost" @click="reply(comment)" />
                     <UButton v-if="loggedIn && canRemove(comment)" icon="i-ph-trash" label="Remove" size="xs"

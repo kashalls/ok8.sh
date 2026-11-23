@@ -34,6 +34,7 @@ defineOgImage('Post', {
 
 <template>
     <main v-if="post">
+        <div class="read-progress" />
         <header class="mb-10">
             <NuxtLink to="/blog" class="post-back">
                 <UIcon name="i-ph-arrow-left" />
@@ -47,7 +48,7 @@ defineOgImage('Post', {
                 <time :datetime="new Date(post.date).toISOString()">{{ date }}</time>
                 <time v-if="updated" :datetime="new Date(post.updated!).toISOString()">Updated {{ updated }}</time>
                 <span v-if="post.tags?.length" class="post-tags">
-                    <NuxtLink v-for="tag in post.tags" :key="tag" :to="{ path: '/blog', query: { q: tag } }" class="chip">{{ tag }}</NuxtLink>
+                    <NuxtLink v-for="tag in post.tags" :key="tag" :to="{ path: '/blog', query: { q: tag } }" class="chip" :style="{ '--tint': tagTint(tag) }">{{ tag }}</NuxtLink>
                 </span>
             </p>
         </header>
@@ -98,6 +99,43 @@ defineOgImage('Post', {
     margin-top: 0.75rem;
     font-size: 0.85rem;
     color: var(--muted);
+}
+
+/* How far through the post you are: the dividers' wavy pastel line along the top of the
+   window, filling as you scroll. Decorative, so browsers without scroll-driven animations
+   simply don't show it. */
+.read-progress {
+    display: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: scroll()) {
+        .read-progress {
+            position: fixed;
+            z-index: 50;
+            top: 0;
+            left: 0;
+            display: block;
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(90deg, rgb(178 218 241 / 0.9), rgb(170 104 204 / 0.9), rgb(177 237 217 / 0.85), rgb(219 136 73 / 0.85));
+            mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='6'%3E%3Cpath d='M0 3Q4 0 8 3T16 3' fill='none' stroke='%23000' stroke-width='2'/%3E%3C/svg%3E") 0 0 / 16px 6px repeat-x;
+            transform-origin: 0 50%;
+            pointer-events: none;
+            animation: read-progress auto linear;
+            animation-timeline: scroll(root);
+        }
+    }
+}
+
+/* The site's own reduced motion setting, on top of the system one. */
+:global(html.reduce-motion) .read-progress {
+    display: none;
+}
+
+@keyframes read-progress {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
 }
 
 .post-tags {

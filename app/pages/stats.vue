@@ -54,6 +54,22 @@ const tick = (start: string, i: number) => {
 
 // From the same buckets as the chart below, so the totals match it.
 const total = computed(() => (waka.value?.buckets ?? []).reduce((sum, bucket) => sum + bucket.seconds, 0))
+
+// A line of commentary on the range: a quiet one, or the language that took most of it.
+const QUIPS: Record<string, string> = {
+  TypeScript: 'TypeScript again? Of course.',
+  Go: 'Mostly Go lately. The gophers approve.',
+  YAML: 'So much YAML. Send help.',
+  Vue: 'Lots of Vue. Making things pretty takes a while.',
+  Python: 'Python this time. Snakes!',
+  Markdown: 'Mostly writing words, for once.',
+}
+const quip = computed(() => {
+  if (!waka.value) return ''
+  if (total.value < 60 * 60) return 'A quiet stretch. Probably outside, touching grass.'
+  const top = waka.value.languages.find(lang => lang.name !== 'Other')?.name
+  return top ? QUIPS[top] ?? `Mostly ${top} lately.` : ''
+})
 const activeDays = computed(() => waka.value?.unit === 'day' ? waka.value.buckets.filter(day => day.seconds >= 60).length : 0)
 
 const busiestBucket = computed(() => Math.max(1, ...(waka.value?.buckets.map(bucket => bucket.seconds) ?? [])))
@@ -97,7 +113,7 @@ const show = (text: string, event: PointerEvent) => { tip.value = { text, el: ev
       <UTabs v-model="range" :items="ranges" :content="false" size="xs" aria-label="Time range" :ui="{ list: 'w-auto' }" />
     </div>
 
-    <p v-if="!waka && (wakaFailed || wakaStatus === 'error')" class="stats-quiet">Coding time isn't available right now.</p>
+    <p v-if="!waka && (wakaFailed || wakaStatus === 'error')" class="stats-quiet">Coding time isn't available right now <span class="kaomoji" aria-hidden="true">(´-ω-`)</span></p>
 
     <!-- The skeletons are only shapes; screen readers get the one line of text. -->
     <div v-if="wakaLoading" class="stats-placeholder">
@@ -143,6 +159,8 @@ const show = (text: string, event: PointerEvent) => { tip.value = { text, el: ev
         <dt>contributions in the past year</dt>
       </div>
     </dl>
+
+    <p v-if="quip" class="stats-quip">{{ quip }}</p>
 
     <figure v-if="waka?.buckets.length" class="stats-figure">
       <figcaption>{{ waka.unit === 'hour' ? 'Per hour' : 'Per day' }}</figcaption>
@@ -282,6 +300,14 @@ html.reduce-motion .stats-bar {
 html.light .stats-total dd { color: oklch(from var(--sky) 0.5 calc(c * 2.2) h); }
 html.light .stats-average dd { color: oklch(from var(--mint) 0.5 calc(c * 2.2) h); }
 html.light .stats-contributions dd { color: oklch(from var(--pastel-peach) 0.5 calc(c * 2.2) h); }
+
+/* Tucked under the numbers rather than spaced like a section. */
+.stats > .stats-quip {
+  margin-top: 0.9rem;
+  font-size: 0.9rem;
+  font-style: italic;
+  color: var(--muted);
+}
 
 .stats-heroes dt {
   font-size: 0.8rem;

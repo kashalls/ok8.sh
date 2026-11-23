@@ -52,7 +52,7 @@ const shown = computed(() => (posts.value ?? []).filter((post) => {
                 </NuxtLink>
             </li>
         </ul>
-        <p v-else class="blog-empty">Nothing matches “{{ query }}”. Try fewer words.</p>
+        <p v-else class="blog-empty">Nothing matches “{{ query }}” <span class="kaomoji" aria-hidden="true">(・・;)</span> Try fewer words.</p>
     </main>
 </template>
 

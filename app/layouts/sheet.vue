@@ -29,11 +29,53 @@ const links = socials.filter(social => social.label !== 'Discord')
 // Follows the system theme until the visitor picks one; Nuxt UI's color mode remembers it.
 const colorMode = useColorMode()
 const isLight = computed(() => colorMode.value === 'light')
-function toggleTheme() {
-  colorMode.preference = isLight.value ? 'dark' : 'light'
+const themeSpinning = ref(false)
+// Switches to the opposite of what's showing. When that's the system's own theme, it goes back
+// to following the system rather than pinning a theme the system might later change away from.
+async function toggleTheme(event: MouseEvent) {
+  const next = isLight.value ? 'dark' : 'light'
+  const system = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  const apply = async () => {
+    colorMode.preference = next === system ? 'system' : next
+    // Color mode sets the class on <html> in a watcher; the transition snapshots after this.
+    await nextTick()
+  }
+  themeSpinning.value = true
+  if (reduced.value || !document.startViewTransition) return apply()
+  // The new theme spills out from the toggle in a circle (see .theme-reveal in main.css).
+  const { left, top, width, height } = (event.currentTarget as HTMLElement).getBoundingClientRect()
+  const x = left + width / 2
+  const y = top + height / 2
+  const root = document.documentElement
+  root.style.setProperty('--reveal-x', `${x}px`)
+  root.style.setProperty('--reveal-y', `${y}px`)
+  root.style.setProperty('--reveal-r', `${Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y))}px`)
+  root.classList.add('theme-reveal')
+  await document.startViewTransition(apply).finished.catch(() => {})
+  root.classList.remove('theme-reveal')
 }
 // Tints the browser's toolbar on phones to match: the cream or the black swatch.
 useHead({ meta: [{ name: 'theme-color', content: () => isLight.value ? '#fcf6ed' : '#1a1918' }] })
+// Every hundredth visitor gets a little celebration.
+const milestone = computed(() => !!visits.value && visits.value % 100 === 0)
+
+// What I'm probably up to, by the time in Oregon. Updated each minute; only shown in the browser.
+const now = ref(new Date())
+if (import.meta.client) useIntervalFn(() => { now.value = new Date() }, 60_000)
+const localTime = computed(() => {
+  const parts = Object.fromEntries(new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/Los_Angeles', hour: 'numeric', minute: '2-digit', weekday: 'short', hourCycle: 'h23',
+  }).formatToParts(now.value).map(part => [part.type, part.value]))
+  const hour = Number(parts.hour)
+  const weekend = parts.weekday === 'Sat' || parts.weekday === 'Sun'
+  const clock = new Intl.DateTimeFormat('en-US', { timeZone: 'America/Los_Angeles', hour: 'numeric', minute: '2-digit' }).format(now.value).toLowerCase()
+  const doing = hour < 6 ? 'probably asleep'
+    : hour < 9 ? 'probably making coffee'
+      : hour < 17 ? (weekend ? 'probably tinkering with something' : 'probably at work')
+        : hour < 22 ? 'probably tinkering with something'
+          : 'probably meant to be asleep'
+  return { clock, doing, night: hour < 6 || hour >= 20 }
+})
 // Pages are prerendered, so this is the year of the last build.
 const year = new Date().getFullYear()
 const socialHints: Record<string, string> = { GitHub: 'Peek at my code', LinkedIn: 'The grown-up profile' }
@@ -115,7 +157,7 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
               <ClientOnly>
                 <UTooltip :text="isLight ? 'Lights off' : 'Lights on'" v-bind="sheetTooltip">
                   <button type="button" :aria-label="isLight ? 'Switch to the dark theme' : 'Switch to the light theme'"
-                    @click="toggleTheme">
+                    :class="{ 'is-spinning': themeSpinning }" @click="toggleTheme" @animationend="themeSpinning = false">
                     <UIcon v-if="isLight" name="i-ph-moon-stars-fill" />
                     <UIcon v-else name="i-ph-sun-fill" />
                   </button>
@@ -164,6 +206,17 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
         </Transition>
       </div>
 
+      <!-- The time in Oregon only makes sense in the browser; the fallback holds its line. -->
+      <ClientOnly v-if="route.path === '/'">
+        <p class="frame-localtime">
+          <UIcon :name="localTime.night ? 'i-ph-moon-fill' : 'i-ph-sun-fill'" class="frame-localtime-icon" />
+          It's {{ localTime.clock }} in Oregon, so I'm {{ localTime.doing }}.
+        </p>
+        <template #fallback>
+          <p class="frame-localtime" aria-hidden="true">&nbsp;</p>
+        </template>
+      </ClientOnly>
+
       <slot />
 
       <footer class="frame-footer">
@@ -179,10 +232,12 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
           </ul>
           <div class="frame-end">
             <NuxtLink to="/legal/privacy" class="frame-legal">Privacy</NuxtLink>
-            <UTooltip v-if="visits !== null" text="Friends who stopped by" v-bind="sheetTooltip">
-              <p class="frame-visits">
+            <UTooltip v-if="visits !== null" :text="milestone ? `You're friend #${visits.toLocaleString('en-US')}! (ﾉ◕ヮ◕)ﾉ` : 'Friends who stopped by'"
+              v-bind="sheetTooltip">
+              <p class="frame-visits" :class="{ 'is-milestone': milestone }">
                 <UIcon name="i-ph-eye-fill" />
                 {{ visits.toLocaleString('en-US') }}<span class="sr-only"> visitors</span>
+                <PopBurst :trigger="milestone ? 1 : 0" :count="10" />
               </p>
             </UTooltip>
           </div>
@@ -374,7 +429,35 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
   text-decoration: underline wavy var(--pastel-lilac);
 }
 
+/* Kaomoji in empty and error states: kept on one line. */
+.kaomoji {
+  white-space: nowrap;
+}
+
+.frame-localtime {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.6rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.frame-localtime-icon {
+  flex: none;
+  color: var(--pastel-butter);
+}
+
+html.light .frame-localtime-icon {
+  color: oklch(from var(--pastel-butter) 0.5 calc(c * 2.2) h);
+}
+
+.frame-visits.is-milestone {
+  color: var(--accent);
+}
+
 .frame-visits {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 0.4rem;
@@ -548,6 +631,15 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
   25% { rotate: -12deg; }
   50% { rotate: 10deg; }
   75% { rotate: -5deg; }
+}
+
+/* The sun or moon does a spin as the theme changes; after the wiggle, so it wins. */
+.frame-links button.is-spinning > * {
+  animation: frame-spin 550ms cubic-bezier(0.3, 1.4, 0.5, 1);
+}
+
+@keyframes frame-spin {
+  from { rotate: -180deg; scale: 0.4; }
 }
 
 /* A page's own title: a post, the blog and the legal pages. */

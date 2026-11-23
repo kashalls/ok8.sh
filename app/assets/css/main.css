@@ -132,6 +132,28 @@ html.reduce-motion *::after {
   animation-timing-function: cubic-bezier(0.3, 0.7, 0.2, 1);
 }
 
+/* Switching themes (toggleTheme in the sheet layout): the new theme spills out from the
+   toggle in a growing circle over the old one. Everything is one snapshot for this, so
+   nothing with its own name (the header, a post title) crossfades on top. */
+html.theme-reveal body * {
+  view-transition-name: none !important;
+}
+
+html.theme-reveal::view-transition-old(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+html.theme-reveal::view-transition-new(root) {
+  animation: theme-reveal 550ms cubic-bezier(0.4, 0, 0.2, 1);
+  mix-blend-mode: normal;
+}
+
+@keyframes theme-reveal {
+  from { clip-path: circle(0 at var(--reveal-x) var(--reveal-y)); }
+  to { clip-path: circle(var(--reveal-r) at var(--reveal-x) var(--reveal-y)); }
+}
+
 html.reduce-motion::view-transition-group(*),
 html.reduce-motion::view-transition-old(*),
 html.reduce-motion::view-transition-new(*) {
