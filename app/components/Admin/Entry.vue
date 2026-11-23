@@ -46,7 +46,7 @@ async function remove() {
 <template>
     <article class="item">
         <p class="item-meta">
-            <NuxtLink :to="`${source.path}#comment-${comment.id}`" class="text-(--gold) hover:text-(--cream)">{{ source.title }}</NuxtLink>
+            <NuxtLink :to="`${source.path}#comment-${comment.id}`" class="text-(--accent) hover:text-(--heading)">{{ source.title }}</NuxtLink>
             · <span class="text-(--text)">{{ name(comment) }}</span>
             · <time :datetime="comment.createdAt">{{ formatDate(new Date(comment.createdAt)) }}</time>
         </p>
@@ -58,11 +58,11 @@ async function remove() {
                 :placeholder="`Reply to ${name(comment)}…`" />
             <div class="flex items-center gap-5 text-sm">
                 <UButton type="submit" label="Post reply" variant="outline" size="sm" :loading="busy" :disabled="!content.trim()" />
-                <button type="button" class="text-(--muted) hover:text-(--cream)" @click="replying = false">Cancel</button>
+                <button type="button" class="text-(--muted) hover:text-(--heading)" @click="replying = false">Cancel</button>
             </div>
         </form>
         <p v-else class="mt-1 flex gap-5 text-sm">
-            <button type="button" class="text-(--gold) hover:text-(--cream)" @click="replying = true">Reply</button>
+            <button type="button" class="text-(--accent) hover:text-(--heading)" @click="replying = true">Reply</button>
             <button type="button" class="text-(--muted) hover:text-(--orange)" :disabled="busy" @click="remove">Remove</button>
         </p>
         <p v-if="message" role="status" class="text-sm text-(--muted)">{{ message }}</p>
