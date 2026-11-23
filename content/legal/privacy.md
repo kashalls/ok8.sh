@@ -39,7 +39,7 @@ Messages are emailed to me through [Resend](https://resend.com/legal/privacy-pol
 
 ## Copyright
 
-Writing, images and artwork on ok8.sh are © 2017-2026 Kashall or their artists, all rights reserved. Please don't republish them or pass them off as your own without asking.
+Writing, images and artwork on ok8.sh are © 2026 Kashall or their artists, all rights reserved. Please don't republish them or pass them off as your own without asking.
 
 The site's code is open source under the [MIT license](https://github.com/kashalls/ok8.sh/blob/main/LICENSE). Feel free to read it, learn from it and reuse it with credit. The fonts and commissioned art aren't covered by that license and belong to their creators.
 

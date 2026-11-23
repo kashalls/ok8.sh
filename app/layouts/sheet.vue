@@ -155,7 +155,6 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
             </li>
           </ul>
           <div class="frame-end">
-            <p class="frame-copyright">© 2017-{{ year }} Kashall</p>
             <NuxtLink to="/legal/privacy" class="frame-legal">Privacy</NuxtLink>
             <UTooltip v-if="visits !== null" text="Friends who stopped by" v-bind="sheetTooltip">
               <p class="frame-visits">
@@ -165,6 +164,10 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
             </UTooltip>
           </div>
         </div>
+        <p class="frame-signoff">
+          © {{ year }} Kashall<span class="frame-signoff-sep" aria-hidden="true">·</span>made with
+          <span class="frame-heart" role="img" aria-label="love">♡</span> in Oregon
+        </p>
       </footer>
     </div>
     <ContactDialog />
@@ -317,14 +320,23 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
 .frame-end {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: 0.25rem 1rem;
+  gap: 1rem;
 }
 
-.frame-copyright {
-  font-size: 0.85rem;
+.frame-signoff {
+  margin-top: 0.9rem;
+  text-align: center;
+  font-size: 0.8rem;
   color: var(--muted);
+}
+
+.frame-signoff-sep {
+  margin-inline: 0.5em;
+  opacity: 0.6;
+}
+
+.frame-heart {
+  color: var(--orange);
 }
 
 .frame-legal {
