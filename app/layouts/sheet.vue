@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useDocumentVisibility, useIntervalFn, useResizeObserver } from '@vueuse/core'
+import { useDocumentVisibility, useIntervalFn } from '@vueuse/core'
 
 useDisplayPreferences()
 
@@ -33,21 +33,6 @@ const statusHints: Record<string, string> = {
   dnd: 'In the zone, shh',
   offline: 'Asleep, probably',
 }
-
-// The header name, a letter at a time so it can wave. A transformed letter drops out of
-// its parent's background-clip, so each letter paints its own slice of the gradient,
-// offset by where it sits in the word.
-const nameLetters = [...'Kashall']
-const nameWord = ref<HTMLElement | null>(null)
-function measureName() {
-  const word = nameWord.value
-  if (!word) return
-  word.parentElement!.style.setProperty('--name-w', `${word.offsetWidth}px`)
-  for (const letter of word.children as HTMLCollectionOf<HTMLElement>) letter.style.setProperty('--x', `${letter.offsetLeft}px`)
-}
-useResizeObserver(nameWord, measureName)
-onMounted(() => document.fonts.ready.then(measureName))
-const squishing = ref(false)
 const lanyard = useLanyard()
 const custom = computed(() => lanyard.value?.activities.find(a => a.type === ActivityType.Custom))
 const nameplate = computed(() => lanyard.value?.discord_user.collectibles?.nameplate)
@@ -82,12 +67,8 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
     <div class="frame">
       <!-- Holds the spot for the logo. -->
       <header class="frame-header">
-        <NuxtLink to="/" aria-label="Kashall, home" class="frame-name frame-logo" :class="{ 'has-gradient': nameGradient }"
-          :style="{ '--name-gradient': nameGradient }" @click="squishing = true">
-          <span ref="nameWord" class="frame-word" :class="{ 'is-squishing': squishing }" aria-hidden="true"
-            @animationend.self="squishing = false">
-            <span v-for="(letter, i) in nameLetters" :key="i" class="frame-letter" :style="{ '--i': i }">{{ letter }}</span>
-          </span>
+        <NuxtLink to="/" aria-label="Kashall, home" class="frame-name frame-logo">
+          <WavyName text="Kashall" :gradient="nameGradient" />
         </NuxtLink>
         <nav aria-label="Site">
           <ul class="frame-links">
@@ -143,7 +124,7 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
               </span>
             </UTooltip>
             <div class="frame-who">
-              <span class="frame-name" :class="{ 'is-gradient': nameGradient }" :style="{ backgroundImage: nameGradient }">Kashall</span>
+              <WavyName text="Kashall" :gradient="nameGradient" class="frame-name" />
               <p class="frame-custom">
                 <span class="sr-only">{{ STATUS[lanyard.discord_status]?.label ?? 'Offline' }} on Discord.</span>
                 <template v-if="custom?.state || custom?.emoji">
@@ -158,9 +139,7 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
         </Transition>
       </div>
 
-      <div class="frame-page">
-        <slot />
-      </div>
+      <slot />
 
       <footer class="frame-footer">
         <div class="frame-base">
@@ -282,81 +261,9 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
   font-size: 1.75rem;
 }
 
-.frame-word {
-  position: relative;
-  display: inline-block;
-  transform-origin: 50% 100%;
-}
-
-.frame-letter {
-  display: inline-block;
-}
-
-/* Registered so the shimmer can animate it. */
-@property --name-shift {
-  syntax: '<length>';
-  inherits: true;
-  initial-value: 0px;
-}
-
-.frame-logo.has-gradient {
-  animation: name-shimmer 4s ease-in-out infinite alternate;
-}
-
-/* The same back-and-forth shimmer as the presence card's name, shared across the letters. */
-.frame-logo.has-gradient .frame-letter {
-  background-image: var(--name-gradient);
-  background-size: calc(var(--name-w, 100%) * 2) 100%;
-  background-position: calc(-1 * var(--x, 0px) - var(--name-shift)) 0;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-@keyframes name-shimmer {
-  to { --name-shift: var(--name-w, 0px); }
-}
-
-/* Hovering the name sends a little wave through the letters. */
-.frame-logo:is(:hover, :focus-visible) .frame-letter {
-  animation: name-hop 500ms ease-in-out calc(var(--i) * 45ms) both;
-}
-
-@keyframes name-hop {
-  35% { translate: 0 -0.2em; }
-  70% { translate: 0 0.02em; }
-}
-
-/* Clicking it gives a squish. */
-.frame-word.is-squishing {
-  animation: name-squish 450ms ease-out;
-}
-
-@keyframes name-squish {
-  25% { scale: 1.12 0.84; }
-  55% { scale: 0.94 1.08; }
-  80% { scale: 1.02 0.98; }
-}
-
-/* Page changes: the old page drifts up and fades, the new one rises in. */
-.frame-page {
-  view-transition-name: frame-page;
-}
-
-::view-transition-old(frame-page) {
-  animation: page-out 180ms ease-in both;
-}
-
-::view-transition-new(frame-page) {
-  animation: page-in 380ms cubic-bezier(0.3, 1.3, 0.5, 1) 60ms both;
-}
-
-@keyframes page-out {
-  to { opacity: 0; translate: 0 -6px; }
-}
-
-@keyframes page-in {
-  from { opacity: 0; translate: 0 10px; scale: 0.99; }
+/* Named so it stays put while the page under it changes (see the root transition in main.css). */
+.frame-header {
+  view-transition-name: frame-header;
 }
 
 /* A maintenance message from the admin page. */
@@ -510,7 +417,7 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
   min-width: 0;
 }
 
-/* Only as wide as the name, so the whole gradient shows across it. */
+/* Only as wide as the name, so the whole gradient shows across it (see WavyName). */
 .frame-name {
   display: inline-block;
   font-family: var(--font-sniglet);
@@ -519,23 +426,6 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
   line-height: 1.15;
   letter-spacing: -0.01em;
   color: var(--cream);
-}
-
-.frame-name.is-gradient {
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  /* Twice the name's width, sliding to one end and back so the last colour never
-     blends into the first. Reduced motion stops it through the global
-     .reduce-motion class. */
-  background-size: 200% 100%;
-  animation: frame-shimmer 4s ease-in-out infinite alternate;
-}
-
-@keyframes frame-shimmer {
-  to {
-    background-position: 100% 0;
-  }
 }
 
 .frame-custom {

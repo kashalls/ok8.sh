@@ -10,7 +10,9 @@ export default {
     head: {
         title: 'Kashall',
         link: [
-            { rel: 'icon', type: 'image/png', href: '/logo.png' }
+            // Only Firefox animates a GIF favicon; other browsers show its first frame.
+            { rel: 'icon', type: 'image/gif', href: '/favicon.gif' },
+            { rel: 'apple-touch-icon', href: '/logo.png' },
         ],
         meta: [
             { name: "description", content: description },
