@@ -3,8 +3,7 @@
 // configured behind them. Point the gateway's default backend here.
 definePageMeta({ layout: 'sheet' })
 
-const url = useRequestURL()
-const host = computed(() => url.host)
+const { host } = useRequestURL()
 const { openContact } = useContact()
 
 useSeoMeta({

@@ -14,7 +14,7 @@ defineOgImage('Default', {
 })
 
 // Where to go next. A server error might pass, so reloading comes first there.
-const reload = () => { if (import.meta.client) window.location.reload() }
+const reload = () => window.location.reload()
 const next = computed(() => [
     ...(meta.value.code >= 500 ? [{ name: 'Reload', text: 'Try the page again.', go: reload }] : []),
     { name: 'Home', text: 'Who I am and the projects I work on.', go: () => clearError({ redirect: '/' }) },
