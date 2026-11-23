@@ -16,8 +16,16 @@ const rangeTotal = computed(() => ranges.find(r => r.value === range.value)!.tot
 const { data: waka, status: wakaStatus } = useFetch('/api/stats/wakatime', { server: false, lazy: true, query: { range } })
 const { data: github, status: githubStatus } = useFetch('/api/stats/github', { server: false, lazy: true })
 
+// A range change refetches with its data cleared; once coding time has failed, keep saying
+// so through that refetch instead of flashing the placeholders, until a fetch succeeds.
+const wakaFailed = ref(false)
+watch(wakaStatus, (status) => {
+  if (status === 'error') wakaFailed.value = true
+  else if (status === 'success') wakaFailed.value = false
+})
+
 // Placeholders hold each chart's shape until its data arrives (or fails).
-const wakaLoading = computed(() => !waka.value && wakaStatus.value !== 'error')
+const wakaLoading = computed(() => !waka.value && !wakaFailed.value && wakaStatus.value !== 'error')
 const githubLoading = computed(() => !github.value && githubStatus.value !== 'error')
 const placeholderDays = [70, 20, 35, 55, 10, 25, 45]
 const placeholderRows = [100, 60, 35, 20]
@@ -89,7 +97,7 @@ const show = (text: string, event: PointerEvent) => { tip.value = { text, el: ev
       <UTabs v-model="range" :items="ranges" :content="false" size="xs" aria-label="Time range" :ui="{ list: 'w-auto' }" />
     </div>
 
-    <p v-if="!waka && wakaStatus === 'error'" class="stats-quiet">Coding time isn't available right now.</p>
+    <p v-if="!waka && (wakaFailed || wakaStatus === 'error')" class="stats-quiet">Coding time isn't available right now.</p>
 
     <!-- The skeletons are only shapes; screen readers get the one line of text. -->
     <div v-if="wakaLoading" class="stats-placeholder">
