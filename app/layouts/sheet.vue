@@ -89,6 +89,23 @@ const statusHints: Record<string, string> = {
 }
 const lanyard = useLanyard()
 const custom = computed(() => lanyard.value?.activities.find(a => a.type === ActivityType.Custom))
+const game = computed(() => lanyard.value?.activities.find(a => a.type === ActivityType.Playing))
+// A little something on the avatar for what I'm up to: notes for music, a pulse for a game,
+// or z's when idle. It plays when that changes and again on hover.
+const mood = computed(() => {
+  if (lanyard.value?.listening_to_spotify) return 'music'
+  if (game.value) return 'game'
+  if (lanyard.value?.discord_status === 'idle') return 'sleep'
+  return undefined
+})
+const moodPlays = ref(0)
+const presenceHint = computed(() => {
+  const spotify = lanyard.value?.spotify
+  if (lanyard.value?.listening_to_spotify && spotify) return `Vibing to ${spotify.song} by ${spotify.artist}`
+  if (game.value) return `Playing ${game.value.name}`
+  return statusHints[lanyard.value?.discord_status ?? 'offline'] ?? statusHints.offline
+})
+const { all: allStars } = useStars()
 const nameplate = computed(() => lanyard.value?.discord_user.collectibles?.nameplate)
 const decoration = computed(() => lanyard.value?.discord_user.avatar_decoration_data)
 const nameGradient = computed(() => {
@@ -184,18 +201,23 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
               <NuxtImg v-if="nameplate" :src="nameplateUrl(nameplate.asset, nameplateAnimated)" alt="" width="448" height="84"
                 class="frame-nameplate" />
             </Transition>
-            <UTooltip :text="statusHints[lanyard.discord_status] ?? statusHints.offline" v-bind="sheetTooltip">
-              <span class="frame-avatar">
+            <UTooltip :text="presenceHint" v-bind="sheetTooltip">
+              <span class="frame-avatar" @pointerenter="moodPlays++">
                 <NuxtImg :src="avatarUrl(lanyard.discord_user.id, lanyard.discord_user.avatar)" alt="" width="36" height="36" />
                 <NuxtImg v-if="decoration" :src="decorationUrl(decoration.asset, decorationAnimated)" alt="" width="44"
                   height="44" class="frame-decoration" />
                 <span class="frame-dot" :style="{ background: statusColor(lanyard.discord_status) }" />
+                <span v-if="mood" :key="`${mood}-${moodPlays}`" class="frame-mood" :class="`is-${mood}`"
+                  :style="{ '--status': statusColor(lanyard.discord_status) }" aria-hidden="true">
+                  <template v-if="mood === 'sleep'"><span>z</span><span>z</span><span>z</span></template>
+                  <template v-else-if="mood === 'music'"><span>♪</span><span>♫</span></template>
+                </span>
               </span>
             </UTooltip>
             <div class="frame-who">
               <WavyName text="Kashall" :gradient="nameGradient" class="frame-name" />
               <p class="frame-custom">
-                <span class="sr-only">{{ STATUS[lanyard.discord_status]?.label ?? 'Offline' }} on Discord.</span>
+                <span class="sr-only">{{ STATUS[lanyard.discord_status]?.label ?? 'Offline' }} on Discord.{{ mood === 'music' || mood === 'game' ? ` ${presenceHint}.` : '' }}</span>
                 <template v-if="custom?.state || custom?.emoji">
                   <NuxtImg v-if="custom.emoji?.id" :src="`https://cdn.discordapp.com/emojis/${custom.emoji.id}.webp?size=32`"
                     :alt="custom.emoji.name" width="14" height="14" />
@@ -246,7 +268,10 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
         </div>
         <p class="frame-signoff">
           © {{ year }} Kashall<span class="frame-signoff-sep" aria-hidden="true">·</span>made with
-          <span class="frame-heart" role="img" aria-label="love">♡</span> in Oregon
+          <span class="frame-heart" role="img" aria-label="love">♡</span> in Oregon <HiddenStar id="gold" />
+          <span v-if="allStars" class="frame-signoff-stars">
+            <span class="frame-signoff-sep" aria-hidden="true">·</span>caught every star with you
+          </span>
         </p>
       </footer>
     </div>
@@ -290,6 +315,18 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
 .sheet ::selection {
   background: var(--sky);
   color: var(--black);
+}
+
+/* Sky barely shows on cream, so the light theme selects in lilac. */
+html.light .sheet ::selection {
+  background: var(--pastel-lilac);
+  color: var(--heading);
+}
+
+/* The text cursor in the accent: gold on black, deep lilac on cream. */
+.sheet,
+.contact {
+  caret-color: var(--accent);
 }
 
 .sheet :focus-visible {
@@ -417,6 +454,11 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
 
 .frame-heart {
   color: var(--orange);
+}
+
+/* Wraps as one piece on narrow screens. */
+.frame-signoff-stars {
+  white-space: nowrap;
 }
 
 .frame-legal {
@@ -547,6 +589,89 @@ html.light .frame-localtime-icon {
   width: 11px;
   height: 11px;
   border-radius: 50%;
+}
+
+/* Drawn over the avatar's corner (top right), or around the dot for a game. */
+.frame-mood {
+  position: absolute;
+  bottom: 70%;
+  left: 78%;
+  display: flex;
+  align-items: flex-end;
+  gap: 0.05rem;
+  font-family: var(--font-sniglet);
+  font-weight: 800;
+  line-height: 1;
+  pointer-events: none;
+  text-shadow: 0 1px 2px rgb(26 25 24 / 0.7);
+}
+
+.frame-mood > span {
+  display: inline-block;
+}
+
+.frame-mood.is-sleep {
+  color: var(--sky);
+}
+
+.frame-mood.is-sleep > span:nth-child(1) { font-size: 0.45rem; }
+.frame-mood.is-sleep > span:nth-child(2) { font-size: 0.55rem; margin-bottom: 0.2rem; }
+.frame-mood.is-sleep > span:nth-child(3) { font-size: 0.65rem; margin-bottom: 0.45rem; }
+
+.frame-mood.is-music {
+  gap: 0.15rem;
+  font-size: 0.7rem;
+  color: var(--mint);
+}
+
+.frame-mood.is-music > span:nth-child(2) {
+  margin-bottom: 0.35rem;
+}
+
+.frame-mood.is-game {
+  inset: auto -1px -1px auto;
+  width: 11px;
+  height: 11px;
+}
+
+.frame-mood.is-game::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 2px solid var(--status);
+  border-radius: 50%;
+  opacity: 0;
+}
+
+/* Three short plays (under five seconds all told), and then it rests: the z's and notes
+   stay put, the pulse fades away. */
+html:not(.reduce-motion) .frame-mood > span {
+  animation: frame-mood-drift 1.4s ease-out 3 backwards;
+}
+
+html:not(.reduce-motion) .frame-mood > span:nth-child(2) { animation-delay: 150ms; }
+html:not(.reduce-motion) .frame-mood > span:nth-child(3) { animation-delay: 300ms; }
+
+html:not(.reduce-motion) .frame-mood.is-music > span {
+  animation-name: frame-mood-bop;
+}
+
+html:not(.reduce-motion) .frame-mood.is-game::before {
+  animation: frame-mood-pulse 1.2s ease-out 3;
+}
+
+@keyframes frame-mood-drift {
+  from { opacity: 0; translate: -3px 5px; scale: 0.5; }
+}
+
+@keyframes frame-mood-bop {
+  from { opacity: 0; translate: -2px 6px; rotate: -20deg; }
+  60% { rotate: 10deg; }
+}
+
+@keyframes frame-mood-pulse {
+  from { opacity: 0.9; scale: 1; }
+  to { opacity: 0; scale: 2.4; }
 }
 
 .frame-who {
@@ -807,6 +932,18 @@ html.light .frame-card {
 
 html.light .frame-custom {
   text-shadow: none;
+}
+
+html.light .frame-mood {
+  text-shadow: none;
+}
+
+html.light .frame-mood.is-sleep {
+  color: oklch(from var(--sky) 0.5 calc(c * 2.2) h);
+}
+
+html.light .frame-mood.is-music {
+  color: oklch(from var(--mint) 0.5 calc(c * 2.2) h);
 }
 
 html.light .chip {

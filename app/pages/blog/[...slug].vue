@@ -50,6 +50,7 @@ defineOgImage('Post', {
                 <span v-if="post.tags?.length" class="post-tags">
                     <NuxtLink v-for="tag in post.tags" :key="tag" :to="{ path: '/blog', query: { q: tag } }" class="chip" :style="{ '--tint': tagTint(tag) }">{{ tag }}</NuxtLink>
                 </span>
+                <HiddenStar id="mint" />
             </p>
         </header>
 
@@ -129,7 +130,7 @@ defineOgImage('Post', {
 }
 
 /* The site's own reduced motion setting, on top of the system one. */
-:global(html.reduce-motion) .read-progress {
+html.reduce-motion .read-progress {
     display: none;
 }
 
