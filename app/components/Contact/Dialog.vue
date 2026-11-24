@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { FetchFailure } from '~/utils/fetchError'
+
 const { open, closeContact } = useContact()
 
 const form = reactive({ name: '', email: '', message: '' })
@@ -28,8 +30,9 @@ async function submit() {
     try {
         await $fetch('/api/contact', { method: 'POST', body: { ...form, token: token.value } })
         sent.value = true
-    } catch (e: any) {
-        errorMsg.value = e?.data?.statusMessage || e?.statusMessage || 'Something went wrong. Please try again.'
+    } catch (e) {
+        const failure = e as FetchFailure
+        errorMsg.value = failure.data?.statusMessage || failure.statusMessage || 'Something went wrong. Please try again.'
         // Tokens are single-use — reset the widget so a retry gets a fresh one.
         token.value = ''
         turnstile.value?.reset?.()

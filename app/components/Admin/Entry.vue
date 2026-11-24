@@ -10,7 +10,6 @@ const replying = ref(false)
 const content = ref('')
 const busy = ref(false)
 const message = ref('')
-const errorMessage = (e: any, fallback: string) => e?.data?.message || e?.data?.statusMessage || fallback
 
 async function reply() {
     if (!content.value.trim() || busy.value) return
