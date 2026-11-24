@@ -72,8 +72,8 @@ const localTime = computed(() => {
   const weekend = parts.weekday === 'Sat' || parts.weekday === 'Sun'
   const clock = new Intl.DateTimeFormat('en-US', { timeZone: 'America/Los_Angeles', hour: 'numeric', minute: '2-digit' }).format(now.value).toLowerCase()
   const doing = hour < 6 ? 'probably asleep'
-    : hour < 9 ? 'probably making coffee'
-      : hour < 17 ? (weekend ? 'probably tinkering with something' : 'probably at work')
+    : hour < 7 ? 'probably getting ready for work'
+      : hour < 16 ? (weekend ? 'probably tinkering with something' : 'probably at work')
         : hour < 22 ? 'probably tinkering with something'
           : 'probably meant to be asleep'
   return { clock, doing, night: hour < 6 || hour >= 20 }
