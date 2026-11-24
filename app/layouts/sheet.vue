@@ -307,7 +307,7 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
   display: flex;
   flex-direction: column;
   min-height: 100dvh;
-  max-width: calc(36rem + 2rem);
+  max-width: calc(40rem + 2rem);
   margin-inline: auto;
   padding: 4rem 1rem 2rem;
   line-height: 1.5;
