@@ -131,6 +131,22 @@ export default defineNuxtConfig({
 
   css: ['~/assets/css/main.css'],
 
+  ui: {
+      eslint: {
+          // Hook classes styled in <style> blocks and main.css, not Tailwind utilities.
+          ignore: [
+              '^(blog|chip|contact|doc|error|frame|gateway|item|post|projects|row|stats)(-|$)',
+              '^(cards|group-label|home|list|rows|sheet)$',
+              '^is-',
+          ],
+          rules: {
+              'no-unknown-classes': 'error',
+              'no-conflicting-classes': 'error',
+              'no-palette-colors': 'error',
+          },
+      },
+  },
+
   sourcemap: { server: false },
 
   routeRules: {
