@@ -44,7 +44,7 @@ function hoverWwt() {
     <p>
       After hours I tinker with my own
       <NuxtLink to="https://github.com/kashalls/infrastructure" target="_blank" class="chip" style="--tint: var(--mint)"><UIcon name="i-simple-icons-kubernetes" class="chip-wheel" />Kubernetes infrastructure</NuxtLink>
-      and build tools that make platforms easier to extend. Thanks for stopping by!
+      and build tools that make platforms easier to extend. Thanks for stopping by! <HiddenStar id="sky" />
     </p>
 
     <section class="projects">

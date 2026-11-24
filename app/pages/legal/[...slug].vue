@@ -34,7 +34,7 @@ const updated = computed(() => {
         <header class="mt-10 mb-8">
             <h1 class="doc-title">{{ page.title }}</h1>
             <p class="mt-2 text-sm text-(--muted)">
-                Last updated <time :datetime="updated.iso">{{ updated.label }}</time>
+                Last updated <time :datetime="updated.iso">{{ updated.label }}</time> <HiddenStar id="indigo" />
             </p>
         </header>
         <ContentRenderer :value="page" class="doc-body" />

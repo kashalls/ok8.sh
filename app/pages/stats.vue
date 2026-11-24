@@ -109,7 +109,7 @@ const show = (text: string, event: PointerEvent) => { tip.value = { text, el: ev
 <template>
   <main class="stats" @pointerleave="tip = undefined">
     <div class="stats-head">
-      <h1 class="doc-title">Stats</h1>
+      <h1 class="doc-title">Stats <HiddenStar id="lilac" /></h1>
       <UTabs v-model="range" :items="ranges" :content="false" size="xs" aria-label="Time range" :ui="{ list: 'w-auto' }" />
     </div>
 
