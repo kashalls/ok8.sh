@@ -39,6 +39,7 @@ const shown = computed(() => (posts.value ?? []).filter((post) => {
         <form role="search" class="blog-search" @submit.prevent>
             <input v-model="query" type="search" placeholder="Search posts" aria-label="Search posts">
             <a href="/feed.xml" target="_blank" class="blog-rss">RSS</a>
+            <HiddenStar id="violet" />
         </form>
 
         <ul v-if="shown.length" class="rows">

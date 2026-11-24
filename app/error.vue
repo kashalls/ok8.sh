@@ -31,7 +31,7 @@ const next = computed(() => [
                     <span class="error-code">{{ meta.code }}</span>
                 </div>
                 <p v-if="meta.code === 404" class="error-text">
-                    This page wandered off <span class="kaomoji" aria-hidden="true">(・・？)</span> Maybe one of these has what you're after? <HiddenStar id="violet" />
+                    This page wandered off <span class="kaomoji" aria-hidden="true">(・・？)</span> Maybe one of these has what you're after?
                 </p>
                 <p v-else class="error-text">{{ meta.description }} <span class="kaomoji" aria-hidden="true">(；ω；)</span></p>
 
