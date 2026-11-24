@@ -129,7 +129,7 @@ defineOgImage('Post', {
 }
 
 /* The site's own reduced motion setting, on top of the system one. */
-:global(html.reduce-motion) .read-progress {
+html.reduce-motion .read-progress {
     display: none;
 }
 
