@@ -11,11 +11,12 @@ const isHome = computed(() => props.title === 'Kashall')
 </script>
 
 <template>
-    <!-- Satori renders this to a 1200x600 PNG, in the site's palette and type.
+    <!-- Satori renders this to a 1200x600 PNG, in the site's palette and the page's type:
+         Sniglet titles and Nunito text.
          Satori can't decode WebP, so the logo and pattern come from PNG copies in /og.
          Vertical padding is added on top of the height and pushes content off the
          canvas, so vertical spacing is margins instead. -->
-    <div class="relative flex size-full flex-col px-[90px] font-karla" style="background:#1a1918;color:#fcf6ed;">
+    <div class="relative flex size-full flex-col px-[90px] font-nunito" style="background:#1a1918;color:#fcf6ed;">
         <!-- The site's logo spread, as faint as it sits behind the page. -->
         <div class="absolute flex flex-wrap" style="top:-40px;left:-80px;width:1560px;height:680px;opacity:0.08;">
             <img v-for="n in 6" :key="n" src="/og/pattern.png" width="520" height="340" style="width:520px;height:340px;">
@@ -35,7 +36,7 @@ const isHome = computed(() => props.title === 'Kashall')
                 <img src="/og/logo.png" width="320" height="157" style="width:320px;height:157px;">
             </div>
             <div class="relative mt-auto mb-[72px] flex flex-col">
-                <div class="flex max-w-[1020px] font-display text-[84px] leading-[1.05]">
+                <div class="flex max-w-[1020px] font-sniglet font-extrabold text-[84px] leading-[1.05] tracking-[-0.01em]">
                     {{ title }}
                 </div>
                 <!-- Satori supports the plain line-clamp property, not Tailwind's -webkit-box version. -->

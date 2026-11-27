@@ -13,11 +13,12 @@ withDefaults(defineProps<{
 </script>
 
 <template>
-    <!-- Satori renders this to a 1200x600 PNG, in the site's palette and type.
+    <!-- Satori renders this to a 1200x600 PNG, in the site's palette and the page's type:
+         Sniglet titles and Nunito text.
          Satori can't decode WebP, so the logo and pattern come from PNG copies in /og.
          Vertical padding is added on top of the height and pushes the footer off the
          canvas, so the top and bottom spacing are margins instead. -->
-    <div class="relative flex size-full flex-col px-[90px] font-karla" style="background:#1a1918;color:#fcf6ed;">
+    <div class="relative flex size-full flex-col px-[90px] font-nunito" style="background:#1a1918;color:#fcf6ed;">
         <!-- The site's logo spread, as faint as it sits behind the page. -->
         <div class="absolute flex flex-wrap" style="top:-40px;left:-80px;width:1560px;height:680px;opacity:0.08;">
             <img v-for="n in 6" :key="n" src="/og/pattern.png" width="520" height="340" style="width:520px;height:340px;">
@@ -28,8 +29,8 @@ withDefaults(defineProps<{
             <img src="/og/logo.png" width="260" height="127" style="width:260px;height:127px;">
             <div class="ml-4 flex" style="color:rgba(252,246,237,0.6);">/ Blog</div>
         </div>
-        <div class="relative mt-6 flex max-w-[1020px] font-display leading-[1.08]"
-            :class="title.length > 50 ? 'text-[58px]' : 'text-[70px]'">
+        <div class="relative mt-6 flex max-w-[1020px] font-sniglet font-extrabold leading-[1.08] tracking-[-0.01em]"
+            :class="title.length > 50 ? 'text-[54px]' : 'text-[66px]'">
             {{ title }}
         </div>
         <!-- Satori supports the plain line-clamp property, not Tailwind's -webkit-box version. -->
