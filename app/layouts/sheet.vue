@@ -135,48 +135,41 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
 
 <template>
   <div class="sheet">
+    <SheetPattern />
     <div class="frame">
-      <!-- Holds the spot for the logo. -->
       <header class="frame-header">
-        <NuxtLink to="/" aria-label="Kashall, home" class="frame-name frame-logo">
-          <WavyName text="Kashall" :gradient="nameGradient" />
+        <NuxtLink to="/" aria-label="Kashall, home" class="frame-logo">
+          <NuxtImg src="/logo.webp" alt="" width="360" height="176" preload />
         </NuxtLink>
         <nav aria-label="Site">
-          <ul class="frame-links">
+          <ul class="frame-links frame-nav">
             <li>
-              <UTooltip text="Read my notes" v-bind="sheetTooltip">
-                <NuxtLink to="/blog" aria-label="Blog" :aria-current="route.path.startsWith('/blog') ? 'page' : undefined">
-                  <UIcon name="i-ph-pen-nib-fill" />
-                </NuxtLink>
-              </UTooltip>
+              <NuxtLink to="/blog" class="frame-pill" :aria-current="route.path.startsWith('/blog') ? 'page' : undefined">
+                <UIcon name="i-ph-pen-nib-fill" />Blog
+              </NuxtLink>
             </li>
             <li>
-              <UTooltip text="Sign my guestbook!" v-bind="sheetTooltip">
-                <NuxtLink to="/guestbook" aria-label="Guestbook" :aria-current="route.path === '/guestbook' ? 'page' : undefined">
-                  <UIcon name="i-ph-signature-fill" />
-                </NuxtLink>
-              </UTooltip>
+              <NuxtLink to="/guestbook" class="frame-pill" :aria-current="route.path === '/guestbook' ? 'page' : undefined">
+                <UIcon name="i-ph-signature-fill" />Guestbook
+              </NuxtLink>
             </li>
             <li>
-              <UTooltip text="Nerdy numbers" v-bind="sheetTooltip">
-                <NuxtLink to="/stats" aria-label="Stats" :aria-current="route.path === '/stats' ? 'page' : undefined">
-                  <UIcon name="i-ph-chart-line-fill" />
-                </NuxtLink>
-              </UTooltip>
+              <NuxtLink to="/stats" class="frame-pill" :aria-current="route.path === '/stats' ? 'page' : undefined">
+                <UIcon name="i-ph-chart-line-fill" />Stats
+              </NuxtLink>
             </li>
             <li>
-              <UTooltip text="Say hi!" v-bind="sheetTooltip">
-                <button type="button" aria-label="Email me" @click="openContact()">
-                  <UIcon name="i-ph-envelope-simple-fill" />
-                </button>
-              </UTooltip>
+              <button type="button" class="frame-pill" @click="openContact()">
+                <UIcon name="i-ph-envelope-simple-fill" />Say hi
+              </button>
             </li>
             <li>
               <!-- Prerendered pages can't know the visitor's theme, so the toggle renders in the browser. -->
               <ClientOnly>
                 <UTooltip :text="isLight ? 'Lights off' : 'Lights on'" v-bind="sheetTooltip">
                   <button type="button" :aria-label="isLight ? 'Switch to the dark theme' : 'Switch to the light theme'"
-                    :class="{ 'is-spinning': themeSpinning }" @click="toggleTheme" @animationend="themeSpinning = false">
+                    class="frame-pill frame-pill-icon" :class="{ 'is-spinning': themeSpinning }" @click="toggleTheme"
+                    @animationend="themeSpinning = false">
                     <UIcon v-if="isLight" name="i-ph-moon-stars-fill" />
                     <UIcon v-else name="i-ph-sun-fill" />
                   </button>
@@ -192,44 +185,6 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
 
       <p v-if="messages.maintenance" class="frame-notice" role="status">{{ messages.maintenance }}</p>
 
-      <div v-if="route.path === '/'" class="frame-presence">
-        <!-- The presence bar is only on the home page; the name above still takes its colours everywhere.
-             Its spot is held while Lanyard connects, so the page doesn't jump when it arrives. -->
-        <Transition name="frame-fade">
-          <section v-if="lanyard" class="frame-card">
-            <Transition name="frame-fade">
-              <NuxtImg v-if="nameplate" :src="nameplateUrl(nameplate.asset, nameplateAnimated)" alt="" width="448" height="84"
-                class="frame-nameplate" />
-            </Transition>
-            <UTooltip :text="presenceHint" v-bind="sheetTooltip">
-              <span class="frame-avatar" @pointerenter="moodPlays++">
-                <NuxtImg :src="avatarUrl(lanyard.discord_user.id, lanyard.discord_user.avatar)" alt="" width="36" height="36" />
-                <NuxtImg v-if="decoration" :src="decorationUrl(decoration.asset, decorationAnimated)" alt="" width="44"
-                  height="44" class="frame-decoration" />
-                <span class="frame-dot" :style="{ background: statusColor(lanyard.discord_status) }" />
-                <span v-if="mood" :key="`${mood}-${moodPlays}`" class="frame-mood" :class="`is-${mood}`"
-                  :style="{ '--status': statusColor(lanyard.discord_status) }" aria-hidden="true">
-                  <template v-if="mood === 'sleep'"><span>z</span><span>z</span><span>z</span></template>
-                  <template v-else-if="mood === 'music'"><span>♪</span><span>♫</span></template>
-                </span>
-              </span>
-            </UTooltip>
-            <div class="frame-who">
-              <WavyName text="Kashall" :gradient="nameGradient" class="frame-name" />
-              <p class="frame-custom">
-                <span class="sr-only">{{ STATUS[lanyard.discord_status]?.label ?? 'Offline' }} on Discord.{{ mood === 'music' || mood === 'game' ? ` ${presenceHint}.` : '' }}</span>
-                <template v-if="custom?.state || custom?.emoji">
-                  <NuxtImg v-if="custom.emoji?.id" :src="`https://cdn.discordapp.com/emojis/${custom.emoji.id}.webp?size=32`"
-                    :alt="custom.emoji.name" width="14" height="14" />
-                  <template v-else-if="custom.emoji">{{ custom.emoji.name }}</template>
-                  <span class="truncate">{{ custom.state }}</span>
-                </template>
-              </p>
-            </div>
-          </section>
-        </Transition>
-      </div>
-
       <!-- The time in Oregon only makes sense in the browser; the fallback holds its line. -->
       <ClientOnly v-if="route.path === '/'">
         <p class="frame-localtime">
@@ -244,6 +199,43 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
       <slot />
 
       <footer class="frame-footer">
+        <div v-if="route.path === '/'" class="frame-presence">
+          <!-- The presence bar is only on the home page.
+               Its spot is held while Lanyard connects, so the page doesn't jump when it arrives. -->
+          <Transition name="frame-fade">
+            <section v-if="lanyard" class="frame-card">
+              <Transition name="frame-fade">
+                <NuxtImg v-if="nameplate" :src="nameplateUrl(nameplate.asset, nameplateAnimated)" alt="" width="448" height="84"
+                  class="frame-nameplate" />
+              </Transition>
+              <UTooltip :text="presenceHint" v-bind="sheetTooltip">
+                <span class="frame-avatar" @pointerenter="moodPlays++">
+                  <NuxtImg :src="avatarUrl(lanyard.discord_user.id, lanyard.discord_user.avatar)" alt="" width="36" height="36" />
+                  <NuxtImg v-if="decoration" :src="decorationUrl(decoration.asset, decorationAnimated)" alt="" width="44"
+                    height="44" class="frame-decoration" />
+                  <span class="frame-dot" :style="{ background: statusColor(lanyard.discord_status) }" />
+                  <span v-if="mood" :key="`${mood}-${moodPlays}`" class="frame-mood" :class="`is-${mood}`"
+                    :style="{ '--status': statusColor(lanyard.discord_status) }" aria-hidden="true">
+                    <template v-if="mood === 'sleep'"><span>z</span><span>z</span><span>z</span></template>
+                    <template v-else-if="mood === 'music'"><span>♪</span><span>♫</span></template>
+                  </span>
+                </span>
+              </UTooltip>
+              <div class="frame-who">
+                <WavyName text="Kashall" :gradient="nameGradient" class="frame-name" />
+                <p class="frame-custom">
+                  <span class="sr-only">{{ STATUS[lanyard.discord_status]?.label ?? 'Offline' }} on Discord.{{ mood === 'music' || mood === 'game' ? ` ${presenceHint}.` : '' }}</span>
+                  <template v-if="custom?.state || custom?.emoji">
+                    <NuxtImg v-if="custom.emoji?.id" :src="`https://cdn.discordapp.com/emojis/${custom.emoji.id}.webp?size=32`"
+                      :alt="custom.emoji.name" width="14" height="14" />
+                    <template v-else-if="custom.emoji">{{ custom.emoji.name }}</template>
+                    <span class="truncate">{{ custom.state }}</span>
+                  </template>
+                </p>
+              </div>
+            </section>
+          </Transition>
+        </div>
         <div class="frame-base">
           <ul class="frame-links">
             <li v-for="social in links" :key="social.to">
@@ -300,9 +292,8 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
   color: var(--text);
   font-family: var(--font-nunito);
   color-scheme: dark;
-  /* The sheet's diagonal stripes, over the galaxy skirt's violets in the corner. */
+  /* The galaxy skirt's violets in the corner. */
   background:
-    repeating-linear-gradient(-58deg, transparent 0 46px, rgb(170 104 204 / 0.06) 46px 47.5px),
     radial-gradient(44rem 30rem at 0% 0%, rgb(178 218 241 / 0.08), transparent 70%),
     radial-gradient(36rem 26rem at 100% 0%, rgb(219 136 73 / 0.06), transparent 70%),
     radial-gradient(40rem 30rem at 0% 70%, rgb(177 237 217 / 0.05), transparent 70%),
@@ -310,6 +301,7 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
     radial-gradient(80rem 50rem at 85% 110%, rgb(91 63 124 / 0.6), transparent 75%),
     color-mix(in oklab, var(--bg) 88%, var(--violet));
   background-attachment: fixed;
+  isolation: isolate;
 }
 
 .sheet ::selection {
@@ -353,10 +345,8 @@ html.light .sheet ::selection {
 .frame-header {
   position: relative;
   display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 0.75rem 1rem;
+  flex-direction: column;
+  gap: 0.75rem;
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
 }
@@ -386,8 +376,73 @@ html.light .sheet ::selection {
   top: -3px;
 }
 
-.frame-name.frame-logo {
-  font-size: 1.75rem;
+.frame-logo {
+  align-self: center;
+}
+
+.frame-logo img {
+  display: block;
+  width: 15rem;
+  height: auto;
+}
+
+/* The page links as labelled pills, with the theme toggle as a round one. */
+.frame-links.frame-nav {
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.frame-links .frame-pill {
+  align-items: center;
+  gap: 0.35em;
+  padding: 0.3em 0.8em;
+  /* The logo's colours: a violet fill with a lilac edge, and the accent (the
+     logo's gold, or purple on the light theme) for hover and the current page. */
+  border: 1px solid color-mix(in oklab, var(--lilac) 40%, transparent);
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--surface) 75%, var(--violet));
+  color: var(--text);
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.3;
+  transition: color 200ms, border-color 200ms, translate 300ms cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+
+/* A circle as tall as the text pills: their line, padding and border. */
+.frame-links .frame-pill-icon {
+  justify-content: center;
+  width: calc(1.9em + 2px);
+  height: calc(1.9em + 2px);
+  padding: 0;
+}
+
+/* Keeps the whole row on one line on a phone. */
+@media (width < 26rem) {
+  .frame-links.frame-nav {
+    gap: 0.3rem;
+  }
+
+  .frame-links .frame-pill {
+    padding-inline: 0.5em;
+    font-size: 0.8125rem;
+  }
+
+  .frame-links .frame-pill-icon {
+    padding: 0;
+  }
+}
+
+.frame-links .frame-pill:is(:hover, :focus-visible) {
+  border-color: var(--accent);
+  color: var(--heading);
+  filter: none;
+}
+
+.frame-links .frame-pill[aria-current] {
+  border-color: color-mix(in oklab, var(--accent) 70%, transparent);
+  background: color-mix(in oklab, var(--surface) 55%, var(--violet));
+  color: var(--heading);
 }
 
 /* Named so it stays put while the page under it changes (see the root transition in main.css). */
@@ -519,6 +574,7 @@ html.light .frame-localtime-icon {
    No margin below: the home page already spaces its intro from what's above. */
 .frame-presence {
   min-height: 4.04rem;
+  margin-bottom: 1.5rem;
 }
 
 /* The Discord user panel: avatar, name and custom status over the nameplate. */
@@ -728,8 +784,8 @@ html:not(.reduce-motion) .frame-mood.is-game::before {
 /* Holds the theme toggle's spot (an icon's size) until it renders. */
 .frame-theme-slot {
   display: block;
-  width: 1.1rem;
-  height: 1.1rem;
+  width: calc(0.875rem * 1.9 + 2px);
+  aspect-ratio: 1;
 }
 
 .frame-links [aria-current] {
@@ -914,16 +970,27 @@ html:not(.reduce-motion) .frame-mood.is-game::before {
   border-radius: inherit;
 }
 
-/* The light theme (tokens in main.css): the same stripes and swatch glows, softer, on cream. */
+/* The light theme (tokens in main.css): the same swatch glows, softer, on cream. */
 html.light .sheet {
   background:
-    repeating-linear-gradient(-58deg, transparent 0 46px, rgb(170 104 204 / 0.07) 46px 47.5px),
     radial-gradient(44rem 30rem at 0% 0%, rgb(178 218 241 / 0.5), transparent 70%),
     radial-gradient(36rem 26rem at 100% 0%, rgb(219 136 73 / 0.16), transparent 70%),
     radial-gradient(40rem 30rem at 0% 70%, rgb(177 237 217 / 0.35), transparent 70%),
     radial-gradient(60rem 36rem at 100% 100%, rgb(170 104 204 / 0.25), transparent 70%),
     var(--bg);
   background-attachment: fixed;
+}
+
+html.light .frame-links .frame-pill {
+  background: color-mix(in oklab, white 72%, var(--lilac));
+}
+
+html.light .frame-links .frame-pill:is(:hover, :focus-visible) {
+  color: var(--heading);
+}
+
+html.light .frame-links .frame-pill[aria-current] {
+  background: color-mix(in oklab, white 55%, var(--lilac));
 }
 
 html.light .frame-card {

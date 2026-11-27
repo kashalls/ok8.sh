@@ -10,9 +10,9 @@ export default {
     head: {
         title: 'Kashall',
         link: [
-            // Only Firefox animates a GIF favicon; other browsers show its first frame.
-            { rel: 'icon', type: 'image/gif', href: '/favicon.gif' },
-            { rel: 'apple-touch-icon', href: '/logo.png' },
+            { rel: 'icon', href: '/favicon.ico', sizes: '48x48' },
+            { rel: 'icon', type: 'image/png', sizes: '192x192', href: '/icon-192.png' },
+            { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
         ],
         meta: [
             // Both themes, so the browser can theme its own UI before the CSS arrives.
