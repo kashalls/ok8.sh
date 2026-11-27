@@ -6,10 +6,11 @@ After almost continuous revisions, I've finally got my personal website to a sta
 
 ### Features
 
-- A WebGL particle nebula that re-forms into each page's title, with the Discord banner's eyes drawn in particles that follow the cursor and blink
-- Live Discord presence (activities and Spotify) streamed from [Lanyard](https://github.com/Phineas/lanyard)
-- GitHub star counts for the Work page, cached server-side for an hour
-- Homelab stats pulled from [kromgo](https://github.com/kashalls/kromgo) badges
+- A commissioned logo, with its pattern drifting behind every page (held still under reduced motion), in dark and light themes
+- Live Discord presence on the home page (status, custom status, Spotify and games) streamed from [Lanyard](https://github.com/Phineas/lanyard)
+- GitHub star counts for the home page's projects, cached server-side for an hour
+- A Stats page with WakaTime coding time and GitHub contributions
+- Stars hidden around the site to find
 - Contact form protected by Cloudflare Turnstile and delivered with Resend
 - Comments under Blog posts and a guestbook, from GitHub accounts at least 14 days old, with one level of replies and hearts
 - A `/gateway` fallback page for hostnames that hit the gateway with no service behind them
@@ -94,8 +95,8 @@ Repeat for the other secrets above.
 The code is [MIT](LICENSE). That covers the code only. These are not under the MIT license:
 
 - Writing, including blog posts (`content/blog`) and legal pages (`content/legal`): all rights reserved.
-- Images and artwork, including `public/banner.png`, `public/logo.png` and any commissioned art: all rights reserved by their creators.
-- The PP Neue Machina Inktrap font in `public/fonts`, which belongs to Pangram Pangram and are used under their license.
+- Images and artwork, including `public/banner.png`, the commissioned logo and pattern by [Bloomeko Studio](https://vgen.co/bloomekoart) (`public/logo.webp`, `public/pattern-*.webp`, the favicons and `public/apple-touch-icon.png`) and any other commissioned art: all rights reserved by their creators.
+- The PP Neue Machina Inktrap font in `public/fonts`, which belongs to Pangram Pangram and is used under their license.
 
 ### 💖 Sponsors
 
