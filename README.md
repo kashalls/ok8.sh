@@ -4,17 +4,11 @@
 
 After almost continuous revisions, I've finally got my personal website to a state where I am proud of it. It's been a long journey since I first got invested in Vue, and it has grown alongside me from Nuxt 3 to Nuxt 4.
 
-### Features
+### About
 
-- A commissioned logo, with its pattern drifting behind every page (held still under reduced motion), in dark and light themes
-- Live Discord presence on the home page (status, custom status, Spotify and games) streamed from [Lanyard](https://github.com/Phineas/lanyard)
-- GitHub star counts for the home page's projects, cached server-side for an hour
-- A Stats page with WakaTime coding time and GitHub contributions
-- Stars hidden around the site to find
-- Contact form protected by Cloudflare Turnstile and delivered with Resend
-- Comments under Blog posts and a guestbook, from GitHub accounts at least 14 days old, with one level of replies and hearts
-- A `/gateway` fallback page for hostnames that hit the gateway with no service behind them
-- Pre-rendered OG images, sitemap and robots.txt
+It's a small, single-column site styled after my character sheet: its colour key gives the palette, in a dark and a light theme, and the logo and the pattern drifting behind each page are commissioned art. The home page is a short intro, my projects with their GitHub stars, and my live Discord presence from [Lanyard](https://github.com/Phineas/lanyard). Beyond that there's a blog written in Markdown with [Nuxt Content](https://content.nuxt.com), a guestbook, and a Stats page with my WakaTime coding time and GitHub contributions.
+
+Visitors can sign in with GitHub to comment on posts and sign the guestbook, or send me a message through a contact form guarded by Cloudflare Turnstile and delivered with Resend. Pages are prerendered and served as static assets, with a Cloudflare Worker behind them for the API, sign-in and comments, which live in Durable Objects. A few small things are hidden around the site too.
 
 ### Development
 
