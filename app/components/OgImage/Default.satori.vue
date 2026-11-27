@@ -36,7 +36,7 @@ const isHome = computed(() => props.title === 'Kashall')
                 <img src="/og/logo.png" width="320" height="157" style="width:320px;height:157px;">
             </div>
             <div class="relative mt-auto mb-[72px] flex flex-col">
-                <div class="flex max-w-[1020px] font-sniglet font-extrabold text-[84px] leading-[1.05] tracking-[-0.01em]">
+                <div class="flex max-w-[1020px] font-sniglet text-[84px] leading-[1.05] tracking-[-0.01em]">
                     {{ title }}
                 </div>
                 <!-- Satori supports the plain line-clamp property, not Tailwind's -webkit-box version. -->

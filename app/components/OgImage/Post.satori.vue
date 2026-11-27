@@ -29,8 +29,8 @@ withDefaults(defineProps<{
             <img src="/og/logo.png" width="260" height="127" style="width:260px;height:127px;">
             <div class="ml-4 flex" style="color:rgba(252,246,237,0.6);">/ Blog</div>
         </div>
-        <div class="relative mt-6 flex max-w-[1020px] font-sniglet font-extrabold leading-[1.08] tracking-[-0.01em]"
-            :class="title.length > 50 ? 'text-[54px]' : 'text-[66px]'">
+        <div class="relative mt-6 flex max-w-[1020px] font-sniglet leading-[1.08] tracking-[-0.01em]"
+            :class="title.length > 50 ? 'text-[58px]' : 'text-[70px]'">
             {{ title }}
         </div>
         <!-- Satori supports the plain line-clamp property, not Tailwind's -webkit-box version. -->
