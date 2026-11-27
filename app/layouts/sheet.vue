@@ -80,7 +80,7 @@ const localTime = computed(() => {
 })
 // Pages are prerendered, so this is the year of the last build.
 const year = new Date().getFullYear()
-const socialHints: Record<string, string> = { GitHub: 'Peek at my code', LinkedIn: 'The grown-up profile' }
+const socialHints: Record<string, string> = { GitHub: 'Peek at my code' }
 const statusHints: Record<string, string> = {
   online: 'Around!',
   idle: 'Probably snacking',
