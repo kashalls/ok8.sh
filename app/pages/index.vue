@@ -46,6 +46,8 @@ const { data: stars } = useFetch('/api/repos', { server: false, lazy: true })
         </li>
       </ul>
     </section>
+
+    <PresenceCard />
   </main>
 </template>
 
@@ -64,6 +66,12 @@ const { data: stars } = useFetch('/api/repos', { server: false, lazy: true })
   font-family: var(--font-display);
   font-size: 1.1rem;
   color: var(--heading);
+}
+
+/* The negative margin pulls the footer's wavy rule up to 1.5rem below the card. */
+.home > .frame-presence {
+  margin-top: 3rem;
+  margin-bottom: -1.5rem;
 }
 
 /* Pops in once the count arrives. */
