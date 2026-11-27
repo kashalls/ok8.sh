@@ -186,15 +186,3 @@ html.reduce-motion::view-transition-old(*),
 html.reduce-motion::view-transition-new(*) {
   animation: none !important;
 }
-
-html[data-text-size="sm"] { font-size: 87.5%; }
-html[data-text-size="lg"] { font-size: 112.5%; }
-html[data-text-size="xl"] { font-size: 125%; }
-
-html.readable-font {
-  --font-sans: "OpenDyslexic", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "OpenDyslexic", ui-sans-serif, system-ui, sans-serif;
-  --font-karla: "OpenDyslexic", ui-sans-serif, system-ui, sans-serif;
-  --font-nunito: "OpenDyslexic", ui-sans-serif, system-ui, sans-serif;
-  --font-sniglet: "OpenDyslexic", ui-sans-serif, system-ui, sans-serif;
-}

@@ -12,7 +12,7 @@ The short version: ok8.sh has no analytics, no ads and no tracking cookies. It o
 
 **Hosting:** the site runs on Cloudflare Workers. Cloudflare handles every request, including your IP address, to serve and protect the site, and the site keeps request and error logs on Cloudflare for troubleshooting. See [Cloudflare's privacy policy](https://www.cloudflare.com/privacypolicy/).
 
-**Your browser:** display settings (reduced motion, text size and the readable font) are saved in your browser's local storage. They never leave your device.
+**Your browser:** the reduced motion setting is saved in your browser's local storage. It never leaves your device.
 
 ## Things loaded from other sites
 
