@@ -1,7 +1,7 @@
 ---
 title: Privacy Policy
 description: What ok8.sh keeps when you visit, sign the guestbook or send a message, and what it doesn't.
-updated: 2026-11-23
+updated: 2026-11-27
 ---
 
 The short version: ok8.sh has no analytics, no ads and no tracking cookies. It only keeps what it needs to count visits, show guestbook entries and comments, and pass along messages you choose to send.
@@ -20,7 +20,6 @@ Some parts of the page come straight from other services, which see your IP addr
 
 - **Lanyard** (`api.lanyard.rest`), for my Discord status on the home page, and **Discord's CDN** for avatars, decorations and emoji.
 - **GitHub**, for avatars next to guestbook entries and comments.
-- **World Wide Technology** (`wwt.com`), for its logo.
 - **Cloudflare Turnstile**, which loads when you open the contact form.
 
 Fonts are served from ok8.sh itself.
