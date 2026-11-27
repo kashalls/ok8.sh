@@ -13,7 +13,7 @@ withDefaults(defineProps<{
 </script>
 
 <template>
-    <!-- Satori renders this to a 1200x600 PNG, in the sheet layout's palette and type.
+    <!-- Satori renders this to a 1200x600 PNG, in the site's palette and type.
          Vertical padding is added on top of the height and pushes the footer off the
          canvas, so the top and bottom spacing are margins instead. -->
     <div class="relative flex size-full flex-col px-[90px] font-karla" style="background:#1a1918;color:#fcf6ed;">

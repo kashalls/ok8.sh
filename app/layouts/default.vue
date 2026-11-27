@@ -24,7 +24,7 @@ onMounted(async () => {
   const result = await $fetch<{ count: number }>('/api/visits', { method: 'POST' }).catch(() => null)
   if (result) visits.value = result.count
 })
-// Discord has the footer's presence bar instead.
+// Discord has the presence card on the home page instead.
 const links = socials.filter(social => social.label !== 'Discord')
 // Follows the system theme until the visitor picks one; Nuxt UI's color mode remembers it.
 const colorMode = useColorMode()
@@ -80,106 +80,46 @@ const localTime = computed(() => {
 })
 // Pages are prerendered, so this is the year of the last build.
 const year = new Date().getFullYear()
-const socialHints: Record<string, string> = { GitHub: 'Peek at my code', LinkedIn: 'The grown-up profile' }
-const statusHints: Record<string, string> = {
-  online: 'Around!',
-  idle: 'Probably snacking',
-  dnd: 'In the zone, shh',
-  offline: 'Asleep, probably',
-}
-const lanyard = useLanyard()
-const custom = computed(() => lanyard.value?.activities.find(a => a.type === ActivityType.Custom))
-const game = computed(() => lanyard.value?.activities.find(a => a.type === ActivityType.Playing))
-// A little something on the avatar for what I'm up to: notes for music, a pulse for a game,
-// or z's when idle. It plays when that changes and again on hover.
-const mood = computed(() => {
-  if (lanyard.value?.listening_to_spotify) return 'music'
-  if (game.value) return 'game'
-  if (lanyard.value?.discord_status === 'idle') return 'sleep'
-  return undefined
-})
-const moodPlays = ref(0)
-const presenceHint = computed(() => {
-  const spotify = lanyard.value?.spotify
-  if (lanyard.value?.listening_to_spotify && spotify) return `Vibing to ${spotify.song} by ${spotify.artist}`
-  if (game.value) return `Playing ${game.value.name}`
-  return statusHints[lanyard.value?.discord_status ?? 'offline'] ?? statusHints.offline
-})
+const socialHints: Record<string, string> = { GitHub: 'Peek at my code' }
 const { all: allStars } = useStars()
-const nameplate = computed(() => lanyard.value?.discord_user.collectibles?.nameplate)
-const decoration = computed(() => lanyard.value?.discord_user.avatar_decoration_data)
-const nameGradient = computed(() => {
-  const colors = lanyard.value?.discord_user.display_name_styles?.colors
-  return colors?.length ? `linear-gradient(90deg, ${colors.map(c => `#${c.toString(16).padStart(6, '0')}`).join(', ')})` : undefined
-})
-// Stills show first; an animated version (tens of times the size) loads in the
-// background and replaces its still once it has arrived, unless reduced motion is
-// on. Keyed on the URL, since every presence update brings new objects.
 const { reduced } = useMotionPreference()
-function animatedOnceLoaded(url: () => string | undefined) {
-  const ready = ref(false)
-  watch([url, reduced], ([src, still]) => {
-    ready.value = false
-    if (!src || still || !import.meta.client) return
-    const image = new Image()
-    image.onload = () => {
-      if (url() === src && !reduced.value) ready.value = true
-    }
-    image.src = src
-  }, { immediate: true })
-  return ready
-}
-const nameplateAnimated = animatedOnceLoaded(() => nameplate.value ? nameplateUrl(nameplate.value.asset, true) : undefined)
-const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decorationUrl(decoration.value.asset, true) : undefined)
+// The header's page buttons: Nuxt UI buttons, drawn as the sheet's pills (see .frame-pill).
+const pill = { color: 'neutral', variant: 'ghost', class: 'frame-pill', ui: { leadingIcon: 'size-[1em]' } } as const
 </script>
 
 <template>
   <div class="sheet">
+    <SheetPattern />
     <div class="frame">
-      <!-- Holds the spot for the logo. -->
       <header class="frame-header">
-        <NuxtLink to="/" aria-label="Kashall, home" class="frame-name frame-logo">
-          <WavyName text="Kashall" :gradient="nameGradient" />
+        <NuxtLink to="/" aria-label="Kashall, home" class="frame-logo">
+          <NuxtImg src="/logo.webp" alt="" width="360" height="176" preload draggable="false" />
         </NuxtLink>
         <nav aria-label="Site">
-          <ul class="frame-links">
+          <ul class="frame-links frame-nav">
             <li>
-              <UTooltip text="Read my notes" v-bind="sheetTooltip">
-                <NuxtLink to="/blog" aria-label="Blog" :aria-current="route.path.startsWith('/blog') ? 'page' : undefined">
-                  <UIcon name="i-ph-pen-nib-fill" />
-                </NuxtLink>
-              </UTooltip>
+              <UButton to="/blog" icon="i-ph-pen-nib-fill" label="Blog" v-bind="pill"
+                :aria-current="route.path.startsWith('/blog') ? 'page' : undefined" />
             </li>
             <li>
-              <UTooltip text="Sign my guestbook!" v-bind="sheetTooltip">
-                <NuxtLink to="/guestbook" aria-label="Guestbook" :aria-current="route.path === '/guestbook' ? 'page' : undefined">
-                  <UIcon name="i-ph-signature-fill" />
-                </NuxtLink>
-              </UTooltip>
+              <UButton to="/guestbook" icon="i-ph-signature-fill" label="Guestbook" v-bind="pill"
+                :aria-current="route.path === '/guestbook' ? 'page' : undefined" />
             </li>
             <li>
-              <UTooltip text="Nerdy numbers" v-bind="sheetTooltip">
-                <NuxtLink to="/stats" aria-label="Stats" :aria-current="route.path === '/stats' ? 'page' : undefined">
-                  <UIcon name="i-ph-chart-line-fill" />
-                </NuxtLink>
-              </UTooltip>
+              <UButton to="/stats" icon="i-ph-chart-line-fill" label="Stats" v-bind="pill"
+                :aria-current="route.path === '/stats' ? 'page' : undefined" />
             </li>
             <li>
-              <UTooltip text="Say hi!" v-bind="sheetTooltip">
-                <button type="button" aria-label="Email me" @click="openContact()">
-                  <UIcon name="i-ph-envelope-simple-fill" />
-                </button>
-              </UTooltip>
+              <UButton icon="i-ph-envelope-simple-fill" label="Say hi" v-bind="pill" @click="openContact()" />
             </li>
             <li>
               <!-- Prerendered pages can't know the visitor's theme, so the toggle renders in the browser. -->
               <ClientOnly>
                 <UTooltip :text="isLight ? 'Lights off' : 'Lights on'" v-bind="sheetTooltip">
-                  <button type="button" :aria-label="isLight ? 'Switch to the dark theme' : 'Switch to the light theme'"
-                    :class="{ 'is-spinning': themeSpinning }" @click="toggleTheme" @animationend="themeSpinning = false">
-                    <UIcon v-if="isLight" name="i-ph-moon-stars-fill" />
-                    <UIcon v-else name="i-ph-sun-fill" />
-                  </button>
+                  <UButton :icon="isLight ? 'i-ph-moon-stars-fill' : 'i-ph-sun-fill'" v-bind="pill"
+                    :aria-label="isLight ? 'Switch to the dark theme' : 'Switch to the light theme'"
+                    class="frame-pill-icon" :class="{ 'is-spinning': themeSpinning }" @click="toggleTheme"
+                    @animationend="themeSpinning = false" />
                 </UTooltip>
                 <template #fallback>
                   <span class="frame-theme-slot" />
@@ -191,44 +131,6 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
       </header>
 
       <p v-if="messages.maintenance" class="frame-notice" role="status">{{ messages.maintenance }}</p>
-
-      <div v-if="route.path === '/'" class="frame-presence">
-        <!-- The presence bar is only on the home page; the name above still takes its colours everywhere.
-             Its spot is held while Lanyard connects, so the page doesn't jump when it arrives. -->
-        <Transition name="frame-fade">
-          <section v-if="lanyard" class="frame-card">
-            <Transition name="frame-fade">
-              <NuxtImg v-if="nameplate" :src="nameplateUrl(nameplate.asset, nameplateAnimated)" alt="" width="448" height="84"
-                class="frame-nameplate" />
-            </Transition>
-            <UTooltip :text="presenceHint" v-bind="sheetTooltip">
-              <span class="frame-avatar" @pointerenter="moodPlays++">
-                <NuxtImg :src="avatarUrl(lanyard.discord_user.id, lanyard.discord_user.avatar)" alt="" width="36" height="36" />
-                <NuxtImg v-if="decoration" :src="decorationUrl(decoration.asset, decorationAnimated)" alt="" width="44"
-                  height="44" class="frame-decoration" />
-                <span class="frame-dot" :style="{ background: statusColor(lanyard.discord_status) }" />
-                <span v-if="mood" :key="`${mood}-${moodPlays}`" class="frame-mood" :class="`is-${mood}`"
-                  :style="{ '--status': statusColor(lanyard.discord_status) }" aria-hidden="true">
-                  <template v-if="mood === 'sleep'"><span>z</span><span>z</span><span>z</span></template>
-                  <template v-else-if="mood === 'music'"><span>♪</span><span>♫</span></template>
-                </span>
-              </span>
-            </UTooltip>
-            <div class="frame-who">
-              <WavyName text="Kashall" :gradient="nameGradient" class="frame-name" />
-              <p class="frame-custom">
-                <span class="sr-only">{{ STATUS[lanyard.discord_status]?.label ?? 'Offline' }} on Discord.{{ mood === 'music' || mood === 'game' ? ` ${presenceHint}.` : '' }}</span>
-                <template v-if="custom?.state || custom?.emoji">
-                  <NuxtImg v-if="custom.emoji?.id" :src="`https://cdn.discordapp.com/emojis/${custom.emoji.id}.webp?size=32`"
-                    :alt="custom.emoji.name" width="14" height="14" />
-                  <template v-else-if="custom.emoji">{{ custom.emoji.name }}</template>
-                  <span class="truncate">{{ custom.state }}</span>
-                </template>
-              </p>
-            </div>
-          </section>
-        </Transition>
-      </div>
 
       <!-- The time in Oregon only makes sense in the browser; the fallback holds its line. -->
       <ClientOnly v-if="route.path === '/'">
@@ -300,9 +202,8 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
   color: var(--text);
   font-family: var(--font-nunito);
   color-scheme: dark;
-  /* The sheet's diagonal stripes, over the galaxy skirt's violets in the corner. */
+  /* The galaxy skirt's violets in the corner. */
   background:
-    repeating-linear-gradient(-58deg, transparent 0 46px, rgb(170 104 204 / 0.06) 46px 47.5px),
     radial-gradient(44rem 30rem at 0% 0%, rgb(178 218 241 / 0.08), transparent 70%),
     radial-gradient(36rem 26rem at 100% 0%, rgb(219 136 73 / 0.06), transparent 70%),
     radial-gradient(40rem 30rem at 0% 70%, rgb(177 237 217 / 0.05), transparent 70%),
@@ -310,6 +211,7 @@ const decorationAnimated = animatedOnceLoaded(() => decoration.value ? decoratio
     radial-gradient(80rem 50rem at 85% 110%, rgb(91 63 124 / 0.6), transparent 75%),
     color-mix(in oklab, var(--bg) 88%, var(--violet));
   background-attachment: fixed;
+  isolation: isolate;
 }
 
 .sheet ::selection {
@@ -353,10 +255,8 @@ html.light .sheet ::selection {
 .frame-header {
   position: relative;
   display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 0.75rem 1rem;
+  flex-direction: column;
+  gap: 0.75rem;
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
 }
@@ -386,8 +286,75 @@ html.light .sheet ::selection {
   top: -3px;
 }
 
-.frame-name.frame-logo {
-  font-size: 1.75rem;
+.frame-logo {
+  align-self: center;
+}
+
+.frame-logo img {
+  display: block;
+  width: 15rem;
+  height: auto;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* The page links as labelled pills, with the theme toggle as a round one. */
+.frame-links.frame-nav {
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.frame-links .frame-pill {
+  align-items: center;
+  gap: 0.35em;
+  padding: 0.3em 0.8em;
+  /* The logo's colours: a violet fill with a lilac edge, and the accent (the
+     logo's gold, or purple on the light theme) for hover and the current page. */
+  border: 1px solid color-mix(in oklab, var(--lilac) 40%, transparent);
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--surface) 75%, var(--violet));
+  color: var(--text);
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.3;
+  transition: color 200ms, border-color 200ms, translate 300ms cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+
+/* A circle as tall as the text pills: their line, padding and border. */
+.frame-links .frame-pill-icon {
+  justify-content: center;
+  width: calc(1.9em + 2px);
+  height: calc(1.9em + 2px);
+  padding: 0;
+}
+
+/* Keeps the whole row on one line on a phone. */
+@media (width < 26rem) {
+  .frame-links.frame-nav {
+    gap: 0.3rem;
+  }
+
+  .frame-links .frame-pill {
+    padding-inline: 0.5em;
+    font-size: 0.8125rem;
+  }
+
+  .frame-links .frame-pill-icon {
+    padding: 0;
+  }
+}
+
+.frame-links .frame-pill:is(:hover, :focus-visible) {
+  border-color: var(--accent);
+  color: var(--heading);
+  filter: none;
+}
+
+.frame-links .frame-pill[aria-current] {
+  border-color: color-mix(in oklab, var(--accent) 70%, transparent);
+  background: color-mix(in oklab, var(--surface) 55%, var(--violet));
+  color: var(--heading);
 }
 
 /* Named so it stays put while the page under it changes (see the root transition in main.css). */
@@ -515,195 +482,6 @@ html.light .frame-localtime-icon {
   from { opacity: 0; }
 }
 
-/* The card's rendered height (its name and status line, padded), held before it loads.
-   No margin below: the home page already spaces its intro from what's above. */
-.frame-presence {
-  min-height: 4.04rem;
-}
-
-/* The Discord user panel: avatar, name and custom status over the nameplate. */
-.frame-card {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem 0.9rem;
-  overflow: hidden;
-  border-radius: 14px;
-  /* The nameplate's palette (violet), under its art. */
-  background: linear-gradient(90deg, rgb(91 63 124 / 0.2), rgb(91 63 124 / 0.5));
-}
-
-.frame-card > :not(.frame-nameplate) {
-  position: relative;
-}
-
-.frame-nameplate {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: auto;
-  height: 100%;
-  pointer-events: none;
-}
-
-.frame-fade-enter-active {
-  transition: opacity 300ms;
-}
-
-.frame-fade-enter-from {
-  opacity: 0;
-}
-
-.frame-avatar {
-  flex: none;
-  width: 36px;
-  height: 36px;
-}
-
-/* A ring cut out of the avatar around the dot, so the card shows through. */
-.frame-avatar img {
-  border-radius: 50%;
-  mask: radial-gradient(circle at 31.5px 31.5px, transparent 8px, #000 8.5px);
-}
-
-/* Discord draws decorations 1.2 times the avatar's size, centred on it. The ring is
-   cut from it too, at the same spot in its own box. */
-.frame-avatar .frame-decoration {
-  position: absolute;
-  top: -10%;
-  left: -10%;
-  width: 120%;
-  height: 120%;
-  max-width: none;
-  border-radius: 0;
-  mask: radial-gradient(circle at 35.1px 35.1px, transparent 8px, #000 8.5px);
-  pointer-events: none;
-}
-
-/* The status dot, on the avatar's corner. */
-.frame-dot {
-  position: absolute;
-  right: -1px;
-  bottom: -1px;
-  width: 11px;
-  height: 11px;
-  border-radius: 50%;
-}
-
-/* Drawn over the avatar's corner (top right), or around the dot for a game. */
-.frame-mood {
-  position: absolute;
-  bottom: 70%;
-  left: 78%;
-  display: flex;
-  align-items: flex-end;
-  gap: 0.05rem;
-  font-family: var(--font-sniglet);
-  font-weight: 800;
-  line-height: 1;
-  pointer-events: none;
-  text-shadow: 0 1px 2px rgb(26 25 24 / 0.7);
-}
-
-.frame-mood > span {
-  display: inline-block;
-}
-
-.frame-mood.is-sleep {
-  color: var(--sky);
-}
-
-.frame-mood.is-sleep > span:nth-child(1) { font-size: 0.45rem; }
-.frame-mood.is-sleep > span:nth-child(2) { font-size: 0.55rem; margin-bottom: 0.2rem; }
-.frame-mood.is-sleep > span:nth-child(3) { font-size: 0.65rem; margin-bottom: 0.45rem; }
-
-.frame-mood.is-music {
-  gap: 0.15rem;
-  font-size: 0.7rem;
-  color: var(--mint);
-}
-
-.frame-mood.is-music > span:nth-child(2) {
-  margin-bottom: 0.35rem;
-}
-
-.frame-mood.is-game {
-  inset: auto -1px -1px auto;
-  width: 11px;
-  height: 11px;
-}
-
-.frame-mood.is-game::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border: 2px solid var(--status);
-  border-radius: 50%;
-  opacity: 0;
-}
-
-/* Three short plays (under five seconds all told), and then it rests: the z's and notes
-   stay put, the pulse fades away. */
-html:not(.reduce-motion) .frame-mood > span {
-  animation: frame-mood-drift 1.4s ease-out 3 backwards;
-}
-
-html:not(.reduce-motion) .frame-mood > span:nth-child(2) { animation-delay: 150ms; }
-html:not(.reduce-motion) .frame-mood > span:nth-child(3) { animation-delay: 300ms; }
-
-html:not(.reduce-motion) .frame-mood.is-music > span {
-  animation-name: frame-mood-bop;
-}
-
-html:not(.reduce-motion) .frame-mood.is-game::before {
-  animation: frame-mood-pulse 1.2s ease-out 3;
-}
-
-@keyframes frame-mood-drift {
-  from { opacity: 0; translate: -3px 5px; scale: 0.5; }
-}
-
-@keyframes frame-mood-bop {
-  from { opacity: 0; translate: -2px 6px; rotate: -20deg; }
-  60% { rotate: 10deg; }
-}
-
-@keyframes frame-mood-pulse {
-  from { opacity: 0.9; scale: 1; }
-  to { opacity: 0; scale: 2.4; }
-}
-
-.frame-who {
-  min-width: 0;
-}
-
-/* Only as wide as the name, so the whole gradient shows across it (see WavyName). */
-.frame-name {
-  display: inline-block;
-  font-family: var(--font-sniglet);
-  font-weight: 800;
-  font-size: 1.2rem;
-  line-height: 1.15;
-  letter-spacing: -0.01em;
-  color: var(--heading);
-}
-
-.frame-custom {
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
-  font-size: 0.8rem;
-  line-height: 1.3;
-  color: var(--muted);
-  text-shadow: 0 1px 3px rgb(26 25 24 / 0.8);
-}
-
-/* Lets a long status shrink and end in an ellipsis. */
-.frame-custom > .truncate {
-  min-width: 0;
-}
-
 .frame-links {
   display: flex;
   gap: 1rem;
@@ -728,8 +506,8 @@ html:not(.reduce-motion) .frame-mood.is-game::before {
 /* Holds the theme toggle's spot (an icon's size) until it renders. */
 .frame-theme-slot {
   display: block;
-  width: 1.1rem;
-  height: 1.1rem;
+  width: calc(0.875rem * 1.9 + 2px);
+  aspect-ratio: 1;
 }
 
 .frame-links [aria-current] {
@@ -914,10 +692,9 @@ html:not(.reduce-motion) .frame-mood.is-game::before {
   border-radius: inherit;
 }
 
-/* The light theme (tokens in main.css): the same stripes and swatch glows, softer, on cream. */
+/* The light theme (tokens in main.css): the same swatch glows, softer, on cream. */
 html.light .sheet {
   background:
-    repeating-linear-gradient(-58deg, transparent 0 46px, rgb(170 104 204 / 0.07) 46px 47.5px),
     radial-gradient(44rem 30rem at 0% 0%, rgb(178 218 241 / 0.5), transparent 70%),
     radial-gradient(36rem 26rem at 100% 0%, rgb(219 136 73 / 0.16), transparent 70%),
     radial-gradient(40rem 30rem at 0% 70%, rgb(177 237 217 / 0.35), transparent 70%),
@@ -926,24 +703,16 @@ html.light .sheet {
   background-attachment: fixed;
 }
 
-html.light .frame-card {
-  background: linear-gradient(90deg, rgb(170 104 204 / 0.12), rgb(170 104 204 / 0.28));
+html.light .frame-links .frame-pill {
+  background: color-mix(in oklab, white 72%, var(--lilac));
 }
 
-html.light .frame-custom {
-  text-shadow: none;
+html.light .frame-links .frame-pill:is(:hover, :focus-visible) {
+  color: var(--heading);
 }
 
-html.light .frame-mood {
-  text-shadow: none;
-}
-
-html.light .frame-mood.is-sleep {
-  color: oklch(from var(--sky) 0.5 calc(c * 2.2) h);
-}
-
-html.light .frame-mood.is-music {
-  color: oklch(from var(--mint) 0.5 calc(c * 2.2) h);
+html.light .frame-links .frame-pill[aria-current] {
+  background: color-mix(in oklab, white 55%, var(--lilac));
 }
 
 html.light .chip {

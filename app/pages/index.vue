@@ -1,5 +1,5 @@
 <script setup lang="ts">
-definePageMeta({ layout: 'sheet', viewTransition: true })
+definePageMeta({ viewTransition: true })
 
 useHead({ title: '𑣲Kashall 𑄝੭' })
 
@@ -10,18 +10,6 @@ defineOgImage('Default', {
 
 // Cached on the server; a project without a count just leaves it off.
 const { data: stars } = useFetch('/api/repos', { server: false, lazy: true })
-
-// Hovering the WWT chip again and again gets a firmer answer and a shake.
-// Each hover within two seconds of the last counts towards it.
-const wwtHovers = ref(0)
-const wwtShaking = ref(false)
-let wwtLastHover = 0
-function hoverWwt() {
-  const now = Date.now()
-  wwtHovers.value = now - wwtLastHover < 2000 ? wwtHovers.value + 1 : 1
-  wwtLastHover = now
-  if (wwtHovers.value >= 3) wwtShaking.value = true
-}
 </script>
 
 <template>
@@ -29,14 +17,8 @@ function hoverWwt() {
     <h1 class="sr-only">Kashall</h1>
     <p>Hi, I'm Kashall! I'm a platform engineer living in Oregon.</p>
     <p>
-      By day I'm at
-      <UTooltip :text="wwtHovers >= 3 ? 'I still work here :)' : 'I work here'" v-bind="sheetTooltip">
-        <NuxtLink to="https://www.wwt.com" target="_blank" class="chip" :class="{ 'chip-shake': wwtShaking }" style="--tint: var(--sky)"
-          @pointerenter="hoverWwt" @animationend="wwtShaking = false">
-          <NuxtImg src="https://www.wwt.com/apple-touch-icon.png" alt="" width="14" height="14" class="chip-logo" />World Wide Technology</NuxtLink>
-      </UTooltip>,
-      looking after internal infrastructure and operations. That means keeping 2,000+ custom apps happy across
-      100+ Kubernetes clusters.
+      By day I look after internal infrastructure and operations. That means keeping 2,000+ custom apps happy
+      across 100+ Kubernetes clusters.
     </p>
     <p>
       I mostly write Go, TypeScript and JavaScript, anything from little Kubernetes tools to web apps like this one.
@@ -64,23 +46,14 @@ function hoverWwt() {
         </li>
       </ul>
     </section>
+
+    <PresenceCard />
   </main>
 </template>
 
 <style scoped>
 .home > * + * {
   margin-top: 1.5rem;
-}
-
-.chip-shake {
-  animation: chip-shake 400ms ease-in-out;
-}
-
-@keyframes chip-shake {
-  20% { translate: -3px 0; rotate: -2deg; }
-  40% { translate: 3px 0; rotate: 2deg; }
-  60% { translate: -2px 0; rotate: -1deg; }
-  80% { translate: 2px 0; rotate: 1deg; }
 }
 
 /* After the intro, so it outranks the spacing between paragraphs. */
@@ -95,6 +68,12 @@ function hoverWwt() {
   color: var(--heading);
 }
 
+/* The negative margin pulls the footer's wavy rule up to 1.5rem below the card. */
+.home > .frame-presence {
+  margin-top: 3rem;
+  margin-bottom: -1.5rem;
+}
+
 /* Pops in once the count arrives. */
 .row-stars {
   display: inline-block;
@@ -103,19 +82,6 @@ function hoverWwt() {
 
 @keyframes stars-pop {
   from { opacity: 0; scale: 0.5; }
-}
-
-/* A logo image rather than an icon, sized to match. */
-.chip-logo {
-  width: 0.9em;
-  height: 0.9em;
-  border-radius: 3px;
-  transition: rotate 300ms cubic-bezier(0.3, 1.6, 0.5, 1), scale 300ms cubic-bezier(0.3, 1.6, 0.5, 1);
-}
-
-.chip:is(:hover, :focus-visible) .chip-logo {
-  rotate: -10deg;
-  scale: 1.1;
 }
 
 /* Kubernetes' logo is a seven-spoke wheel: a seventh of a turn lands it back on

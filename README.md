@@ -4,16 +4,11 @@
 
 After almost continuous revisions, I've finally got my personal website to a state where I am proud of it. It's been a long journey since I first got invested in Vue, and it has grown alongside me from Nuxt 3 to Nuxt 4.
 
-### Features
+### About
 
-- A WebGL particle nebula that re-forms into each page's title, with the Discord banner's eyes drawn in particles that follow the cursor and blink
-- Live Discord presence (activities and Spotify) streamed from [Lanyard](https://github.com/Phineas/lanyard)
-- GitHub star counts for the Work page, cached server-side for an hour
-- Homelab stats pulled from [kromgo](https://github.com/kashalls/kromgo) badges
-- Contact form protected by Cloudflare Turnstile and delivered with Resend
-- Comments under Blog posts and a guestbook, from GitHub accounts at least 14 days old, with one level of replies and hearts
-- A `/gateway` fallback page for hostnames that hit the gateway with no service behind them
-- Pre-rendered OG images, sitemap and robots.txt
+It's a small, single-column site styled after my character sheet: its colour key gives the palette, in a dark and a light theme, and the logo and the pattern drifting behind each page are commissioned art. The home page is a short intro, my projects with their GitHub stars, and my live Discord presence from [Lanyard](https://github.com/Phineas/lanyard). Beyond that there's a blog written in Markdown with [Nuxt Content](https://content.nuxt.com), a guestbook, and a Stats page with my WakaTime coding time and GitHub contributions.
+
+Visitors can sign in with GitHub to comment on posts and sign the guestbook, or send me a message through a contact form guarded by Cloudflare Turnstile and delivered with Resend. Pages are prerendered and served as static assets, with a Cloudflare Worker behind them for the API, sign-in and comments, which live in Durable Objects. A few small things are hidden around the site too.
 
 ### Development
 
@@ -94,8 +89,8 @@ Repeat for the other secrets above.
 The code is [MIT](LICENSE). That covers the code only. These are not under the MIT license:
 
 - Writing, including blog posts (`content/blog`) and legal pages (`content/legal`): all rights reserved.
-- Images and artwork, including `public/banner.png`, `public/logo.png` and any commissioned art: all rights reserved by their creators.
-- The PP Neue Machina Inktrap font in `public/fonts`, which belongs to Pangram Pangram and are used under their license.
+- Images and artwork, including `public/banner.png`, the commissioned logo and pattern by [Bloomeko Studio](https://vgen.co/bloomekoart) (`public/logo.webp`, `public/pattern-*.webp`, the favicons and `public/apple-touch-icon.png`) and any other commissioned art: all rights reserved by their creators.
+- The PP Neue Machina Inktrap font in `public/fonts`, which belongs to Pangram Pangram and is used under their license.
 
 ### 💖 Sponsors
 

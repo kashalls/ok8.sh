@@ -1,11 +1,11 @@
 <script setup lang="ts">
-definePageMeta({ layout: 'sheet' })
 useRobotsRule(false)
 
 // Rendered per request, so the session and everything below load on the server.
-// /api/admin answers 404 to anyone but the site owner, signed in or not.
+// /api/admin answers 404 to anyone but the site owner, signed in or not. Any
+// other failure is a 404 too, so the page never shows without the owner's session.
 const { data, error, refresh } = await useFetch('/api/admin/comments')
-if (error.value?.statusCode === 404)
+if (error.value)
     throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
 
 const entries = computed(() => (data.value?.sources ?? [])

@@ -13,7 +13,7 @@ const showName = computed(() => props.title !== 'Kashall')
 </script>
 
 <template>
-    <!-- Satori renders this to a 1200x600 PNG, in the sheet layout's palette and type.
+    <!-- Satori renders this to a 1200x600 PNG, in the site's palette and type.
          Vertical padding is added on top of the height and pushes content off the
          canvas, so the bottom spacing is a margin instead. -->
     <div class="relative flex size-full flex-col px-[90px] font-karla" style="background:#1a1918;color:#fcf6ed;">

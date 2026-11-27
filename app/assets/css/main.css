@@ -11,13 +11,13 @@
 
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 
-  /* `font-karla` -> body text on the sheet layout. */
+  /* `font-karla` -> body text on the site. */
   --font-karla: "Karla", ui-sans-serif, system-ui, sans-serif;
 
-  /* `font-nunito` -> body text on the sheet layout; Karla stays on the OG cards. */
+  /* `font-nunito` -> body text on the site; Karla stays on the OG cards. */
   --font-nunito: "Nunito", ui-rounded, ui-sans-serif, system-ui, sans-serif;
 
-  /* `font-sniglet` -> the name on the sheet layout, standing in for Discord's Sakura. */
+  /* `font-sniglet` -> the name on the Discord card, standing in for Discord's Sakura. */
   --font-sniglet: "Sniglet", ui-rounded, system-ui, sans-serif;
 
   /* Custom "Nuxt green" palette (overrides Tailwind's default green). */
@@ -134,7 +134,7 @@ html.reduce-motion *::after {
   scroll-behavior: auto !important;
 }
 
-/* Page changes on the sheet layout: the old page drifts up and fades while the new one
+/* Page changes: the old page drifts up and fades while the new one
    springs in, the header stays put, and a post's title glides between the blog list and
    the post. This animates the whole viewport rather than a named page element: a page
    whose height changes as it loads (like stats) would be stretched to its first snapshot. */
@@ -159,7 +159,7 @@ html.reduce-motion *::after {
   animation-timing-function: cubic-bezier(0.3, 0.7, 0.2, 1);
 }
 
-/* Switching themes (toggleTheme in the sheet layout): the new theme spills out from the
+/* Switching themes (toggleTheme in the default layout): the new theme spills out from the
    toggle in a growing circle over the old one. Everything is one snapshot for this, so
    nothing with its own name (the header, a post title) crossfades on top. */
 html.theme-reveal body * {
@@ -185,16 +185,4 @@ html.reduce-motion::view-transition-group(*),
 html.reduce-motion::view-transition-old(*),
 html.reduce-motion::view-transition-new(*) {
   animation: none !important;
-}
-
-html[data-text-size="sm"] { font-size: 87.5%; }
-html[data-text-size="lg"] { font-size: 112.5%; }
-html[data-text-size="xl"] { font-size: 125%; }
-
-html.readable-font {
-  --font-sans: "OpenDyslexic", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "OpenDyslexic", ui-sans-serif, system-ui, sans-serif;
-  --font-karla: "OpenDyslexic", ui-sans-serif, system-ui, sans-serif;
-  --font-nunito: "OpenDyslexic", ui-sans-serif, system-ui, sans-serif;
-  --font-sniglet: "OpenDyslexic", ui-sans-serif, system-ui, sans-serif;
 }

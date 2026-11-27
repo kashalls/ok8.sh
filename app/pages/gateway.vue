@@ -1,7 +1,6 @@
 <script setup lang="ts">
 // Fallback page for hostnames that resolve to the gateway with no service
 // configured behind them. Point the gateway's default backend here.
-definePageMeta({ layout: 'sheet' })
 
 const { host } = useRequestURL()
 const { openContact } = useContact()
