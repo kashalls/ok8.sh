@@ -1,5 +1,5 @@
 <script setup lang="ts">
-definePageMeta({ layout: 'sheet', viewTransition: true })
+definePageMeta({ viewTransition: true })
 
 const route = useRoute()
 

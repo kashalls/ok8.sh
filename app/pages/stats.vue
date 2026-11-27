@@ -1,5 +1,5 @@
 <script setup lang="ts">
-definePageMeta({ layout: 'sheet', viewTransition: true })
+definePageMeta({ viewTransition: true })
 
 const description = 'What I have been coding lately, from WakaTime and GitHub.'
 useSeoMeta({ title: "𑣲Kashall's Stats 𑄝੭", description, ogDescription: description })

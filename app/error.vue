@@ -24,7 +24,7 @@ const next = computed(() => [
 
 <template>
     <UApp>
-        <NuxtLayout name="sheet">
+        <NuxtLayout>
             <main>
                 <div class="row-top">
                     <h1 class="doc-title">{{ meta.title }}</h1>

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-definePageMeta({ layout: 'sheet' })
 useRobotsRule(false)
 
 // Rendered per request, so the session and everything below load on the server.

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { refDebounced } from '@vueuse/core'
 
-definePageMeta({ layout: 'sheet', viewTransition: true })
+definePageMeta({ viewTransition: true })
 
 const description = 'Posts about my homelab, Kubernetes and the tools I build.'
 useSeoMeta({ title: "𑣲Kashall's Blog 𑄝੭", description, ogDescription: description })

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-definePageMeta({ layout: 'sheet', viewTransition: true })
+definePageMeta({ viewTransition: true })
 useHead({ title: "𑣲Kashall's Guestbook 𑄝੭" })
 </script>
 
