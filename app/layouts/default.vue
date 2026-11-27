@@ -91,7 +91,7 @@ const { reduced } = useMotionPreference()
     <div class="frame">
       <header class="frame-header">
         <NuxtLink to="/" aria-label="Kashall, home" class="frame-logo">
-          <NuxtImg src="/logo.webp" alt="" width="360" height="176" preload />
+          <NuxtImg src="/logo.webp" alt="" width="360" height="176" preload draggable="false" />
         </NuxtLink>
         <nav aria-label="Site">
           <ul class="frame-links frame-nav">
@@ -299,6 +299,8 @@ html.light .sheet ::selection {
   display: block;
   width: 15rem;
   height: auto;
+  user-select: none;
+  -webkit-user-drag: none;
 }
 
 /* The page links as labelled pills, with the theme toggle as a round one. */

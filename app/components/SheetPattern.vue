@@ -79,5 +79,6 @@ onMounted(() => {
   height: 100%;
   opacity: 0.07;
   pointer-events: none;
+  user-select: none;
 }
 </style>
