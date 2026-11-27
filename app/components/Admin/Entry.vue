@@ -55,14 +55,14 @@ async function remove() {
         <form v-if="replying" class="mt-2 flex flex-col gap-2" @submit.prevent="reply">
             <UTextarea v-model="content" :rows="2" autoresize :maxlength="1000" autofocus aria-label="Your reply"
                 :placeholder="`Reply to ${name(comment)}…`" />
-            <div class="flex items-center gap-5 text-sm">
+            <div class="flex items-center gap-2 text-sm">
                 <UButton type="submit" label="Post reply" variant="outline" size="sm" :loading="busy" :disabled="!content.trim()" />
-                <button type="button" class="text-(--muted) hover:text-(--heading)" @click="replying = false">Cancel</button>
+                <UButton label="Cancel" color="neutral" variant="link" size="sm" @click="replying = false" />
             </div>
         </form>
-        <p v-else class="mt-1 flex gap-5 text-sm">
-            <button type="button" class="text-(--accent) hover:text-(--heading)" @click="replying = true">Reply</button>
-            <button type="button" class="text-(--muted) hover:text-(--orange)" :disabled="busy" @click="remove">Remove</button>
+        <p v-else class="mt-1 -ml-2.5 flex gap-1 text-sm">
+            <UButton label="Reply" variant="link" size="sm" @click="replying = true" />
+            <UButton label="Remove" color="neutral" variant="link" size="sm" :disabled="busy" @click="remove" />
         </p>
         <p v-if="message" role="status" class="text-sm text-(--muted)">{{ message }}</p>
     </article>

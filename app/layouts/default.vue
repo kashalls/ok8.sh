@@ -83,6 +83,8 @@ const year = new Date().getFullYear()
 const socialHints: Record<string, string> = { GitHub: 'Peek at my code' }
 const { all: allStars } = useStars()
 const { reduced } = useMotionPreference()
+// The header's page buttons: Nuxt UI buttons, drawn as the sheet's pills (see .frame-pill).
+const pill = { color: 'neutral', variant: 'ghost', class: 'frame-pill', ui: { leadingIcon: 'size-[1em]' } } as const
 </script>
 
 <template>
@@ -96,35 +98,28 @@ const { reduced } = useMotionPreference()
         <nav aria-label="Site">
           <ul class="frame-links frame-nav">
             <li>
-              <NuxtLink to="/blog" class="frame-pill" :aria-current="route.path.startsWith('/blog') ? 'page' : undefined">
-                <UIcon name="i-ph-pen-nib-fill" />Blog
-              </NuxtLink>
+              <UButton to="/blog" icon="i-ph-pen-nib-fill" label="Blog" v-bind="pill"
+                :aria-current="route.path.startsWith('/blog') ? 'page' : undefined" />
             </li>
             <li>
-              <NuxtLink to="/guestbook" class="frame-pill" :aria-current="route.path === '/guestbook' ? 'page' : undefined">
-                <UIcon name="i-ph-signature-fill" />Guestbook
-              </NuxtLink>
+              <UButton to="/guestbook" icon="i-ph-signature-fill" label="Guestbook" v-bind="pill"
+                :aria-current="route.path === '/guestbook' ? 'page' : undefined" />
             </li>
             <li>
-              <NuxtLink to="/stats" class="frame-pill" :aria-current="route.path === '/stats' ? 'page' : undefined">
-                <UIcon name="i-ph-chart-line-fill" />Stats
-              </NuxtLink>
+              <UButton to="/stats" icon="i-ph-chart-line-fill" label="Stats" v-bind="pill"
+                :aria-current="route.path === '/stats' ? 'page' : undefined" />
             </li>
             <li>
-              <button type="button" class="frame-pill" @click="openContact()">
-                <UIcon name="i-ph-envelope-simple-fill" />Say hi
-              </button>
+              <UButton icon="i-ph-envelope-simple-fill" label="Say hi" v-bind="pill" @click="openContact()" />
             </li>
             <li>
               <!-- Prerendered pages can't know the visitor's theme, so the toggle renders in the browser. -->
               <ClientOnly>
                 <UTooltip :text="isLight ? 'Lights off' : 'Lights on'" v-bind="sheetTooltip">
-                  <button type="button" :aria-label="isLight ? 'Switch to the dark theme' : 'Switch to the light theme'"
-                    class="frame-pill frame-pill-icon" :class="{ 'is-spinning': themeSpinning }" @click="toggleTheme"
-                    @animationend="themeSpinning = false">
-                    <UIcon v-if="isLight" name="i-ph-moon-stars-fill" />
-                    <UIcon v-else name="i-ph-sun-fill" />
-                  </button>
+                  <UButton :icon="isLight ? 'i-ph-moon-stars-fill' : 'i-ph-sun-fill'" v-bind="pill"
+                    :aria-label="isLight ? 'Switch to the dark theme' : 'Switch to the light theme'"
+                    class="frame-pill-icon" :class="{ 'is-spinning': themeSpinning }" @click="toggleTheme"
+                    @animationend="themeSpinning = false" />
                 </UTooltip>
                 <template #fallback>
                   <span class="frame-theme-slot" />

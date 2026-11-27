@@ -60,16 +60,15 @@ watch(open, (isOpen) => {
             <div class="contact">
                 <header class="contact-head">
                     <h2 class="contact-title">Say hi!</h2>
-                    <button type="button" class="contact-close" aria-label="Close" @click="closeContact">
-                        <UIcon name="i-ph-x" />
-                    </button>
+                    <UButton icon="i-ph-x" color="neutral" variant="link" aria-label="Close" class="contact-close"
+                        @click="closeContact" />
                 </header>
 
                 <div v-if="sent" class="contact-sent" role="status">
                     <UIcon name="i-ph-check-circle" class="contact-sent-icon" />
                     <p class="contact-title">Yay, got it!</p>
                     <p>Thanks for writing. I'll get back to you soon.</p>
-                    <button type="button" class="contact-button" @click="closeContact">Close</button>
+                    <UButton label="Close" class="contact-button" @click="closeContact" />
                 </div>
 
                 <form v-else class="contact-form" @submit.prevent="submit">
@@ -93,11 +92,8 @@ watch(open, (isOpen) => {
                         <UIcon name="i-ph-warning-circle" /> {{ errorMsg }}
                     </p>
 
-                    <button type="submit" class="contact-button" :disabled="loading">
-                        <UIcon v-if="loading" name="i-ph-circle-notch" class="animate-spin" />
-                        <UIcon v-else name="i-ph-paper-plane-tilt" />
-                        {{ loading ? 'Sending…' : 'Send it!' }}
-                    </button>
+                    <UButton type="submit" icon="i-ph-paper-plane-tilt" loading-icon="i-ph-circle-notch" :loading="loading"
+                        :label="loading ? 'Sending…' : 'Send it!'" class="contact-button" />
                 </form>
             </div>
         </template>
