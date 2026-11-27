@@ -7,10 +7,10 @@ const meta = computed(() => statusMeta(props.error?.statusCode))
 
 useHead({ title: () => `𑣲${meta.value.code} ${meta.value.title} 𑄝੭` })
 
+// The OG fonts have no glyphs for the kaomoji, so the card gets the plain title.
 defineOgImage('Default', {
-    title: `𑣲${meta.value.code} ${meta.value.title} 𑄝੭`,
+    title: `${meta.value.code} ${meta.value.title}`,
     description: meta.value.description,
-    badge: 'Error',
 })
 
 // Where to go next. A server error might pass, so reloading comes first there.
