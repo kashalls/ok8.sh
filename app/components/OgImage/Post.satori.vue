@@ -23,8 +23,9 @@ withDefaults(defineProps<{
         <div class="absolute flex flex-wrap" style="top:-40px;left:-80px;width:1560px;height:680px;opacity:0.08;">
             <img v-for="n in 6" :key="n" src="/og/pattern.png" width="520" height="340" style="width:520px;height:340px;">
         </div>
+        <!-- A glow behind the logo. -->
         <div class="absolute top-0 left-0 flex"
-            style="width:1200px;height:600px;background-image:radial-gradient(700px circle at 100% 100%, rgba(82,67,156,0.55), transparent 70%);" />
+            style="width:1200px;height:600px;background-image:radial-gradient(480px circle at 220px 112px, rgba(82,67,156,0.5), transparent 70%);" />
         <div class="relative mt-[48px] flex items-center text-[30px]">
             <img src="/og/logo.png" width="260" height="127" style="width:260px;height:127px;">
             <div class="ml-4 flex" style="color:rgba(252,246,237,0.6);">/ Blog</div>

@@ -21,8 +21,9 @@ const isHome = computed(() => props.title === 'Kashall')
         <div class="absolute flex flex-wrap" style="top:-40px;left:-80px;width:1560px;height:680px;opacity:0.08;">
             <img v-for="n in 6" :key="n" src="/og/pattern.png" width="520" height="340" style="width:520px;height:340px;">
         </div>
+        <!-- A glow behind the logo, wherever it sits. -->
         <div class="absolute top-0 left-0 flex"
-            style="width:1200px;height:600px;background-image:radial-gradient(640px circle at 50% 42%, rgba(82,67,156,0.5), transparent 70%);" />
+            :style="`width:1200px;height:600px;background-image:radial-gradient(${isHome ? '640px circle at 50% 42%' : '480px circle at 250px 134px'}, rgba(82,67,156,0.5), transparent 70%);`" />
 
         <div v-if="isHome" class="relative my-auto flex flex-col items-center">
             <img src="/og/logo.png" width="720" height="353" style="width:720px;height:353px;">
