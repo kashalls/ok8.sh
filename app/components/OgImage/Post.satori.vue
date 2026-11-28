@@ -25,7 +25,7 @@ withDefaults(defineProps<{
         </div>
         <!-- A glow behind the logo. -->
         <div class="absolute top-0 left-0 flex"
-            style="width:1200px;height:600px;background-image:radial-gradient(480px circle at 220px 112px, rgba(82,67,156,0.5), transparent 70%);" />
+            style="width:1200px;height:600px;background-image:radial-gradient(280px circle at 220px 112px, rgba(82,67,156,0.5), transparent 70%);" />
         <div class="relative mt-[48px] flex items-center text-[30px]">
             <img src="/og/logo.png" width="260" height="127" style="width:260px;height:127px;">
             <div class="ml-4 flex" style="color:rgba(252,246,237,0.6);">/ Blog</div>

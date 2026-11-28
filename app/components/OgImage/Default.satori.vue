@@ -23,7 +23,7 @@ const isHome = computed(() => props.title === 'Kashall')
         </div>
         <!-- A glow behind the logo, wherever it sits. -->
         <div class="absolute top-0 left-0 flex"
-            :style="`width:1200px;height:600px;background-image:radial-gradient(${isHome ? '640px circle at 50% 42%' : '480px circle at 250px 134px'}, rgba(82,67,156,0.5), transparent 70%);`" />
+            :style="`width:1200px;height:600px;background-image:radial-gradient(${isHome ? '640px circle at 50% 42%' : '320px circle at 250px 134px'}, rgba(82,67,156,0.5), transparent 70%);`" />
 
         <div v-if="isHome" class="relative my-auto flex flex-col items-center">
             <img src="/og/logo.png" width="720" height="353" style="width:720px;height:353px;">
