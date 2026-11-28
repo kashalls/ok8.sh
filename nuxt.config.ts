@@ -221,7 +221,6 @@ export default defineNuxtConfig({
       },
       families: [
           // global so @nuxt/fonts emits them for OG image (satori) font extraction.
-          { name: 'Karla', provider: 'google', weights: [400, 700], global: true },
           { name: 'Sniglet', provider: 'google', weights: [400, 800], global: true },
           { name: 'Nunito', provider: 'google', weights: [400, 700], global: true },
           // global so @nuxt/fonts emits it for OG image (satori) font extraction.

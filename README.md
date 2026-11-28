@@ -89,7 +89,7 @@ Repeat for the other secrets above.
 The code is [MIT](LICENSE). That covers the code only. These are not under the MIT license:
 
 - Writing, including blog posts (`content/blog`) and legal pages (`content/legal`): all rights reserved.
-- Images and artwork, including `public/banner.png`, the commissioned logo and pattern by [Bloomeko Studio](https://vgen.co/bloomekoart) (`public/logo.webp`, `public/pattern-*.webp`, the favicons and `public/apple-touch-icon.png`) and any other commissioned art: all rights reserved by their creators.
+- Images and artwork, including the commissioned logo and pattern by [Bloomeko Studio](https://vgen.co/bloomekoart) (`public/logo.webp`, `public/pattern-*.webp`, their PNG copies in `public/og`, the favicons and `public/apple-touch-icon.png`) and any other commissioned art: all rights reserved by their creators.
 - The PP Neue Machina Inktrap font in `public/fonts`, which belongs to Pangram Pangram and is used under their license.
 
 ### 💖 Sponsors

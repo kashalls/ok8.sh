@@ -13,23 +13,24 @@ withDefaults(defineProps<{
 </script>
 
 <template>
-    <!-- Satori renders this to a 1200x600 PNG, in the site's palette and type.
+    <!-- Satori renders this to a 1200x600 PNG, in the site's palette and the page's type:
+         Sniglet titles and Nunito text.
+         Satori can't decode WebP, so the logo and pattern come from PNG copies in /og.
          Vertical padding is added on top of the height and pushes the footer off the
          canvas, so the top and bottom spacing are margins instead. -->
-    <div class="relative flex size-full flex-col px-[90px] font-karla" style="background:#1a1918;color:#fcf6ed;">
-        <!-- A strip of the Discord banner along the top, fading out before the title. -->
-        <img src="/banner.png" width="1200" height="300" class="absolute top-0 left-0"
-            style="width:1200px;height:300px;object-fit:cover;object-position:50% 58%;">
+    <div class="relative flex size-full flex-col px-[90px] font-nunito" style="background:#1a1918;color:#fcf6ed;">
+        <!-- The site's logo spread, as faint as it sits behind the page. -->
+        <div class="absolute flex flex-wrap" style="top:-40px;left:-80px;width:1560px;height:680px;opacity:0.08;">
+            <img v-for="n in 6" :key="n" src="/og/pattern.png" width="520" height="340" style="width:520px;height:340px;">
+        </div>
+        <!-- A glow behind the logo. -->
         <div class="absolute top-0 left-0 flex"
-            style="width:1200px;height:600px;background-image:linear-gradient(180deg, rgba(26,25,24,0.35) 0%, rgba(26,25,24,0.8) 30%, #1a1918 50%), radial-gradient(700px circle at 100% 100%, rgba(82,67,156,0.55), transparent 70%);" />
-        <div class="relative mt-[150px] flex items-center text-[30px]">
-            <div class="flex font-sniglet text-[40px] font-extrabold"
-                style="background-image:linear-gradient(90deg,#b2daf1,#aa68cc);background-clip:text;color:transparent;">
-                Kashall
-            </div>
+            style="width:1200px;height:600px;background-image:radial-gradient(280px circle at 220px 112px, rgba(82,67,156,0.5), transparent 70%);" />
+        <div class="relative mt-[48px] flex items-center text-[30px]">
+            <img src="/og/logo.png" width="260" height="127" style="width:260px;height:127px;">
             <div class="ml-4 flex" style="color:rgba(252,246,237,0.6);">/ Blog</div>
         </div>
-        <div class="relative mt-6 flex max-w-[1020px] font-display leading-[1.08]"
+        <div class="relative mt-6 flex max-w-[1020px] font-sniglet leading-[1.08] tracking-[-0.01em]"
             :class="title.length > 50 ? 'text-[58px]' : 'text-[70px]'">
             {{ title }}
         </div>

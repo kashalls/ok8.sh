@@ -11,10 +11,7 @@
 
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 
-  /* `font-karla` -> body text on the site. */
-  --font-karla: "Karla", ui-sans-serif, system-ui, sans-serif;
-
-  /* `font-nunito` -> body text on the site; Karla stays on the OG cards. */
+  /* `font-nunito` -> body text on the site and the OG cards. */
   --font-nunito: "Nunito", ui-rounded, ui-sans-serif, system-ui, sans-serif;
 
   /* `font-sniglet` -> the name on the Discord card, standing in for Discord's Sakura. */
